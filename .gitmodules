@@ -1,6 +1,7 @@
 [submodule "src/src/submodules/autoattack"]
 	path = src/src/submodules/autoattack
 	url = https://github.com/adverML/auto-attack.git
+	branch = forspectraldefense
 [submodule "src/src/submodules/pytorch-classification"]
 	path = src/src/submodules/pytorch-classification
 	url = https://github.com/bearpaw/pytorch-classification
@@ -19,3 +20,6 @@
 [submodule "src/src/submodules/ImageNet-Downsampled"]
 	path = src/src/submodules/ImageNet-Downsampled
 	url = git@github.com:computeVision/ImageNet-Downsampled.git
+[submodule "src/src/submodules/CD-VAE"]
+	path = src/src/submodules/CD-VAE
+	url = https://github.com/kai-wen-yang/CD-VAE.git
