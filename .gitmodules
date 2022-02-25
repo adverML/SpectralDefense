@@ -10,3 +10,12 @@
 [submodule "src/src/submodules/knn-defense"]
 	path = src/src/submodules/knn-defense
 	url = https://github.com/chawins/knn-defense.git
+[submodule "src/src/submodules/Imagenet32_Scripts"]
+	path = src/src/submodules/Imagenet32_Scripts
+	url = https://github.com/computeVision/Imagenet32_Scripts
+[submodule "src/src/submodules/ImageNet128_Scripts"]
+	path = src/src/submodules/ImageNet128_Scripts
+	url = git@github.com:adverML/ImageNet128_Scripts.git
+[submodule "src/src/submodules/ImageNet-Downsampled"]
+	path = src/src/submodules/ImageNet-Downsampled
+	url = git@github.com:computeVision/ImageNet-Downsampled.git
