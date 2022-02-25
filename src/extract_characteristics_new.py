@@ -32,7 +32,6 @@ from utils import (
 from defenses.helper_layer_extr import get_whitebox_features, test_activation
 from defenses.Spectral import blackbox_mfs_analysis, blackbox_mfs_pfs, whitebox_mfs_pfs
 
-
 # from nnif import get_knn_layers, calc_all_ranks_and_dists, append_suffix
 # NORMALIZED = settings.NORMALIZED
 
@@ -149,8 +148,10 @@ elif args.detector == 'ODD':
     pass
 
 ####### Dknn section
-elif args.detector == 'Dknn':
-    pass
+elif args.detector == 'DkNN':
+    import defenses.DeepkNN as DkNN
+
+    DkNN.
 
 ####### Trust section
 elif args.detector == 'Trust':
