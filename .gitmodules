@@ -1,0 +1,12 @@
+[submodule "src/src/submodules/autoattack"]
+	path = src/src/submodules/autoattack
+	url = https://github.com/adverML/auto-attack.git
+[submodule "src/src/submodules/pytorch-classification"]
+	path = src/src/submodules/pytorch-classification
+	url = https://github.com/bearpaw/pytorch-classification
+[submodule "src/src/submodules/adversarial-detection"]
+	path = src/src/submodules/adversarial-detection
+	url = https://github.com/adverML/adversarial-detection
+[submodule "src/src/submodules/knn-defense"]
+	path = src/src/submodules/knn-defense
+	url = https://github.com/chawins/knn-defense.git
