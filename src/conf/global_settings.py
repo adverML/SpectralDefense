@@ -38,7 +38,7 @@ HELP_AA_EPSILONS = "epsilon: 8./255. 4/255, 3/255, 2/255, 1/255, 0.5/255"
 WARN_DIR_EXISTS = "Directory already Exists! Do you want to continue?"
 
 # CSV Paths
-CELEBA_CSV_PATH = '../pytorch_ipynb/cnn/celeba-' # test_
+CELEBA_CSV_PATH = 'submodules/pytorch_ipynb/cnn/celeba-' # test_
 
 # Weight Paths
 MNIST_CKPT = '/home/lorenzp/adversialml/src/pytorch-classification/checkpoint/model_best.pth.tar'
@@ -50,26 +50,26 @@ MNIST_CKPT = '/home/lorenzp/adversialml/src/pytorch-classification/checkpoint/mo
 
 CIF10_CKPT      = './checkpoint/wideresnet_2810/wide_resnet_ckpt.pth'
 # CIF10_M_CKPT    = '/home/lorenzp/adversialml/src/src/submodules/CD-VAE/pretrained/wide_resnet.pth'
-CIF10_M_CKPT    =  '/home/lorenzp/adversialml/src/src/submodules/CD-VAE/pretrained/cd-vae-1.pth'
+CIF10_M_CKPT    =  './submodules/CD-VAE/pretrained/cd-vae-1.pth'
 
-CIF100_CKPT     = './../pytorch-classification/checkpoints/cifar100/wideresnet2810/model_best.pth.tar'
+CIF100_CKPT     = './submodules/pytorch-classification/checkpoints/cifar100/wideresnet2810/model_best.pth.tar'
 CIF10VGG_CKPT   = './checkpoint/vgg16/original/models/vgg_cif10.pth'
 CIF100VGG_CKPT  = './checkpoint/vgg16/original/models/vgg_cif100.pth'
 CIF10RN34_CKPT  = '/home/lorenzp/adversialml/src/pytorch-CelebAHQ/checkpoint/resnet_34/resnet_34_ckpt_test.pth'
 CIF100RN34_CKPT = '/home/lorenzp/adversialml/src/pytorch-CelebAHQ/checkpoint/cif100_resnet_34/resnet_34_ckpt_test.pth'
 
-CIF10RN34_SOTA_CKPT = '/home/lorenzp/adversialml/src/src/submodules/adversarial-detection/expts/models/cifar10_cnn.pt'
+CIF10RN34_SOTA_CKPT = './submodules/adversarial-detection/expts/models/cifar10_cnn.pt'
 
-IMAGENET32_CKPT_1000   = './../pytorch-classification/checkpoints/imagenet32/wideresent2810/model_best.pth.tar' # model_best.pth.tar
-IMAGENET32_CKPT_250    = './../pytorch-classification/checkpoints/imagenet32/wideresent2810_250/model_best.pth.tar'
-IMAGENET32_CKPT_100    = './../pytorch-classification/checkpoints/imagenet32/wideresent2810_100/model_best.pth.tar'
-IMAGENET32_CKPT_75     = './../pytorch-classification/checkpoints/imagenet32/wideresent2810_75/model_best.pth.tar'
-IMAGENET32_CKPT_50     = './../pytorch-classification/checkpoints/imagenet32/wideresent2810_50/model_best.pth.tar'
-IMAGENET32_CKPT_25     = './../pytorch-classification/checkpoints/imagenet32/wideresent2810_25/model_best.pth.tar'
-IMAGENET32_CKPT_10     = './../pytorch-classification/checkpoints/imagenet32/wideresent2810_10/model_best.pth.tar'
+IMAGENET32_CKPT_1000   = './submodules/pytorch-classification/checkpoints/imagenet32/wideresent2810/model_best.pth.tar' # model_best.pth.tar
+IMAGENET32_CKPT_250    = './submodules/pytorch-classification/checkpoints/imagenet32/wideresent2810_250/model_best.pth.tar'
+IMAGENET32_CKPT_100    = './submodules/pytorch-classification/checkpoints/imagenet32/wideresent2810_100/model_best.pth.tar'
+IMAGENET32_CKPT_75     = './submodules/pytorch-classification/checkpoints/imagenet32/wideresent2810_75/model_best.pth.tar'
+IMAGENET32_CKPT_50     = './submodules/pytorch-classification/checkpoints/imagenet32/wideresent2810_50/model_best.pth.tar'
+IMAGENET32_CKPT_25     = './submodules/pytorch-classification/checkpoints/imagenet32/wideresent2810_25/model_best.pth.tar'
+IMAGENET32_CKPT_10     = './submodules/pytorch-classification/checkpoints/imagenet32/wideresent2810_10/model_best.pth.tar'
 
-IMAGENET64_CKPT_1000   = './../pytorch-classification/checkpoints/imagenet64/wideresent2810/model_best.pth.tar'
-IMAGENET128_CKPT_1000  = './../pytorch-classification/checkpoints/imagenet128/wideresent2810/model_best.pth.tar'
+IMAGENET64_CKPT_1000   = './submodules/pytorch-classification/checkpoints/imagenet64/wideresent2810/model_best.pth.tar'
+IMAGENET128_CKPT_1000  = './submodules/pytorch-classification/checkpoints/imagenet128/wideresent2810/model_best.pth.tar'
 
 # CELEBAHQ32_CKPT_2   =  './checkpoint/wrn2810/32x32_64_0.1_Smiling_a100_Wednesday_18_August_2021_16h_02m_16s/wrn2810-175-best.pth' # '/home/lorenzp/adversialml/src/src/checkpoint/wrn2810/32x32_64_0.1_Smiling_a100_Wednesday_18_August_2021_16h_02m_16s/wrn2810-175-best.pth'
 CELEBAHQ32_CKPT_2   = '/home/lorenzp/adversialml/src/pytorch-CelebAHQ/checkpoint/wrn2810/32x32_128_0.1_Smiling_Thursday_30_September_2021_11h_01m_19s/wrn2810-161-best.pth'
