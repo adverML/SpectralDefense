@@ -359,3 +359,6 @@ python -u extract_characteristics.py --net cif100vgg --attack df --detector Laye
 
 
 python -u detect_adversarials.py --net cif100vgg --attack df --detector LayerMFS --wanted_samples 7210 --clf "$classifier" --num_classes 10 --nr "$nr" --run_nr  "$run"
+
+
+python -u extract_characteristics.py --net cif10 --attack df --detector DkNN --num_classes 10  --run_nr 8  --wanted_samples 7210  --take_inputimage_off 

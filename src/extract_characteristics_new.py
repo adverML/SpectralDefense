@@ -8,6 +8,7 @@ import pdb
 import os, sys
 import pickle
 import torch
+
 import torchvision.models as models
 import torch.utils.data as data
 
@@ -26,6 +27,7 @@ from utils import (
     check_args,
     create_dir_attacks,
     create_save_dir_path,
+    get_num_classes,
     load_model
 )
 
@@ -107,7 +109,7 @@ model = model.eval()
 # print(activation)
 
 
-if args.detector == 'LayerMFS' or args.detector == 'LayerPFS' or args.detector == 'LID'  or args.detector == 'Mahalanobis':
+if args.detector == 'LayerMFS' or args.detector == 'LayerPFS' or args.detector == 'LID'  or args.detector == 'Mahalanobis'  or args.detector == 'DkNN':
     get_layer_feature_maps, layers, model, activation = get_whitebox_features(args, logger, model)
 
 
@@ -139,6 +141,19 @@ elif args.detector == 'Mahalanobis':
     from defenses.DeepMahalanobis import deep_mahalanobis
     characteristics, characteristics_adv = deep_mahalanobis(args, logger, model, images, images_advs, layers, get_layer_feature_maps, activation, output_path_dir)
 
+
+
+####### Dknn section
+elif args.detector == 'DkNN':
+    import defenses.DeepkNN as DkNN
+
+    DkNN.calculate(args, model, images, images_advs, layers, get_layer_feature_maps, activation)
+
+
+####### Trust section
+elif args.detector == 'Trust':
+    pass
+
 ####### LID_Class_Cond section
 elif args.detector == 'LID_Class_Cond':
     pass
@@ -146,17 +161,6 @@ elif args.detector == 'LID_Class_Cond':
 ####### ODD section https://github.com/jayaram-r/adversarial-detection
 elif args.detector == 'ODD':
     pass
-
-####### Dknn section
-elif args.detector == 'DkNN':
-    import defenses.DeepkNN as DkNN
-
-    DkNN.
-
-####### Trust section
-elif args.detector == 'Trust':
-    pass
-
 else:
     logger.log('ERR: unknown detector')
 
