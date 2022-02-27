@@ -19,12 +19,12 @@ from utils import (
     create_save_dir_path,
 )
 
-from sklearn.model_selection import train_test_split
+
 from sklearn.preprocessing import MinMaxScaler, StandardScaler
 from sklearn import svm
 import argparse
 
-from detection.helper_detection import show_results
+from detection.helper_detection import show_results, split_data
 
 
 
@@ -79,86 +79,21 @@ logger.log("shape: " + str(shape))
 if shape[0] < args.wanted_samples:
     logger.log("CAUTION: The actual number is smaller as the wanted samples!")
 
-k = shape[0]
 
-test_size = 0.2
-adv_X_train_val, adv_X_test, adv_y_train_val, adv_y_test = train_test_split(characteristics_adv, np.ones(k), test_size=test_size, random_state=42)
-b_X_train_val, b_X_test, b_y_train_val, b_y_test         = train_test_split(characteristics, np.zeros(k), test_size=test_size, random_state=42)
-adv_X_train, adv_X_val, adv_y_train, adv_y_val           = train_test_split(adv_X_train_val, adv_y_train_val, test_size=test_size, random_state=42)
-b_X_train, b_X_val, b_y_train, b_y_val                   = train_test_split(b_X_train_val, b_y_train_val, test_size=test_size, random_state=42)
+X_train, y_train, X_test, y_test = split_data(args, logger, characteristics, characteristics_adv, k=shape[0], test_size=0.2, random_state=42)
 
-X_train = np.concatenate(( b_X_train, adv_X_train) )
-y_train = np.concatenate(( b_y_train, adv_y_train) )
-
-if args.mode == 'test':
-    X_test = np.concatenate( (b_X_test, adv_X_test) )
-    y_test = np.concatenate( (b_y_test, adv_y_test) )
-elif args.mode == 'validation':
-    X_test = np.concatenate( (b_X_val, adv_X_val) )
-    y_test = np.concatenate( (b_y_val, adv_y_val) )
-else:
-    logger.log('Not a valid mode')
-
-logger.log("b_X_train" + str(b_X_train.shape) )
-logger.log("adv_X_train" + str(adv_X_train.shape) )
-
-logger.log("b_X_test" + str(b_X_test.shape) )
-logger.log("adv_X_test" + str(adv_X_test.shape) )
 
 #train classifier
 logger.log('Training classifier...')
-
-
-#special case
-# if (detector == 'LayerMFS'or detector =='LayerPFS') and net == 'imagenet33' and (attack_method=='std' or attack_method=='cw' or attack_method=='df'):
-#     print("SVM")
-#     # from cuml.svm import SVC
-#     scaler  = MinMaxScaler().fit(X_train)
-#     X_train = scaler.transform(X_train)
-#     X_test  = scaler.transform(X_test)
-#     if detector == 'LayerMFS':
-#         gamma = 0.1
-#         if attack_method == 'cw':
-#             C=1
-#         else:
-#             C=10
-#     else:
-#         C=10
-#         gamma = 0.01
-#     # clf = SVC(probability=True, C=C, gamma=gamma)
-#     clf = svm.SVC(probability=True, C=C, gamma=gamma ) # https://scikit-learn.org/stable/modules/generated/sklearn.svm.SVC.html
-# else:
-#     # clf = RandomForestClassifier(max_depth=3, n_estimators=300)
-
-
-# C_list = [1, 5, 10, 15, 20]
-# gamma_list = [0.001, 0.01, 0.1, 1]
-
-# clf = LogisticRegression()
-
-# C_list = [1, 5, 10]
-# gamma_list = [0.01, 0.1]
-
-# C = 1
-# gamma = 0.01
-# clf = svm.SVC(probability=True, C=C, gamma=gamma ) 
-
-
-# for c in C_list:
-#     for g in gamma_list:
-#         clf.set_params(C=c, gamma=g )
-#         clf.fit(X_train,y_train)
-#         print ("C ", c, " gamma", g, "train score: ", clf.score(X_train, y_train) )
-#         print ("C ", c, " gamma", g, "test score:  ", clf.score(X_test, y_test) )
 
 if args.clf == 'LR':
     from detection.LogisticRegression import LR
     clf = LR(args, logger, X_train, y_train, X_test, y_test)
 elif args.clf == 'RF':
-    from detection.LogisticRegression import RF
+    from detection.RandomForest import RF
     clf = RF(args, logger, X_train, y_train, X_test, y_test)
 elif args.clf == 'IF':
-    from detection.LogisticRegression import IF
+    from detection.IsolationForest import IF
     clf = IF(args, logger, X_train, y_train, X_test, y_test)
 
 
@@ -173,10 +108,6 @@ else:
 logger.log('Evaluating classifier...')
 y_hat =    clf.predict(X_test)
 y_hat_pr = clf.predict_proba(X_test)[:, 1]
-
-# logger.log( "train error: " + str(clf.score(X_train, y_train)) )
-# logger.log( "test error:  " + str(clf.score(X_test, y_test)) )
-
 
 
 show_results(args, logger, y_test, y_hat, y_hat_pr)

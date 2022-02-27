@@ -1,8 +1,12 @@
 #!/usr/bin/env python3
 
+from sklearn.model_selection import train_test_split
+
 from sklearn.metrics import confusion_matrix
 from sklearn.metrics import roc_auc_score
 from sklearn.metrics import roc_curve
+
+import  numpy as np
 
 def show_results(args, logger, y_test, y_hat, y_hat_pr):
 
@@ -65,3 +69,31 @@ def show_results(args, logger, y_test, y_hat, y_hat_pr):
     # fpr, tpr, _ = roc_curve(y_test, y_hat_pr)
     # print("fpr", fpr)
     # print("tpr", tpr)
+
+
+def split_data(args, logger, characteristics, characteristics_adv, k, test_size=0.2, random_state=42):
+    
+    adv_X_train_val, adv_X_test, adv_y_train_val, adv_y_test = train_test_split(characteristics_adv, np.ones(k), test_size=test_size, random_state=random_state)
+    b_X_train_val, b_X_test, b_y_train_val, b_y_test         = train_test_split(characteristics, np.zeros(k), test_size=test_size, random_state=random_state)
+    adv_X_train, adv_X_val, adv_y_train, adv_y_val           = train_test_split(adv_X_train_val, adv_y_train_val, test_size=test_size, random_state=random_state)
+    b_X_train, b_X_val, b_y_train, b_y_val                   = train_test_split(b_X_train_val, b_y_train_val, test_size=test_size, random_state=random_state)
+
+    X_train = np.concatenate(( b_X_train, adv_X_train) )
+    y_train = np.concatenate(( b_y_train, adv_y_train) )
+
+    if args.mode == 'test':
+        X_test = np.concatenate( (b_X_test, adv_X_test) )
+        y_test = np.concatenate( (b_y_test, adv_y_test) )
+    elif args.mode == 'validation':
+        X_test = np.concatenate( (b_X_val, adv_X_val) )
+        y_test = np.concatenate( (b_y_val, adv_y_val) )
+    else:
+        logger.log('Not a valid mode')
+
+    logger.log("b_X_train" + str(b_X_train.shape) )
+    logger.log("adv_X_train" + str(adv_X_train.shape) )
+
+    logger.log("b_X_test" + str(b_X_test.shape) )
+    logger.log("adv_X_test" + str(adv_X_test.shape) )
+
+    return X_train, y_train, X_test, y_test

@@ -168,7 +168,7 @@ detectadversarialslayer ()
 
 # genereratecleandata
 # attacks
-extractcharacteristics
+# extractcharacteristics
 detectadversarials
 
 # extractcharacteristicslayer
