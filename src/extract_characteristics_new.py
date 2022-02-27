@@ -7,10 +7,10 @@ import numpy as np
 import pdb
 import os, sys
 import pickle
-import torch
 
-import torchvision.models as models
-import torch.utils.data as data
+import torch
+# import torchvision
+# import torchvision.models as models_v
 
 from models.vgg_cif10 import VGG
 from models.wideresidual import WideResNet, WideBasic
@@ -31,7 +31,7 @@ from utils import (
     load_model
 )
 
-from defenses.helper_layer_extr import get_whitebox_features, test_activation
+from defenses.helper_layer_extr import get_whitebox_features, test_activation, dfknn_layer
 from defenses.Spectral import blackbox_mfs_analysis, blackbox_mfs_pfs, whitebox_mfs_pfs
 
 # from nnif import get_knn_layers, calc_all_ranks_and_dists, append_suffix
@@ -109,9 +109,10 @@ model = model.eval()
 # print(activation)
 
 
-if args.detector == 'LayerMFS' or args.detector == 'LayerPFS' or args.detector == 'LID'  or args.detector == 'Mahalanobis'  or args.detector == 'DkNN':
+if args.detector == 'LayerMFS' or args.detector == 'LayerPFS' or args.detector == 'LID'  or args.detector == 'Mahalanobis':
     get_layer_feature_maps, layers, model, activation = get_whitebox_features(args, logger, model)
-
+elif args.detector == 'DkNN':
+    layers = dfknn_layer(args, model)
 
 ################Sections for each different detector
 ####### Fourier section
@@ -147,7 +148,7 @@ elif args.detector == 'Mahalanobis':
 elif args.detector == 'DkNN':
     import defenses.DeepkNN as DkNN
 
-    DkNN.calculate(args, model, images, images_advs, layers, get_layer_feature_maps, activation)
+    DkNN.calculate(args, model, images, images_advs, layers, 0, 0)
 
 
 ####### Trust section

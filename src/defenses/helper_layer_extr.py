@@ -26,17 +26,13 @@ def test_activation(args, logger, model, images):
     pdb.set_trace()
 
     model(images[0])
-
     print(activation)
-
 
     return activation
 
 
 
-
-def get_whitebox_features(args, logger, model):
-
+def dfknn_layer(args, model):
     if args.detector == 'DkNN':
         layers = {
             'relu1': model.conv3[1].residual[1],
@@ -44,8 +40,19 @@ def get_whitebox_features(args, logger, model):
             'relu3': model.conv3[3].residual[1],
             'relu4': model.conv3[3].residual[4]
         }
-    
-        return layers
+
+    def get_layer_feature_maps(activation_dict, act_layer_list):
+        act_val_list = []
+        for it in act_layer_list:
+            act_val = activation_dict[it]
+            act_val_list.append(act_val)
+        return act_val_list        
+
+    return layers
+
+
+
+def get_whitebox_features(args, logger, model):
 
     activation = {}
     def get_activation(name):

@@ -23,3 +23,6 @@
 [submodule "src/src/submodules/CD-VAE"]
 	path = src/submodules/CD-VAE
 	url = git@github.com:adverML/CD-VAE.git
+[submodule "src/submodules/adaptive-auto-attack"]
+	path = src/submodules/adaptive-auto-attack
+	url = git@github.com:adverML/adaptive-auto-attack.git

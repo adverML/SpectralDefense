@@ -552,6 +552,8 @@ elif args.net == 'imagenet':
 
     if not args.nr == -1:
 
+        # pdb.set_trace()
+
         model.relu.register_forward_hook( get_activation('0_relu') )
 
         model.layer1[0].relu.register_forward_hook( get_activation('layer_1_0_relu') )
@@ -573,6 +575,10 @@ elif args.net == 'imagenet':
         model.layer4[0].relu.register_forward_hook( get_activation('layer_4_0_relu') )
         model.layer4[1].relu.register_forward_hook( get_activation('layer_4_1_relu') )
         model.layer4[2].relu.register_forward_hook( get_activation('layer_4_2_relu') )
+
+        # model.avgpool.register_forward_hook( get_activation('avgpool') )
+        # model.fc.register_forward_hook( get_activation('fc') )
+        
     else:
         if not (args.attack == 'df' or  args.attack == 'cw'):
 
@@ -587,9 +593,14 @@ elif args.net == 'imagenet':
             ]
         else:
             # model.layer4[1].relu.register_forward_hook( get_activation('layer_4_1_relu') )
-            model.layer4[2].relu.register_forward_hook( get_activation('layer_4_2_relu') )
+            # model.layer4[2].relu.register_forward_hook( get_activation('layer_4_2_relu') )
+            model.avgpool.register_forward_hook( get_activation('avgpool') )
+            # model.fc.register_forward_hook( get_activation('fc') )
+
             layers = [
-                'layer_4_2_relu'
+                # 'layer_4_2_relu'
+                'avgpool'
+                # 'fc'
             ]
 
     # layers = ['layer_1_0_relu', 'layer_1_1_relu', 'layer_1_2_relu', 'layer_2_0_relu', 'layer_2_1_relu', 'layer_2_2_relu']
@@ -754,7 +765,7 @@ def calculate_fourier_spectrum(im, typ='MFS'):
 
     fft = np.fft.fft2(im)
 
-    im = im[:,:100,:5,:5]
+    # im = im[:,:100,:5,:5]
 
     if typ == 'MFS':
         fourier_spectrum = np.abs(fft)
@@ -921,7 +932,7 @@ elif args.detector == 'LayerMFS':
             image_feature_maps = inputimage + get_layer_feature_maps(image_c, layers)
             adv_feature_maps   = inputadv   + get_layer_feature_maps(adv_c,   layers)
 
-        import pdb; pdb.set_trace()
+        # import pdb; pdb.set_trace()
         fourier_maps     = calculate_spectra(image_feature_maps)
         fourier_maps_adv = calculate_spectra(adv_feature_maps)
         mfs.append(np.hstack(fourier_maps))
