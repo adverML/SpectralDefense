@@ -136,13 +136,10 @@ elif args.detector == 'LID':
     from defenses.Lid import lid
     characteristics, characteristics_adv = lid(args, model, images, images_advs, layers, get_layer_feature_maps, activation)
 
-
 ####### Mahalanobis section
 elif args.detector == 'Mahalanobis':
     from defenses.DeepMahalanobis import deep_mahalanobis
     characteristics, characteristics_adv = deep_mahalanobis(args, logger, model, images, images_advs, layers, get_layer_feature_maps, activation, output_path_dir)
-
-
 
 ####### Dknn section
 elif args.detector == 'DkNN':

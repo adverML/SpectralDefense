@@ -21,7 +21,21 @@ import foolbox
 from foolbox import PyTorchModel, accuracy, samples
 from foolbox.attacks import  L2DeepFoolAttack, LinfBasicIterativeAttack, FGSM, L2CarliniWagnerAttack, FGM, PGD
 
-from utils import *
+from utils import (
+    Logger,
+    log_header,
+    create_dir_extracted_characteristics, 
+    save_args_to_file,
+    getdevicename,
+    check_args,
+    create_dir_attacks,
+    create_save_dir_path,
+    create_dir_clean_data,
+    epsilon_to_float,
+    get_num_classes,
+    load_model,
+    get_debug_info
+)
 
 
 
@@ -50,6 +64,9 @@ def create_advs(logger, args, output_path_dir, clean_data_path, wanted_samples, 
 
     clean_path = 'clean_' + indicator + '_data' 
     dataset = torch.load(os.path.join(clean_data_path, clean_path))[:wanted_samples]
+    get_debug_info( "actual len/wanted " + str(len(dataset)) + "/" + str(wanted_samples) )
+
+    test_loader = torch.utils.data.DataLoader(dataset, batch_size=batch_size, shuffle=args.shuffle_on)
 
     if args.attack == 'std' or args.attack == 'apgd-ce' or args.attack == 'apgd-t' or args.attack == 'fab-t' or args.attack == 'square':
         logger.log('INFO: Load data...')
@@ -65,21 +82,34 @@ def create_advs(logger, args, output_path_dir, clean_data_path, wanted_samples, 
         # run attack and save images
         with torch.no_grad():
 
-            for x_test, y_test in dataset:
+            for x_test, y_test in test_loader:
+
+                x_test = torch.squeeze(x_test).cpu()
+                y_test = torch.squeeze(y_test).cpu()
+
+                if batch_size == 1:
+                    x_test = torch.unsqueeze(x_test, 0)
+                    y_test = torch.unsqueeze(y_test, 0)
+
+                
+                # import pdb; pdb.set_trace()
+
                 if not args.individual:
                     logger.log("INFO: mode: std; not individual")
-                    adv_complete, max_nr = adversary.run_standard_evaluation(x_test, y_test, bs=args.batch_size)
+                    x_adv, y_adv, max_nr = adversary.run_standard_evaluation(x_test, y_test, bs=args.batch_size, return_labels=True)
                 else: 
                     logger.log("INFO: mode: individual; not std")
-                    adv_complete, max_nr = adversary.run_standard_evaluation_individual(x_test, y_test, bs=args.batch_size)
-                    adv_complete = adv_complete[args.attack]
+                    adv_complete, max_nr = adversary.run_standard_evaluation_individual(x_test, y_test, bs=args.batch_size, return_labels=True)
+                    x_adv, y_adv = adv_complete[args.attack]
 
                 tmp_images_advs = []
                 # import pdb; pdb.set_trace()
-                for it, img in enumerate(adv_complete):
+                for it, img in enumerate(x_adv):
                     if not (np.abs(x_test[it] - img) <= 1e-5).all():
-                        images.append(x_test[it])
+                        images.append(x_test[it])                      
                         tmp_images_advs.append(img)
+                        labels.append(y_test[it])
+                        labels_advs.append(y_adv[it])  
                         success_counter = success_counter + 1
                         if (success_counter % 1000) == 0:
                             get_debug_info( msg="success_counter " + str(success_counter) + " / " + str(wanted_samples) )
@@ -96,10 +126,7 @@ def create_advs(logger, args, output_path_dir, clean_data_path, wanted_samples, 
 
     elif args.attack == 'fgsm' or args.attack == 'bim' or args.attack == 'pgd' or args.attack == 'df' or args.attack == 'cw': 
 
-        dataset = torch.load(os.path.join(clean_data_path, clean_path))[:wanted_samples]
-
         logger.log("INFO: len(dataset): {}".format(len(dataset)))
-        test_loader = torch.utils.data.DataLoader(dataset, batch_size=batch_size, shuffle=args.shuffle_on)
 
         #setup depending on attack
         if args.attack == 'fgsm':
@@ -137,8 +164,6 @@ def create_advs(logger, args, output_path_dir, clean_data_path, wanted_samples, 
             if batch_size == 1:
                 image = torch.unsqueeze(image, 0)
                 label = torch.unsqueeze(label, 0)
-
-            print( image.shape )
 
             image = image.cuda()
             label = label.cuda()
@@ -223,8 +248,6 @@ if __name__ == '__main__':
     logger = Logger(output_path_dir + os.sep + 'log.txt')
     log_header(logger, args, output_path_dir, sys) # './data/attacks/imagenet32/wrn_28_10/fgsm'
 
-    device_name =  getdevicename()
-
     # check args
     args = check_args(args, logger)
 
@@ -238,6 +261,7 @@ if __name__ == '__main__':
 
     ######################################################################################
     # load correctly classified data
+    device_name = getdevicename()
     batch_size = 128 
     if device_name == 'titan v' and (args.net == 'imagenet128' or args.net == 'celebaHQ128'):
         batch_size = 24
