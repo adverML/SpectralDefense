@@ -24,8 +24,7 @@ from sklearn.preprocessing import MinMaxScaler, StandardScaler
 from sklearn import svm
 import argparse
 
-from detection.helper_detection import show_results, split_data
-
+from detection.helper_detection import show_results, split_data, save_load_clf
 
 
 #processing the arguments
@@ -42,14 +41,16 @@ parser.add_argument("--num_classes",    default='10',   type=int, help=settings.
 parser.add_argument("--clf",            default='LR',             help="Logistic Regression (LR) or Random Forest (RF) or Isolation Forest (IF)")
 parser.add_argument("--trees",          default='300',  type=int, help=settings.HELP_NUM_CLASSES)
 parser.add_argument("--num_iter",       default='100',  type=int, help="LR: Number iteration")
+parser.add_argument("--pca_features",   default='1',    type=int, help="Number of PCA features to train")
 
-# parser.add_argument("--eps",       default='-1',       help="epsilon: 4/255, 3/255, 2/255, 1/255, 0.5/255")
-parser.add_argument("--eps",       default='8./255.',            help=settings.HELP_AA_EPSILONS)
-# parser.add_argument("--eps",       default='4./255.',       help="epsilon: 4/255, 3/255, 2/255, 1/255, 0.5/255")
-# parser.add_argument("--eps",       default='2./255.',       help="epsilon: 4/255, 3/255, 2/255, 1/255, 0.5/255")
-# parser.add_argument("--eps",       default='1./255.',       help="epsilon: 4/255, 3/255, 2/255, 1/255, 0.5/255")
-# parser.add_argument("--eps",       default='1./255.',       help="epsilon: 4/255, 3/255, 2/255, 1/255, 0.5/255")
-# parser.add_argument("--eps",       default='0.5/255.',      help="epsilon: 4/255, 3/255, 2/255, 1/255, 0.5/255")
+
+# parser.add_argument("--eps",   default='-1',     help="epsilon: 4/255, 3/255, 2/255, 1/255, 0.5/255")
+parser.add_argument("--eps",    default='8./255.',     help=settings.HELP_AA_EPSILONS)
+# parser.add_argument("--eps",    default='4./255.',   help="epsilon: 4/255, 3/255, 2/255, 1/255, 0.5/255")
+# parser.add_argument("--eps",    default='2./255.',   help="epsilon: 4/255, 3/255, 2/255, 1/255, 0.5/255")
+# parser.add_argument("--eps",    default='1./255.',   help="epsilon: 4/255, 3/255, 2/255, 1/255, 0.5/255")
+# parser.add_argument("--eps",    default='1./255.',   help="epsilon: 4/255, 3/255, 2/255, 1/255, 0.5/255")
+# parser.add_argument("--eps",    default='0.5/255.',  help="epsilon: 4/255, 3/255, 2/255, 1/255, 0.5/255")
 
 args = parser.parse_args()
 
@@ -65,7 +66,7 @@ logger.log('INFO: Loading characteristics...')
 
 # input data
 extracted_characteristics_path = create_dir_extracted_characteristics(args, root='./data/extracted_characteristics/', wait_input=False)
-characteristics_path, characteristics_advs_path = create_save_dir_path(extracted_characteristics_path, args, filename='characteristics' )
+characteristics_path, characteristics_advs_path = create_save_dir_path(extracted_characteristics_path, args, filename='characteristics')
 
 logger.log("characteristics_path:      " + str(characteristics_path) )
 logger.log("characteristics_advs_path: " + str(characteristics_advs_path) )
@@ -82,32 +83,37 @@ if shape[0] < args.wanted_samples:
 
 X_train, y_train, X_test, y_test = split_data(args, logger, characteristics, characteristics_adv, k=shape[0], test_size=0.2, random_state=42)
 
+scaler  = MinMaxScaler().fit(X_train)
+X_train = scaler.transform(X_train)
+X_test  = scaler.transform(X_test)
+
+
+if args.pca_features > 0:
+    logger.log('Apply PCA decomposition. Reducing number of features from {} to {}'.format(X_train.shape[1], args.pca_features))
+    from sklearn.decomposition import PCA # https://scikit-learn.org/stable/modules/generated/sklearn.decomposition.PCA.html?highlight=pca#sklearn.decomposition.PCA
+    # pca = PCA(n_components=args.pca_features)
+    pca = PCA(n_components='mle', svd_solver='auto', random_state=32)
+
+    pca.fit(X_train)
+    X_train = pca.transform(X_train)
+    X_test = pca.transform(X_test)
+
 
 #train classifier
 logger.log('Training classifier...')
 
 if args.clf == 'LR':
     from detection.LogisticRegression import LR
-    clf = LR(args, logger, X_train, y_train, X_test, y_test)
+    clf, y_hat, y_hat_pr = LR(args, logger, X_train, y_train, X_test, y_test)
 elif args.clf == 'RF':
     from detection.RandomForest import RF
-    clf = RF(args, logger, X_train, y_train, X_test, y_test)
+    clf, y_hat, y_hat_pr = RF(args, logger, X_train, y_train, X_test, y_test)
 elif args.clf == 'IF':
     from detection.IsolationForest import IF
-    clf = IF(args, logger, X_train, y_train, X_test, y_test)
+    clf, y_hat, y_hat_pr = IF(args, logger, X_train, y_train, X_test, y_test)
 
 
-# save classifier
-classifier_pth = output_path_dir + os.sep + str(args.clf) + '.clf'
-if settings.SAVE_CLASSIFIER:
-    torch.save(clf, classifier_pth)
-else:
-    clf = torch.load(classifier_pth)
-
-
-logger.log('Evaluating classifier...')
-y_hat =    clf.predict(X_test)
-y_hat_pr = clf.predict_proba(X_test)[:, 1]
+clf = save_clf(args, output_path_dir)
 
 
 show_results(args, logger, y_test, y_hat, y_hat_pr)

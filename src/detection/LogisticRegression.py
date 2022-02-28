@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
-    
+
+from helper_detection import save_clf
 from sklearn.linear_model import LogisticRegression
 
 def LR(args, logger, X_train, y_train, X_test, y_test):
@@ -16,11 +17,12 @@ def LR(args, logger, X_train, y_train, X_test, y_test):
     # max_iter int, default=100
     # multi_class{‘auto’, ‘ovr’, ‘multinomial’}, default=’auto’
 
-
     logger.log(clf)
     clf.fit(X_train, y_train)
     logger.log("train score: " + str(clf.score(X_train, y_train)) )
     logger.log("test score:  " + str(clf.score(X_test,  y_test)) )
 
+    y_hat =    clf.predict(X_test)
+    y_hat_pr = clf.predict_proba(X_test)[:, 1]
 
-    return clf
+    return clf, y_hat, y_hat_pr

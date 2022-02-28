@@ -9,7 +9,9 @@ function log_msg {
 # DATASETS="cif10 cif100"
 # DATASETS="cif100vgg"
 # DATASETS="cif10rn34 cif100rn34"
-DATASETS="cif10rn34sota"
+# DATASETS="cif10rn34sota"
+DATASETS="cif10"
+
 # DATASETS="imagenet64 celebaHQ64 imagenet128 celebaHQ128"
 # RUNS="1 2 3"
 RUNS="8"
@@ -17,7 +19,7 @@ RUNS="8"
 # ATTACKS="fgsm bim pgd std df cw"
 # ATTACKS="apgd-ce apgd-t fab-t square"
 # ATTACKS="std"
-ATTACKS="fgsm bim df"
+ATTACKS="df"
 
 # ATTACKS="apgd-ce"
 
@@ -30,7 +32,8 @@ DETECTORS="LayerMFS"
 EPSILONS="8./255."
 
 # CLF="LR RF"
-CLF="LR RF"
+CLF="IF"
+
 
 IMAGENET32CLASSES="25 50 100 250 1000"
 # NRSAMPLES="300 500 1000 1200 1500 2000" # only at detectadversarialslayer
@@ -239,7 +242,7 @@ detectadversarials ()
                         for nrsamples in $NRSAMPLES; do
                             for classifier in $CLF; do
                                 if [ "$net" == cif10 ]; then
-                                    python -u detect_adversarials.py --net "$net" --attack "$att" --detector "$det" --wanted_samples "$nrsamples" --clf "$classifier" --eps "$eps" --num_classes 10  --run_nr "$run"
+                                    python -u detect_adversarials.py --net "$net" --attack "$att" --detector "$det" --wanted_samples "$nrsamples" --clf "$classifier" --eps "$eps" --num_classes 10  --run_nr "$run"  --pca_features -1
                                 fi
 
                                 if [ "$net" == cif10vgg ]; then
@@ -314,7 +317,7 @@ detectadversarialslayer ()
 # printn
 # genereratecleandata
 # attacks
-extractcharacteristics
+# extractcharacteristics
 detectadversarials
 
 

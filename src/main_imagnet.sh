@@ -24,8 +24,8 @@ DETECTORS="LayerMFS"
 EPSILONS="8./255."
 
 # CLF="LR RF"
-CLF="RF"
-
+CLF="LR"
+# CLF="IF"
 
 DATASETSLAYERNR="imagenet"
 ATTACKSLAYERNR="bim"
@@ -156,7 +156,8 @@ detectadversarialslayer ()
                         for classifier in $CLF; do
                             for nr in $LAYERNR; do 
                                 log_msg "Layer Nr. $nr"
-                                python -u detect_adversarials.py --net "$net" --attack "$att" --detector "$det" --wanted_samples "$nrsamples" --clf "$classifier" --num_classes 1000 --nr "$nr" --run_nr "$run"
+                                python -u detect_adversarials.py --net "$net" --attack "$att" --detector "$det" --wanted_samples "$nrsamples" --clf "$classifier" --num_classes 1000 --nr "$nr" --run_nr "$run" --pca_features 1
+                                # python -u detect_adversarials.py --net "$net" --attack "$att" --detector "$det" --wanted_samples "$nrsamples" --clf "$classifier" --num_classes 1000 --nr "$nr" --run_nr "$run" --pca_features -1
                             done
                         done
                     done

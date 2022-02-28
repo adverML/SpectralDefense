@@ -1,7 +1,10 @@
 #!/usr/bin/env python3
 
-from sklearn.model_selection import train_test_split
+from conf import settings
 
+import torch
+import os
+from sklearn.model_selection import train_test_split
 from sklearn.metrics import confusion_matrix
 from sklearn.metrics import roc_auc_score
 from sklearn.metrics import roc_curve
@@ -97,3 +100,14 @@ def split_data(args, logger, characteristics, characteristics_adv, k, test_size=
     logger.log("adv_X_test" + str(adv_X_test.shape) )
 
     return X_train, y_train, X_test, y_test
+
+
+def save_load_clf(args, output_path_dir):
+    # save classifier
+    classifier_pth = output_path_dir + os.sep + str(args.clf) + '.clf'
+    if settings.SAVE_CLASSIFIER:
+        torch.save(clf, classifier_pth)
+    else:
+        clf = torch.load(classifier_pth)
+    
+    return clf
