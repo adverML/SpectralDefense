@@ -10,7 +10,7 @@ import numpy as np
 
 
 
-def adapt_batchsize(args):
+def adapt_batchsize(args, device_name):
     batch_size = 128 
     if device_name == 'titan v' and (args.net == 'imagenet128' or args.net == 'celebaHQ128'):
         batch_size = 24

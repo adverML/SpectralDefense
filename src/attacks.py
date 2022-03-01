@@ -153,15 +153,15 @@ if __name__ == '__main__':
         #setup depending on attack
         if args.attack == 'fgsm':
             attack = FGSM()
-            epsilons = [0.03]
+            epsilons = [epsilon_to_float(args.eps)]
             if args.net == 'mnist':
                 epsilons = [0.4] 
         elif args.attack == 'bim':
             attack = LinfBasicIterativeAttack()
-            epsilons = [0.03]
+            epsilons = [epsilon_to_float(args.eps)]
         elif args.attack == 'pgd':
             attack = PGD()
-            epsilons = [0.03]
+            epsilons = [epsilon_to_float(args.eps)]
         elif args.attack == 'df':
             attack = L2DeepFoolAttack()
             epsilons = None
@@ -188,8 +188,6 @@ if __name__ == '__main__':
 
             image = image.cuda()
             label = label.cuda()
-
-            
 
             adv, adv_clip, success = attack(fmodel, image, criterion=foolbox.criteria.Misclassification(label), epsilons=epsilons)
 

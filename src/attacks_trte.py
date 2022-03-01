@@ -14,12 +14,16 @@ import numpy as np
 from tqdm import tqdm
 
 from conf import settings
-
 import matplotlib.pyplot as plt
 
 import foolbox
 from foolbox import PyTorchModel, accuracy, samples
 from foolbox.attacks import  L2DeepFoolAttack, LinfBasicIterativeAttack, FGSM, L2CarliniWagnerAttack, FGM, PGD
+
+from attacks.helper_attack import (
+    adapt_batchsize
+)
+
 
 from utils import (
     Logger,
@@ -262,24 +266,7 @@ if __name__ == '__main__':
     ######################################################################################
     # load correctly classified data
     device_name = getdevicename()
-    batch_size = 128 
-    if device_name == 'titan v' and (args.net == 'imagenet128' or args.net == 'celebaHQ128'):
-        batch_size = 24
-    if device_name == 'a100' and (args.net == 'imagenet' or  args.net == 'imagenet128' or args.net == 'celebaHQ128'):
-        batch_size = 48
-
-    if device_name == 'titan v' and (args.attack == "apgd-ce" or args.attack == "apgd-t" or args.attack == "fab-t" or args.attack == "square"):
-        batch_size = 256
-
-    if device_name == 'titan v' and (( args.attack == "cw" or args.attack == "df") and (args.net == 'imagenet64' or args.net == 'celebaHQ64')):
-        batch_size = 48
-    elif args.net == 'celebaHQ256':
-        batch_size = 24
-    elif device_name == 'titan v' and args.net == 'imagenet':
-        batch_size = 32
-    ######################################################################################
-
-    args.batch_size = batch_size
+    args.batch_size = adapt_batchsize(args, device_name)
     logger.log('INFO: batch size: ' + str(batch_size))
 
     # input data    
