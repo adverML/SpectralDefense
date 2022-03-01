@@ -14,16 +14,16 @@ DATASETS="cif10"
 
 # DATASETS="imagenet64 celebaHQ64 imagenet128 celebaHQ128"
 # RUNS="1 2 3"
-RUNS="8"
+RUNS="1"
 
 # ATTACKS="fgsm bim pgd std df cw"
 # ATTACKS="apgd-ce apgd-t fab-t square"
 # ATTACKS="std"
-ATTACKS="df"
+ATTACKS="gauss"
 
 # ATTACKS="apgd-ce"
 
-DETECTORS="LayerMFS"
+DETECTORS="InputMFS"
 # DETECTORS="InputMFS LayerMFS LID Mahalanobis"
 # DETECTORS="LayerMFS"
 # DETECTORS="InputPFS LayerPFS InputMFS LayerMFS LID Mahalanobis"
@@ -48,7 +48,7 @@ DATASETSLAYERNR="cif10"
 ATTACKSLAYERNR="df"
 
 LAYERNR="0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24"
-LAYERNR="0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 "
+LAYERNR="0 1 2 3 4 5 6 7 8 9 10 11 12 13 14"
 DETECTORSLAYERNR="LayerMFS LayerPFS"
 
 #-----------------------------------------------------------------------------------------------------------------------------------
@@ -244,7 +244,7 @@ detectadversarials ()
                         for nrsamples in $NRSAMPLES; do
                             for classifier in $CLF; do
                                 if [ "$net" == cif10 ]; then
-                                    python -u detect_adversarials.py --net "$net" --attack "$att" --detector "$det" --wanted_samples "$nrsamples" --clf "$classifier" --eps "$eps" --num_classes 10  --run_nr "$run"  --pca_features 10
+                                    python -u detect_adversarials.py --net "$net" --attack "$att" --detector "$det" --wanted_samples "$nrsamples" --clf "$classifier" --eps "$eps" --num_classes 10  --run_nr "$run"  --pca_features 100
                                 fi
 
                                 if [ "$net" == cif10vgg ]; then
@@ -318,9 +318,9 @@ detectadversarialslayer ()
 
 # printn
 # genereratecleandata
-# attacks
+attacks
 # extractcharacteristics
-detectadversarials
+# detectadversarials
 
 
 # python attacks.py --net cif10 --att std --batch_size 500 --eps 4./255.

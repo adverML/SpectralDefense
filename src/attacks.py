@@ -21,9 +21,23 @@ import foolbox
 from foolbox import PyTorchModel, accuracy, samples
 from foolbox.attacks import  L2DeepFoolAttack, LinfBasicIterativeAttack, FGSM, L2CarliniWagnerAttack, FGM, PGD
 
-from utils import *
+from utils import (
+    Logger,
+    log_header,
+    create_dir_extracted_characteristics, 
+    save_args_to_file,
+    getdevicename,
+    check_args,
+    create_dir_attacks,
+    create_save_dir_path,
+    create_dir_clean_data,
+    epsilon_to_float,
+    get_num_classes,
+    load_model,
+    get_debug_info
+)
 
-from attacks.helper_attack import (
+from attack.helper_attacks import (
     adapt_batchsize
 )
 
@@ -80,7 +94,7 @@ if __name__ == '__main__':
 
     #load correctly classified data
     args.batch_size = adapt_batchsize(args, device_name)
-    logger.log('INFO: batch size: ' + str(batch_size))
+    logger.log('INFO: batch size: ' + str(args.batch_size))
 
     # input data    
     clean_data_path = create_dir_clean_data(args, root='./data/clean_data/')
@@ -99,6 +113,9 @@ if __name__ == '__main__':
     success = []
     success_rate = 0
     logger.log('INFO: Perform attacks...')
+
+    testset = torch.load(clean_data_path + os.sep + 'clean_data')[:args.all_samples]
+    test_loader = torch.utils.data.DataLoader(testset, batch_size=args.batch_size, shuffle=args.shuffle_on)
 
     if args.attack == 'std' or args.attack == 'apgd-ce' or args.attack == 'apgd-t' or args.attack == 'fab-t' or args.attack == 'square':
         logger.log('INFO: Load data...')
@@ -144,11 +161,11 @@ if __name__ == '__main__':
 
     elif args.attack == 'fgsm' or args.attack == 'bim' or args.attack == 'pgd' or args.attack == 'df' or args.attack == 'cw': 
 
-        testset = torch.load(clean_data_path + os.sep + 'clean_data')[:args.all_samples]
+        
         # testset = torch.load("/home/lorenzp/adversialml/src/pytorch-CelebAHQ/data/clean_data_cif1028_10")[:args.all_samples]
 
         logger.log("INFO: len(testset): {}".format(len(testset)))
-        test_loader = torch.utils.data.DataLoader(testset, batch_size=batch_size, shuffle=args.shuffle_on)
+        
 
         #setup depending on attack
         if args.attack == 'fgsm':
@@ -204,8 +221,8 @@ if __name__ == '__main__':
                 counter = counter + 1
                 if suc:
                     # import pdb; pdb.set_trace()
-                    images_advs.append( adv_clip[idx].squeeze_(0).cpu() )
                     images.append( image[idx].squeeze_(0).cpu() )
+                    images_advs.append( adv_clip[idx].squeeze_(0).cpu() )
                     # labels_advs.append( torch.argmax( adv_clip_pred[idx]).cpu().item() )
                     labels.append( label[idx].cpu().item() )
                     success_counter = success_counter + 1
@@ -213,14 +230,25 @@ if __name__ == '__main__':
             if success_counter >= args.wanted_samples:
                 logger.log("INFO: wanted samples reached {}".format(args.wanted_samples))
                 break
-    
-    
-    elif args.attack == 'gauss':
-        # baseline accuracy
-        from attack.helper_attacks imort (
 
-        )
+ 
+    elif args.attack == 'gauss':  # baseline accuracy
+        from attack.noise_baseline import noisy
+        logger.log("INFO: len(testset): {}".format(len(testset)))
 
+        for image, label in test_loader:
+            for itx, img in enumerate(image):
+                img_np = img.cpu().numpy().squeeze().transpose([1,2,0])
+                image_adv = torch.from_numpy(np.expand_dims(noisy(img_np, noise_typ='gauss').transpose([2, 1, 0]), 0)).cuda()
+                images.append( img )
+                images_advs.append( image_adv )
+                labels.append( label[itx] )
+                labels_advs.append( label[itx] )
+                success_counter  = success_counter + 1
+                
+                if success_counter >= args.wanted_samples:
+                    logger.log("INFO: wanted samples reached {}".format(args.wanted_samples))
+                    break
 
     logger.log("INFO: len(testset):   {}".format( len(testset) ))
     logger.log("INFO: success_counter {}".format(success_counter))

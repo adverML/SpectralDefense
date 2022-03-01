@@ -20,11 +20,6 @@ import foolbox
 from foolbox import PyTorchModel, accuracy, samples
 from foolbox.attacks import  L2DeepFoolAttack, LinfBasicIterativeAttack, FGSM, L2CarliniWagnerAttack, FGM, PGD
 
-from attacks.helper_attack import (
-    adapt_batchsize
-)
-
-
 from utils import (
     Logger,
     log_header,
@@ -41,6 +36,9 @@ from utils import (
     get_debug_info
 )
 
+from attacks.helper_attack import (
+    adapt_batchsize
+)
 
 
 def create_advs(logger, args, output_path_dir, clean_data_path, wanted_samples, option=1):
