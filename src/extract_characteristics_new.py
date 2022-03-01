@@ -144,9 +144,7 @@ elif args.detector == 'Mahalanobis':
 ####### Dknn section
 elif args.detector == 'DkNN':
     import defenses.DeepkNN as DkNN
-
     DkNN.calculate(args, model, images, images_advs, layers, 0, 0)
-
 
 ####### Trust section
 elif args.detector == 'Trust':

@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
 
-from helper_detection import save_clf
 from sklearn.linear_model import LogisticRegression
 
 def LR(args, logger, X_train, y_train, X_test, y_test):

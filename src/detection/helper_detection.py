@@ -102,7 +102,7 @@ def split_data(args, logger, characteristics, characteristics_adv, k, test_size=
     return X_train, y_train, X_test, y_test
 
 
-def save_load_clf(args, output_path_dir):
+def save_load_clf(args, clf, output_path_dir):
     # save classifier
     classifier_pth = output_path_dir + os.sep + str(args.clf) + '.clf'
     if settings.SAVE_CLASSIFIER:

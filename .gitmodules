@@ -26,3 +26,6 @@
 [submodule "src/submodules/adaptive-auto-attack"]
 	path = src/submodules/adaptive-auto-attack
 	url = git@github.com:adverML/adaptive-auto-attack.git
+[submodule "src/submodules/PyTorch"]
+	path = src/submodules/PyTorch
+	url = git@github.com:adverML/PyTorch.git

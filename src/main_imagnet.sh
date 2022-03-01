@@ -112,7 +112,7 @@ detectadversarials ()
                         for nrsamples in $NRSAMPLES; do
                             for classifier in $CLF; do
                                 for eps in $EPSILONS; do
-                                    python -u detect_adversarials.py --net "$net" --attack "$att" --detector "$det" --wanted_samples "$nrsamples" --clf "$classifier" --num_classes 1000  --eps "$eps"  --run_nr "$run"
+                                    python -u detect_adversarials.py --net "$net" --attack "$att" --detector "$det" --wanted_samples "$nrsamples" --clf "$classifier" --num_classes 1000  --eps "$eps"  --run_nr "$run" --pca_features 500
                                 done
                             done
                         done
@@ -156,7 +156,7 @@ detectadversarialslayer ()
                         for classifier in $CLF; do
                             for nr in $LAYERNR; do 
                                 log_msg "Layer Nr. $nr"
-                                python -u detect_adversarials.py --net "$net" --attack "$att" --detector "$det" --wanted_samples "$nrsamples" --clf "$classifier" --num_classes 1000 --nr "$nr" --run_nr "$run" --pca_features 1
+                                python -u detect_adversarials.py --net "$net" --attack "$att" --detector "$det" --wanted_samples "$nrsamples" --clf "$classifier" --num_classes 1000 --nr "$nr" --run_nr "$run" 
                                 # python -u detect_adversarials.py --net "$net" --attack "$att" --detector "$det" --wanted_samples "$nrsamples" --clf "$classifier" --num_classes 1000 --nr "$nr" --run_nr "$run" --pca_features -1
                             done
                         done

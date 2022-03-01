@@ -19,13 +19,11 @@ from utils import (
     create_save_dir_path,
 )
 
-
 from sklearn.preprocessing import MinMaxScaler, StandardScaler
 from sklearn import svm
 import argparse
 
 from detection.helper_detection import show_results, split_data, save_load_clf
-
 
 #processing the arguments
 parser = argparse.ArgumentParser()
@@ -83,21 +81,27 @@ if shape[0] < args.wanted_samples:
 
 X_train, y_train, X_test, y_test = split_data(args, logger, characteristics, characteristics_adv, k=shape[0], test_size=0.2, random_state=42)
 
-scaler  = MinMaxScaler().fit(X_train)
-X_train = scaler.transform(X_train)
-X_test  = scaler.transform(X_test)
+# scaler  = MinMaxScaler().fit(X_train)
+# X_train = scaler.transform(X_train)
+# X_test  = scaler.transform(X_test)
 
 
 if args.pca_features > 0:
     logger.log('Apply PCA decomposition. Reducing number of features from {} to {}'.format(X_train.shape[1], args.pca_features))
     from sklearn.decomposition import PCA # https://scikit-learn.org/stable/modules/generated/sklearn.decomposition.PCA.html?highlight=pca#sklearn.decomposition.PCA
-    # pca = PCA(n_components=args.pca_features)
-    pca = PCA(n_components='mle', svd_solver='auto', random_state=32)
+    pca = PCA(n_components=args.pca_features, svd_solver='auto', random_state=32)
+    # pca = PCA(n_components='mle', svd_solver='auto', random_state=32)
 
     pca.fit(X_train)
     X_train = pca.transform(X_train)
     X_test = pca.transform(X_test)
+    # import pdb; pdb.set_trace()
+    # # X_train = torch.from_numpy(X_train)
+    # from submodules.PyTorch.TorchPCA import PCA
+    # y = PCA.Decomposition(X_train.cuda(), k=1)
 
+    # import pdb; pdb.set_trace()
+    
 
 #train classifier
 logger.log('Training classifier...')
@@ -112,8 +116,6 @@ elif args.clf == 'IF':
     from detection.IsolationForest import IF
     clf, y_hat, y_hat_pr = IF(args, logger, X_train, y_train, X_test, y_test)
 
-
-clf = save_clf(args, output_path_dir)
-
+clf = save_load_clf(args, clf, output_path_dir)
 
 show_results(args, logger, y_test, y_hat, y_hat_pr)

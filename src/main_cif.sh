@@ -32,7 +32,9 @@ DETECTORS="LayerMFS"
 EPSILONS="8./255."
 
 # CLF="LR RF"
-CLF="IF"
+# CLF="IF"
+CLF="LR"
+
 
 
 IMAGENET32CLASSES="25 50 100 250 1000"
@@ -242,7 +244,7 @@ detectadversarials ()
                         for nrsamples in $NRSAMPLES; do
                             for classifier in $CLF; do
                                 if [ "$net" == cif10 ]; then
-                                    python -u detect_adversarials.py --net "$net" --attack "$att" --detector "$det" --wanted_samples "$nrsamples" --clf "$classifier" --eps "$eps" --num_classes 10  --run_nr "$run"  --pca_features -1
+                                    python -u detect_adversarials.py --net "$net" --attack "$att" --detector "$det" --wanted_samples "$nrsamples" --clf "$classifier" --eps "$eps" --num_classes 10  --run_nr "$run"  --pca_features 2
                                 fi
 
                                 if [ "$net" == cif10vgg ]; then
