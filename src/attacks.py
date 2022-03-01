@@ -197,7 +197,7 @@ if __name__ == '__main__':
             image = torch.squeeze(image)
             label = torch.squeeze(label)
 
-            if batch_size == 1:
+            if args.batch_size == 1:
                 image = torch.unsqueeze(image, 0)
                 label = torch.unsqueeze(label, 0)
 
@@ -234,17 +234,20 @@ if __name__ == '__main__':
  
     elif args.attack == 'gauss':  # baseline accuracy
         from attack.noise_baseline import noisy
+        
         logger.log("INFO: len(testset): {}".format(len(testset)))
 
         for image, label in test_loader:
             for itx, img in enumerate(image):
                 img_np = img.cpu().numpy().squeeze().transpose([1,2,0])
-                image_adv = torch.from_numpy(np.expand_dims(noisy(img_np, noise_typ='gauss').transpose([2, 1, 0]), 0)).cuda()
-                images.append( img )
+                image_adv = torch.from_numpy( noisy(img_np, noise_typ='gauss').transpose([2, 1, 0]) ).cuda()
+                images.append( img.squeeze() )
                 images_advs.append( image_adv )
                 labels.append( label[itx] )
                 labels_advs.append( label[itx] )
+                
                 success_counter  = success_counter + 1
+                counter = counter + 1
                 
                 if success_counter >= args.wanted_samples:
                     logger.log("INFO: wanted samples reached {}".format(args.wanted_samples))

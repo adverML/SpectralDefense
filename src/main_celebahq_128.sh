@@ -8,7 +8,7 @@ function log_msg {
 
 # DATASETS=(cif10 cif10vgg cif100 cif100vgg imagenet imagenet32 imagenet64 imagenet128 celebaHQ32 celebaHQ64 celebaHQ128)
 # DATASETS="celebaHQ32 celebaHQ64 celebaHQ128"
-DATASETS="celebaHQ128"
+DATASETS="celebaHQ64 celebaHQ128"
 # DATASETS="celebaHQ64"
 # DATASETS="celebaHQ256"
 
@@ -17,9 +17,9 @@ RUNS="1 2 3"
 NUMCLASSES=4
 VERSION="standard_4"
 
-ATTACKS="fgsm bim pgd df cw"
+# ATTACKS="fgsm bim pgd df cw"
 # ATTACKS="df cw"
-# ATTACKS="cw"
+ATTACKS="gauss"
 
 # DETECTORS="InputMFS"
 DETECTORS="LayerMFS"

@@ -90,6 +90,8 @@ logger.log("INFO: images_advs " + images_advs_path)
 images =      torch.load(images_path)[:args.wanted_samples]
 images_advs = torch.load(images_advs_path)[:args.wanted_samples]
 
+# import pdb; pdb.set_trace()
+
 number_images = len(images)
 logger.log("INFO: eps " + str(args.eps) + " INFO: nr_img " + str(number_images) + " INFO: Wanted Samples: " + str(args.wanted_samples) )
 
@@ -178,11 +180,7 @@ elif args.net == 'cif10rn34sota':
             act_val_list.append(act_val)
         return act_val_list
 
-
     layer_name = layer_name_cif10
-
-    import pdb; pdb.set_trace()
-
 
     if not args.nr == -1:
 
@@ -898,9 +896,16 @@ elif args.detector == 'LayerMFS':
     mfs = []
     mfs_advs = []
 
+    # import pdb; pdb.set_trace()
+
     for i in tqdm(range(number_images)):
-        image = images[i].unsqueeze_(0)
-        adv = images_advs[i].unsqueeze_(0)
+        
+        if len(images[i].shape) > 4:
+            image = images[i].unsqueeze_(0)
+            adv = images_advs[i].unsqueeze_(0)
+        else:
+            image = images[i]
+            adv   = images_advs[i]
 
         image = normalize_images(image, args)
         adv   = normalize_images(adv, args)
@@ -1269,6 +1274,7 @@ elif args.detector == 'Mahalanobis':
                 noise_out_features = noise_out_features.view(noise_out_features.size(0), noise_out_features.size(1), -1)
                 noise_out_features = torch.mean(noise_out_features, 2)
                 noise_gaussian_score = 0
+                
             for i in range(num_classes):
                 batch_sample_mean = sample_mean[layer_index][i]
                 zero_f = noise_out_features.cpu().data - batch_sample_mean.cpu()
@@ -1279,6 +1285,7 @@ elif args.detector == 'Mahalanobis':
                     noise_gaussian_score = torch.cat((noise_gaussian_score, term_gau.view(-1,1)), 1)
             noise_gaussian_score, _ = torch.max(noise_gaussian_score, dim=1)
             Mahalanobis.extend(noise_gaussian_score.cpu().numpy())
+            
         return Mahalanobis
 
 

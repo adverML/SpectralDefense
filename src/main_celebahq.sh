@@ -7,37 +7,39 @@ function log_msg {
 }
 
 # DATASETS=(cif10 cif10vgg cif100 cif100vgg imagenet imagenet32 imagenet64 imagenet128 celebaHQ32 celebaHQ64 celebaHQ128)
-DATASETS="celebaHQ32 celebaHQ64 celebaHQ128"
+# DATASETS="celebaHQ32 celebaHQ64 celebaHQ128"
 # DATASETS="celebaHQ128"
-# DATASETS="celebaHQ32"
+DATASETS="celebaHQ32"
 # DATASETS="celebaHQ256"
 
 # RUNS="1 2 3"
-RUNS="2 3"
+RUNS="1 2 3"
 
 NUMCLASSES=4
 VERSION="standard_4"
 
 # ATTACKS="fgsm bim pgd df cw"
 # ATTACKS="fgsm bim pgd df cw"
-ATTACKS="df cw"
+ATTACKS="gauss"
 # ATTACKS="cw"
 
-DETECTORS="LayerMFS"
+DETECTORS="InputMFS LayerMFS"
 # DETECTORS="InputMFS LayerMFS"
 
 # EPSILONS="4./255. 2./255. 1./255. 0.5/255."
 # EPSILONS="8./255. 4./255. 2./255. 1./255. 0.5/255."
 EPSILONS="8./255."
-
 CLF="LR RF"
-
 
 IMAGENET32CLASSES="25 50 100 250 1000"
 # NRSAMPLES="300 500 1000 1200 1500 2000"
 NRSAMPLES="1500"
 # NRRUN=1..4
 NRRUN=3
+
+WANTEDSAMPLES="2000"
+ALLSAMPLES="4500"
+NRSAMPLES="2000" 
 
 #-----------------------------------------------------------------------------------------------------------------------------------
 log_msg "Networks are already trained!"
@@ -49,18 +51,18 @@ genereratecleandata ()
     for run in $RUNS; do
         for net in $DATASETS; do
             if [ "$net" == celebaHQ32 ]; then
-                python -u generate_clean_data.py --net "$net" --num_classes $NUMCLASSES  --img_size 32 --run_nr "$run"
+                python -u generate_clean_data.py --net "$net" --num_classes $NUMCLASSES  --img_size 32 --run_nr "$run" --wanted_samples "$ALLSAMPLES"
             fi 
 
             if [ "$net" == celebaHQ64 ]; then
-                python -u generate_clean_data.py --net "$net" --num_classes $NUMCLASSES  --img_size 64 --run_nr "$run"
+                python -u generate_clean_data.py --net "$net" --num_classes $NUMCLASSES  --img_size 64 --run_nr "$run" --wanted_samples "$ALLSAMPLES"
             fi 
 
-            if [ "$net" == celebaHQ128 ]; then
-                python -u generate_clean_data.py --net "$net" --num_classes $NUMCLASSES  --img_size 128 --run_nr "$run"
+            if [ "$net" == celebaHQ128 ]; then 
+                python -u generate_clean_data.py --net "$net" --num_classes $NUMCLASSES  --img_size 128 --run_nr "$run" --wanted_samples "$ALLSAMPLES"
             fi 
             if [ "$net" == celebaHQ256 ]; then
-                python -u generate_clean_data.py --net "$net" --num_classes $NUMCLASSES  --img_size 256 --run_nr "$run"
+                python -u generate_clean_data.py --net "$net" --num_classes $NUMCLASSES  --img_size 256 --run_nr "$run" --wanted_samples "$ALLSAMPLES"
             fi 
         done
     done
@@ -75,19 +77,19 @@ attacks ()
             for att in $ATTACKS; do
                 for eps in $EPSILONS; do
                     if [ "$net" == celebaHQ32 ]; then
-                        python -u attacks.py --net "$net" --num_classes $NUMCLASSES --attack "$att" --img_size 32 --batch_size 500  --eps "$eps" --version "$VERSION" --run_nr "$run" --wanted_samples $NRSAMPLES
+                        python -u attacks.py --net "$net" --num_classes $NUMCLASSES --attack "$att" --img_size 32 --batch_size 500  --eps "$eps" --version "$VERSION" --run_nr "$run" --wanted_samples "$WANTEDSAMPLES"
                     fi 
 
                     if [ "$net" == celebaHQ64 ]; then
-                        python -u attacks.py --net "$net" --num_classes $NUMCLASSES --attack "$att" --img_size 64 --batch_size 500  --eps "$eps" --version "$VERSION" --run_nr "$run" --wanted_samples $NRSAMPLES
+                        python -u attacks.py --net "$net" --num_classes $NUMCLASSES --attack "$att" --img_size 64 --batch_size 500  --eps "$eps" --version "$VERSION" --run_nr "$run" --wanted_samples "$WANTEDSAMPLES"
                     fi 
 
                     if [ "$net" == celebaHQ128 ]; then
-                        python -u attacks.py --net "$net" --num_classes $NUMCLASSES --attack "$att" --img_size 128 --batch_size 48  --eps "$eps" --version "$VERSION" --run_nr "$run" --wanted_samples $NRSAMPLES
+                        python -u attacks.py --net "$net" --num_classes $NUMCLASSES --attack "$att" --img_size 128 --batch_size 48  --eps "$eps" --version "$VERSION" --run_nr "$run" --wanted_samples "$WANTEDSAMPLES"
                     fi 
 
                     if [ "$net" == celebaHQ256 ]; then 
-                        python -u attacks.py --net "$net" --num_classes $NUMCLASSES --attack "$att" --img_size 256 --batch_size 12  --eps "$eps" --version "$VERSION" --run_nr "$run" --wanted_samples $NRSAMPLES
+                        python -u attacks.py --net "$net" --num_classes $NUMCLASSES --attack "$att" --img_size 256 --batch_size 12  --eps "$eps" --version "$VERSION" --run_nr "$run" --wanted_samples "$WANTEDSAMPLES"
                     fi 
                 done
             done
@@ -146,7 +148,7 @@ detectadversarials ()
 }
 
 # genereratecleandata
-# attacks
+attacks
 extractcharacteristics
 detectadversarials
 

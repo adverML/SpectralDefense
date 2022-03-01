@@ -68,7 +68,9 @@ def is_float(value):
 def get_clean_accuracy(paths):
     result = {}
     for path in paths:
-        if 'fgsm' in path:
+        if 'gauss' in path:
+            attack_method = 'gauss'        
+        elif 'fgsm' in path:
             attack_method = 'fgsm'
         elif 'bim' in path:
             attack_method = 'bim'
@@ -117,7 +119,7 @@ def get_clean_accuracy(paths):
         asr_list = []
         for line in lines_attack:
             if line.__contains__("INFO: attack success rate:"):
-                print(path, line)
+                
                 asr = float(line.strip().split(' ')[-1])
                 asr_list.append(asr)            
 
@@ -126,6 +128,7 @@ def get_clean_accuracy(paths):
                 else:
                     # import pdb; pdb.set_trace()
                     result[attack_method] = asr_list[-1]
+        # print(path, asr_list[-1])
     
     return result
 
@@ -341,7 +344,7 @@ def copy_run_dest(root='./data/clean_data', net=['cif10', 'cif10vgg', 'cif100', 
 # clean_root_folders( root='./data/attacks',    net=['imagenet32', 'imagenet64', 'imagenet128'] )
 
 
-
+NR = [1]
 
 # for run in [1, 2, 3]:
 #     copy_run_dest(root='./data/clean_data', net=['cif10', 'cif10vgg', 'cif100', 'cif100vgg'], dest='./log_evaluation/cif', run_nr=run)
@@ -389,25 +392,24 @@ def copy_run_dest(root='./data/clean_data', net=['cif10', 'cif10vgg', 'cif100', 
 # extract_information(root='./data', net=['cif100vgg'], dest='./data/detection', run_nr=[1], csv_filename='eval_cif100vgg.csv', layers=False)
 
 
-
 # run 1
+extract_information(root='./data', net=['cif10'],    dest='./data/detection',    run_nr=NR, csv_filename='eval_cif.csv', layers=False)
+extract_information(root='./data', net=['cif10vgg'], dest='./data/detection',    run_nr=NR, csv_filename='eval_cifvgg.csv', layers=False)
 
-# extract_information(root='./data', net=['cif10vgg'], dest='./data/detection',    run_nr=[1], csv_filename='eval_cifvgg_mah.csv', layers=False)
-# extract_information(root='./data', net=['cif100'], dest='./data/detection',   run_nr=[1], csv_filename='eval_cif.csv', layers=False)
-# extract_information(root='./data', net=['cif10vgg'], dest='./data/detection', run_nr=[3], csv_filename='eval_cif.csv', layers=False)
-# extract_information(root='./data', net=['cif100vgg'], dest='./data/detection', run_nr=[3], csv_filename='eval_cif.csv', layers=False)
+extract_information(root='./data', net=['cif100'],    dest='./data/detection',   run_nr=NR, csv_filename='eval_cif100.csv', layers=False)
+extract_information(root='./data', net=['cif100vgg'], dest='./data/detection',   run_nr=NR, csv_filename='eval_cif100vgg.csv', layers=False)
 
-# extract_information(root='./data', net=['imagenet32'], dest='./data/detection',  run_nr=[1], csv_filename='eval_imagenet32.csv', layers=False)
+extract_information(root='./data', net=['cif10rn34'],  dest='./data/detection',  run_nr=NR, csv_filename='eval_cifrn34.csv', layers=False)
+extract_information(root='./data', net=['cif100rn34'], dest='./data/detection',  run_nr=NR, csv_filename='eval_cifrn34.csv', layers=False)
+
+extract_information(root='./data', net=['imagenet32'], dest='./data/detection',  run_nr=NR, csv_filename='eval_imagenet32.csv', layers=False)
 # extract_information(root='./data', net=['imagenet64'], dest='./data/detection',  run_nr=[1], csv_filename='eval_imagenet64.csv', layers=False)
 # extract_information(root='./data', net=['imagenet128'], dest='./data/detection', run_nr=[4], csv_filename='eval_imagenet128.csv', layers=False)
 
-# extract_information(root='./data', net=['celebaHQ32'], dest='./data/detection',  run_nr=[1], csv_filename='eval_celebaHQ32.csv', layers=False)
+extract_information(root='./data', net=['celebaHQ32'], dest='./data/detection',  run_nr=NR, csv_filename='eval_celebaHQ32.csv', layers=False)
 # extract_information(root='./data', net=['celebaHQ64'], dest='./data/detection',  run_nr=[1], csv_filename='eval_celebaHQ64.csv', layers=False)
 # extract_information(root='./data', net=['celebaHQ128'], dest='./data/detection', run_nr=[1], csv_filename='eval_celebaHQ128.csv', layers=False)
 
-# extract_information(root='./data', net=['cif10rn34'], dest='./data/detection',  run_nr=[1], csv_filename='eval_cifrn34.csv', layers=False)
-
-# extract_information(root='./data', net=['cif100rn34'], dest='./data/detection',  run_nr=[1], csv_filename='eval_cifrn34.csv', layers=False)
 
 # extract_information(root='./data', net=['imagenet'], dest='./data/detection',  run_nr=[1], csv_filename='eval.csv', layers=False)
 
@@ -495,7 +497,7 @@ def copy_run_dest(root='./data/clean_data', net=['cif10', 'cif10vgg', 'cif100', 
 # extract_information(root='./data', net=['imagenet'], dest='./data/detection',  run_nr=[7], csv_filename='eval.csv', layers=True)
 # extract_information(root='./data', net=['imagenet'], dest='./data/detection',  run_nr=[8], csv_filename='eval.csv', layers=False)
 
-extract_information(root='./data', net=['imagenet32'], dest='./data/detection',  run_nr=[8], csv_filename='eval_layers.csv', layers=True)
+# extract_information(root='./data', net=['imagenet32'], dest='./data/detection',  run_nr=[8], csv_filename='eval_layers.csv', layers=True)
 
 # data_transfer
 

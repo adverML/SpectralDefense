@@ -8,20 +8,20 @@ function log_msg {
 
 # DATASETS=(cif10 cif10vgg cif100 cif100vgg imagenet imagenet32 imagenet64 imagenet128 celebaHQ32 celebaHQ64 celebaHQ128)
 DATASETS="imagenet32"
-# RUNS="1 2 3"
-RUNS="8"
+RUNS="1 2 3"
+# RUNS="8"
 
 # ATTACKS="cw"
 # ATTACKS="df cw"
-ATTACKS="df"
+ATTACKS="gauss"
 
 # DETECTORS="InputPFS LayerPFS LID Mahalanobis"
 # DETECTORS="InputPFS LayerPFS InputMFS LayerMFS LID Mahalanobis"
-DETECTORS="LayerMFS"
+DETECTORS="InputMFS LayerMFS"
 # EPSILONS="8./255. 4./255. 2./255. 1./255. 0.5/255."
 EPSILONS="8./255."
 
-CLF="RF"
+CLF="LR RF"
 # CLF="LR"
 
 IMAGENET32CLASSES="25 50 100 250 1000"
@@ -184,7 +184,7 @@ detectadversarialslayer ()
 
 
 # genereratecleandata
-# attacks
+attacks
 extractcharacteristics
 detectadversarials
 

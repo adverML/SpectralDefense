@@ -7,28 +7,28 @@ function log_msg {
 # DATASETS=(cif10 cif10vgg cif100 cif100vgg imagenet imagenet32 imagenet64 imagenet128 celebaHQ32 celebaHQ64 celebaHQ128)
 DATASETS="imagenet"
 
-# RUNS="1 2 3"
-RUNS="8"
+RUNS="1 2 3"
+# RUNS="8"
 # RUNS="7"
 
 # ATTACKS="fgsm bim pgd"
-ATTACKS="df"
+ATTACKS="gauss"
 
 # ATTACKS="fgsm bim std pgd df cw"
 # ATTACKS="apgd-ce apgd-t fab-t square"
 # DETECTORS="InputMFS LayerMFS LID Mahalanobis"
-DETECTORS="LayerMFS"
+DETECTORS="InputMFS LayerMFS"
 # DETECTORS="InputPFS LayerPFS InputMFS LayerMFS LID Mahalanobis"
 
 # EPSILONS="8./255. 4./255. 2./255. 1./255. 0.5/255."
 EPSILONS="8./255."
 
 # CLF="LR RF"
-CLF="LR"
+CLF="LR RF"
 # CLF="IF"
 
 DATASETSLAYERNR="imagenet"
-ATTACKSLAYERNR="bim"
+ATTACKSLAYERNR="df"
 # ATTACKSLAYERNR="bim df"
 
 # ATTACKSLAYERNR="fgsm bim pgd std df cw"
@@ -112,7 +112,7 @@ detectadversarials ()
                         for nrsamples in $NRSAMPLES; do
                             for classifier in $CLF; do
                                 for eps in $EPSILONS; do
-                                    python -u detect_adversarials.py --net "$net" --attack "$att" --detector "$det" --wanted_samples "$nrsamples" --clf "$classifier" --num_classes 1000  --eps "$eps"  --run_nr "$run" --pca_features 500
+                                    python -u detect_adversarials.py --net "$net" --attack "$att" --detector "$det" --wanted_samples "$nrsamples" --clf "$classifier" --num_classes 1000  --eps "$eps"  --run_nr "$run" --pca_features 0
                                 done
                             done
                         done
@@ -168,8 +168,8 @@ detectadversarialslayer ()
 }
 
 # genereratecleandata
-# attacks
-# extractcharacteristics
+attacks
+extractcharacteristics
 detectadversarials
 
 # extractcharacteristicslayer

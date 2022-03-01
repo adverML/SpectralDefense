@@ -39,7 +39,7 @@ parser.add_argument("--num_classes",    default='10',   type=int, help=settings.
 parser.add_argument("--clf",            default='LR',             help="Logistic Regression (LR) or Random Forest (RF) or Isolation Forest (IF)")
 parser.add_argument("--trees",          default='300',  type=int, help=settings.HELP_NUM_CLASSES)
 parser.add_argument("--num_iter",       default='100',  type=int, help="LR: Number iteration")
-parser.add_argument("--pca_features",   default='1',    type=int, help="Number of PCA features to train")
+parser.add_argument("--pca_features",   default='0',    type=int, help="Number of PCA features to train")
 
 
 # parser.add_argument("--eps",   default='-1',     help="epsilon: 4/255, 3/255, 2/255, 1/255, 0.5/255")

@@ -8,11 +8,11 @@ function log_msg {
 }
 
 # DATASETS=(cif10 cif10vgg cif100 cif100vgg imagenet imagenet32 imagenet64 imagenet128 celebaHQ32 celebaHQ64 celebaHQ128)
-DATASETS="imagenet128"
+DATASETS="imagenet64 imagenet128"
 # DATASETS="imagenet"
-ATTACKS="df cw"
+ATTACKS="gauss"
 # ATTACKS="apgd-ce apgd-t fab-t square"
-RUNS="8"
+RUNS="1 2 3"
 
 # ATTACKS="cw"
 # ATTACKS="fgsm bim pgd df cw"
@@ -24,7 +24,7 @@ EPSILONS="8./255."
 
 
 # DETECTORS="InputPFS LayerPFS InputMFS LayerMFS LID Mahalanobis"
-DETECTORS="InputMFS LayerMFS LID Mahalanobis"
+DETECTORS="InputMFS LayerMFS"
 CLF="LR RF"
 IMAGENET32CLASSES="25 50 100 250 1000"
 # NRSAMPLES="300 500 1000 1200 1500 2000"
@@ -89,17 +89,17 @@ detectadversarials ()
     log_msg "Detect Adversarials!"
     for run in $RUNS; do
         for net in $DATASETS; do
-                for att in $ATTACKS; do
-                    for eps in $EPSILONS; do
-                        for det in $DETECTORS; do
-                            for nrsamples in $NRSAMPLES; do
-                                for classifier in $CLF; do
-                                    python -u detect_adversarials.py --net "$net" --attack "$att" --detector "$det" --wanted_samples "$nrsamples" --clf "$classifier" --num_classes 1000 --eps "$eps" --run_nr "$run"
-                                done
+            for att in $ATTACKS; do
+                for eps in $EPSILONS; do
+                    for det in $DETECTORS; do
+                        for nrsamples in $NRSAMPLES; do
+                            for classifier in $CLF; do
+                                python -u detect_adversarials.py --net "$net" --attack "$att" --detector "$det" --wanted_samples "$nrsamples" --clf "$classifier" --num_classes 1000 --eps "$eps" --run_nr "$run"
                             done
                         done
                     done
                 done
+            done
         done
     done
 }
