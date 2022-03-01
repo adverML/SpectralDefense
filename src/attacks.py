@@ -23,6 +23,10 @@ from foolbox.attacks import  L2DeepFoolAttack, LinfBasicIterativeAttack, FGSM, L
 
 from utils import *
 
+from attacks.helper_attack import (
+    adapt_batchsize
+)
+
 
 
 if __name__ == '__main__':
@@ -75,24 +79,7 @@ if __name__ == '__main__':
     model = model.to(device)
 
     #load correctly classified data
-    batch_size = 128 
-    if device_name == 'titan v' and (args.net == 'imagenet128' or args.net == 'celebaHQ128'):
-        batch_size = 24
-    if device_name == 'a100' and (args.net == 'imagenet' or  args.net == 'imagenet128' or args.net == 'celebaHQ128'):
-        batch_size = 48
-
-    if device_name == 'titan v' and (args.attack == "apgd-ce" or args.attack == "apgd-t" or args.attack == "fab-t" or args.attack == "square"):
-        batch_size = 256
-
-    if device_name == 'titan v' and (( args.attack == "cw" or args.attack == "df") and (args.net == 'imagenet64' or args.net == 'celebaHQ64')):
-        batch_size = 48
-    elif args.net == 'celebaHQ256':
-        batch_size = 24
-    elif device_name == 'titan v' and args.net == 'imagenet':
-        batch_size = 32
-
-
-    args.batch_size = batch_size
+    args.batch_size = adapt_batchsize(args, device_name)
     logger.log('INFO: batch size: ' + str(batch_size))
 
     # input data    
@@ -126,7 +113,6 @@ if __name__ == '__main__':
 
         # run attack and save images
         with torch.no_grad():
-
             for x_test, y_test in testset:
                 if not args.individual:
                     logger.log("INFO: mode: std; not individual")
@@ -182,9 +168,6 @@ if __name__ == '__main__':
         elif args.attack == 'cw':
             attack = L2CarliniWagnerAttack(steps=1000)
             epsilons = None
-        elif args.attack == 'autoattack':
-            logger.log("Err: Auttoattack is started from another script! attacks_autoattack.py")
-            raise NotImplementedError("Err: Wrong Keyword use 'std' for 'ind' for AutoAttack!")
         else:
             logger.log('Err: unknown attack')
             raise NotImplementedError('Err: unknown attack')
@@ -232,6 +215,14 @@ if __name__ == '__main__':
             if success_counter >= args.wanted_samples:
                 logger.log("INFO: wanted samples reached {}".format(args.wanted_samples))
                 break
+    
+    
+    elif args.attack == 'gauss':
+        # baseline accuracy
+        from attack.helper_attacks imort (
+
+        )
+
 
     logger.log("INFO: len(testset):   {}".format( len(testset) ))
     logger.log("INFO: success_counter {}".format(success_counter))

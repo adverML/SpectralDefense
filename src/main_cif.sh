@@ -244,7 +244,7 @@ detectadversarials ()
                         for nrsamples in $NRSAMPLES; do
                             for classifier in $CLF; do
                                 if [ "$net" == cif10 ]; then
-                                    python -u detect_adversarials.py --net "$net" --attack "$att" --detector "$det" --wanted_samples "$nrsamples" --clf "$classifier" --eps "$eps" --num_classes 10  --run_nr "$run"  --pca_features 2
+                                    python -u detect_adversarials.py --net "$net" --attack "$att" --detector "$det" --wanted_samples "$nrsamples" --clf "$classifier" --eps "$eps" --num_classes 10  --run_nr "$run"  --pca_features 10
                                 fi
 
                                 if [ "$net" == cif10vgg ]; then
