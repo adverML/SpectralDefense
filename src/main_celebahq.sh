@@ -8,8 +8,8 @@ function log_msg {
 
 # DATASETS=(cif10 cif10vgg cif100 cif100vgg imagenet imagenet32 imagenet64 imagenet128 celebaHQ32 celebaHQ64 celebaHQ128)
 # DATASETS="celebaHQ32 celebaHQ64 celebaHQ128"
-# DATASETS="celebaHQ128"
-DATASETS="celebaHQ32"
+DATASETS="celebaHQ128"
+# DATASETS="celebaHQ32"
 # DATASETS="celebaHQ256"
 
 # RUNS="1 2 3"

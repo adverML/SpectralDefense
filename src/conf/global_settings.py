@@ -114,11 +114,11 @@ ISSAMPLEMEANCALCULATED = False #True # Mahalannobis; set true if sample mean and
 # ATTACKS_LIST = ['apgd-ce', 'apgd-t', 'fab-t', 'square']
 ATTACKS_LIST = [ 'gauss' ]
 
-
 # DETECTOR_LIST_LAYERS = ['InputMFS', 'LayerMFS', 'LID', 'Mahalanobis']
 DETECTOR_LIST_LAYERS = ['LayerPFS', 'LayerMFS']
 # DETECTOR_LIST_LAYERS = ['InputMFS', 'LayerMFS']
 
+# DETECTOR_LIST = [ 'LID', 'Mahalanobis' ]
 DETECTOR_LIST = [ 'InputMFS', 'LayerMFS' ]
 # DETECTOR_LIST = ['InputPFS', 'InputMFS', 'LayerPFS', 'LayerMFS', 'LID', 'Mahalanobis']
 # DETECTOR_LIST = ['InputMFS', 'LayerMFS', 'LID', 'Mahalanobis']

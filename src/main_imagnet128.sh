@@ -8,7 +8,7 @@ function log_msg {
 }
 
 # DATASETS=(cif10 cif10vgg cif100 cif100vgg imagenet imagenet32 imagenet64 imagenet128 celebaHQ32 celebaHQ64 celebaHQ128)
-DATASETS="imagenet64 imagenet128"
+DATASETS="imagenet128"
 # DATASETS="imagenet"
 ATTACKS="gauss"
 # ATTACKS="apgd-ce apgd-t fab-t square"

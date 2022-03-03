@@ -10,11 +10,11 @@ DATASETS="cif10_rb"
 # DATASETS="cif10rn34 cif100rn34"
 # DATASETS="cif100rn34"
 # DATASETS="imagenet64 celebaHQ64 imagenet128 celebaHQ128"
-RUNS="8"
+RUNS="1 2 3"
 
 # ATTACKS="fgsm bim pgd std df cw"
 # ATTACKS="fgsm bim std pgd df cw"
-ATTACKS="std"
+ATTACKS="gauss"
 
 # ATTACKS="df cw"
 # ATTACKS="bim df"
@@ -312,12 +312,12 @@ detectadversarialslayer ()
 
 # printn
 # genereratecleandata
-# attacks
-# extractcharacteristics
-# detectadversarials
+attacks
+extractcharacteristics
+detectadversarials
 
 # extractcharacteristicslayer
-detectadversarialslayer
+# detectadversarialslayer
 
 # #-----------------------------------------------------------------------------------------------------------------------------------
 log_msg "finished"

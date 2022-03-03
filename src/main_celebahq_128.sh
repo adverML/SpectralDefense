@@ -144,7 +144,7 @@ detectadversarials ()
 }
 
 # genereratecleandata
-# attacks
+attacks
 extractcharacteristics
 detectadversarials
 
