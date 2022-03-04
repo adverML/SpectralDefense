@@ -7,17 +7,17 @@ function log_msg {
 }
 
 # DATASETS=(cif10 cif10vgg cif100 cif100vgg imagenet imagenet32 imagenet64 imagenet128 celebaHQ32 celebaHQ64 celebaHQ128)
-DATASETS="imagenet64"
-RUNS="1"
+DATASETS="imagenet32"
+RUNS="2 3"
 # RUNS="8"
 
 # ATTACKS="cw"
 # ATTACKS="df cw"
-ATTACKS="gauss"
+ATTACKS="fgsm df"
 
 # DETECTORS="InputPFS LayerPFS LID Mahalanobis"
 # DETECTORS="InputPFS LayerPFS InputMFS LayerMFS LID Mahalanobis"
-DETECTORS="LayerMFS"
+DETECTORS="InputMFS LayerMFS"
 # EPSILONS="8./255. 4./255. 2./255. 1./255. 0.5/255."
 EPSILONS="8./255."
 
@@ -26,9 +26,14 @@ CLF="LR RF"
 
 IMAGENET32CLASSES="25 50 100 250 1000"
 # NRSAMPLES="300 500 1000 1200 1500 2000" # only at detectadversarialslayer
-WANTEDSAMPLES="24000"
-ALLSAMPLES="24000"
-NRSAMPLES="24000" # detect
+# WANTEDSAMPLES="24000"
+# ALLSAMPLES="24000"
+# NRSAMPLES="24000" # detect
+
+
+WANTEDSAMPLES="2000"
+ALLSAMPLES="4000"
+NRSAMPLES="2000" # detect
 
 DATASETSLAYERNR="imagenet32"
 ATTACKSLAYERNR="df"
@@ -97,7 +102,6 @@ extractcharacteristics ()
                                 python -u extract_characteristics.py --net "$net" --attack "$att" --detector "$det" --num_classes 1000  --img_size 64   --run_nr "$run"  --wanted_samples "$WANTEDSAMPLES"  --take_inputimage_off
                             fi
                         fi
-                        
                     done
                 done
             done
@@ -183,7 +187,7 @@ detectadversarialslayer ()
 }
 
 
-genereratecleandata
+# genereratecleandata
 attacks
 extractcharacteristics
 detectadversarials

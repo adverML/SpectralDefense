@@ -10,7 +10,7 @@ function log_msg {
 # DATASETS=(cif10 cif10vgg cif100 cif100vgg imagenet imagenet32 imagenet64 imagenet128 celebaHQ32 celebaHQ64 celebaHQ128)
 DATASETS="imagenet128"
 # DATASETS="imagenet"
-ATTACKS="gauss"
+ATTACKS="df"
 # ATTACKS="apgd-ce apgd-t fab-t square"
 RUNS="1 2 3"
 
@@ -39,9 +39,8 @@ genereratecleandata ()
     log_msg "Generate Clean Data for Foolbox Attacks and Autoattack!"
     for run in $RUNS; do
         for net in $DATASETS; do
-
             if [ "$net" == imagenet128 ]; then
-                python -u generate_clean_data.py --net "$net" --num_classes 1000   --img_size 128 --run_nr "$run" 
+                python -u generate_clean_data.py --net "$net" --num_classes 1000  --img_size 128 --run_nr "$run" 
             fi 
         done
     done

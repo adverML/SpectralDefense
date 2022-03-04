@@ -67,12 +67,10 @@ def save_args_to_file(args, path):
     
 
 def get_debug_info(msg):
-
     if settings.SHOW_DEBUG:
         # frameinfo = getframeinfo(currentframe())
         # print(msg, ", filename: ", frameinfo.filename, ", line_nr: ", frameinfo.lineno)
         print(msg)
-
 
 
 def aa_get_mode(args):
@@ -674,18 +672,17 @@ def get_dataloader(dataset_type, root_dir, is_train, batch_size, workers, resolu
     normalize = False
     if not preprocessing == None:
         normalize = True
-        if normalize or is_train:
-            normalize_transfrom = transforms.Normalize(mean=preprocessing['mean'], std=preprocessing['std'])
+        normalize_transfrom = transforms.Normalize(mean=preprocessing['mean'], std=preprocessing['std'])
 
-    if is_train and not clean_data:
-        transformations = [transforms.ToTensor(), normalize_transfrom]
-    elif is_train:
-            transformations = [
-            transforms.RandomHorizontalFlip(),
-            transforms.ToTensor(),
-            normalize_transfrom, 
-            ]
-    elif not is_train:
+    # if is_train and not clean_data:
+    #     transformations = [ transforms.ToTensor(), normalize_transfrom ]
+    # elif is_train:
+    #         transformations = [
+    #         transforms.RandomHorizontalFlip(),
+    #         transforms.ToTensor(),
+    #         normalize_transfrom, 
+    #         ]
+    if normalize:
         transformations = [ transforms.ToTensor(), normalize_transfrom ]
     else:
         transformations = [ transforms.ToTensor() ]
@@ -699,8 +696,8 @@ def get_dataloader(dataset_type, root_dir, is_train, batch_size, workers, resolu
     #         transforms.ToTensor()
     #     ] 
     
-    print("normalize: ", normalize)
-    print("transformations: ", transformations)
+    get_debug_info( "normalize: " + str(normalize) )
+    get_debug_info( "transformations: " + str(transformations) )
 
     trans = transforms.Compose(transformations)
     dataset = smallimagenet.SmallImagenet(root=root_dir, size=resolution, train=is_train, transform=trans,

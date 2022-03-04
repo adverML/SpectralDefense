@@ -27,8 +27,8 @@ main_path = "."
 # datasets=['cif10rn34', 'cif100rn34']
 
 # datasets=['imagenet32', 'imagenet64', 'cif10_rb', 'imagenet']
-datasets=['cif10', 'cif100', 'cif10vgg', 'cif100vgg', 'imagenet32', 'imagenet64', 'imagenet128', 'celebaHQ32', 'celebaHQ64', 'cif10_rb', 'imagenet']
-# datasets=['cif10']
+# datasets=['cif10', 'cif100', 'cif10vgg', 'cif100vgg', 'imagenet32', 'imagenet64', 'imagenet128', 'celebaHQ32', 'celebaHQ64', 'cif10_rb', 'imagenet']
+datasets=['celebaHQ128']
 
 columns = ['asr', 'auc', 'fnr', 'asrd']
 new_cols = ['Unnamed: 0', 'asr', 'auc', 'fnr', 'asrd']
@@ -66,7 +66,7 @@ for dataset in datasets:
 
     for row in range(i):
         for col in range(j):
-            print( "row,col", row, col)
+            # print( "row,col", row, col)
             variance = np.var( np.array([np_arr[0][row, col], np_arr[1][row, col], np_arr[2][row, col] ]))
                                 
             if variance > 500:

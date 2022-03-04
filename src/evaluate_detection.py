@@ -359,24 +359,24 @@ if __name__ == "__main__":
     NR = [1,2,3]
 
     for nr in NR:
-        CSV_FILE_PATH.append( extract_information(root='./data', net=['cif10'],       dest='./data/detection',  nr=nr, csv_filename='cif10.csv', layers=False) )
-        CSV_FILE_PATH.append( extract_information(root='./data', net=['cif100'],      dest='./data/detection',  nr=nr, csv_filename='cif100.csv', layers=False) )
-        CSV_FILE_PATH.append( extract_information(root='./data', net=['cif10vgg'],    dest='./data/detection',  nr=nr, csv_filename='cif10vgg.csv', layers=False) )
-        CSV_FILE_PATH.append( extract_information(root='./data', net=['cif100vgg'],   dest='./data/detection',  nr=nr, csv_filename='cif100vgg.csv', layers=False) )
+        # CSV_FILE_PATH.append( extract_information(root='./data', net=['cif10'],       dest='./data/detection',  nr=nr, csv_filename='cif10.csv', layers=False) )
+        # CSV_FILE_PATH.append( extract_information(root='./data', net=['cif100'],      dest='./data/detection',  nr=nr, csv_filename='cif100.csv', layers=False) )
+        # CSV_FILE_PATH.append( extract_information(root='./data', net=['cif10vgg'],    dest='./data/detection',  nr=nr, csv_filename='cif10vgg.csv', layers=False) )
+        # CSV_FILE_PATH.append( extract_information(root='./data', net=['cif100vgg'],   dest='./data/detection',  nr=nr, csv_filename='cif100vgg.csv', layers=False) )
 
-        CSV_FILE_PATH.append( extract_information(root='./data', net=['cif10rn34'],   dest='./data/detection', nr=nr, csv_filename='cifrn34.csv', layers=False) )
-        CSV_FILE_PATH.append( extract_information(root='./data', net=['cif100rn34'],  dest='./data/detection', nr=nr, csv_filename='cifrn34.csv', layers=False) )
+        # CSV_FILE_PATH.append( extract_information(root='./data', net=['cif10rn34'],   dest='./data/detection', nr=nr, csv_filename='cifrn34.csv', layers=False) )
+        # CSV_FILE_PATH.append( extract_information(root='./data', net=['cif100rn34'],  dest='./data/detection', nr=nr, csv_filename='cifrn34.csv', layers=False) )
 
-        CSV_FILE_PATH.append( extract_information(root='./data', net=['imagenet32'],  dest='./data/detection', nr=nr, csv_filename='imagenet32.csv', layers=False) )
-        CSV_FILE_PATH.append( extract_information(root='./data', net=['imagenet64'],  dest='./data/detection', nr=nr, csv_filename='imagenet64.csv', layers=False) )
-        CSV_FILE_PATH.append( extract_information(root='./data', net=['imagenet128'], dest='./data/detection',nr=nr, csv_filename='imagenet128.csv', layers=False) )
+        # CSV_FILE_PATH.append( extract_information(root='./data', net=['imagenet32'],  dest='./data/detection', nr=nr, csv_filename='imagenet32.csv', layers=False) )
+        # CSV_FILE_PATH.append( extract_information(root='./data', net=['imagenet64'],  dest='./data/detection', nr=nr, csv_filename='imagenet64.csv', layers=False) )
+        # CSV_FILE_PATH.append( extract_information(root='./data', net=['imagenet128'], dest='./data/detection',nr=nr, csv_filename='imagenet128.csv', layers=False) )
 
-        CSV_FILE_PATH.append( extract_information(root='./data', net=['celebaHQ32'],  dest='./data/detection', nr=nr, csv_filename='celebaHQ32.csv', layers=False) )
-        CSV_FILE_PATH.append( extract_information(root='./data', net=['celebaHQ64'],  dest='./data/detection', nr=nr, csv_filename='celebaHQ64.csv', layers=False) )
+        # CSV_FILE_PATH.append( extract_information(root='./data', net=['celebaHQ32'],  dest='./data/detection', nr=nr, csv_filename='celebaHQ32.csv', layers=False) )
+        # CSV_FILE_PATH.append( extract_information(root='./data', net=['celebaHQ64'],  dest='./data/detection', nr=nr, csv_filename='celebaHQ64.csv', layers=False) )
         CSV_FILE_PATH.append( extract_information(root='./data', net=['celebaHQ128'], dest='./data/detection', nr=nr, csv_filename='celebaHQ128.csv', layers=False) )
 
-        CSV_FILE_PATH.append( extract_information(root='./data', net=['cif10_rb'],    dest='./data/detection',   nr=nr, csv_filename='cif10_rb.csv', layers=False) )
-        CSV_FILE_PATH.append( extract_information(root='./data', net=['imagenet'],    dest='./data/detection',   nr=nr, csv_filename='imagenet.csv', layers=False) )
+        # CSV_FILE_PATH.append( extract_information(root='./data', net=['cif10_rb'],    dest='./data/detection',   nr=nr, csv_filename='cif10_rb.csv', layers=False) )
+        # CSV_FILE_PATH.append( extract_information(root='./data', net=['imagenet'],    dest='./data/detection',   nr=nr, csv_filename='imagenet.csv', layers=False) )
 
         copy_var(CSV_FILE_PATH, OUT_PATH, nr)
 
