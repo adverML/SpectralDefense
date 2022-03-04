@@ -123,7 +123,7 @@ def create_advs(logger, args, output_path_dir, clean_data_path, wanted_samples, 
 
                 success_rate  = np.mean(success)
                 if success_counter >= wanted_samples:
-                    print( " success: {:2f}".format(success_rate) )
+                    get_debug_info( " success: {:2f}".format(success_rate) )
                     break
 
     elif args.attack == 'fgsm' or args.attack == 'bim' or args.attack == 'pgd' or args.attack == 'df' or args.attack == 'cw': 
@@ -148,9 +148,6 @@ def create_advs(logger, args, output_path_dir, clean_data_path, wanted_samples, 
         elif args.attack == 'cw':
             attack = L2CarliniWagnerAttack(steps=1000)
             epsilons = None
-        elif args.attack == 'autoattack':
-            logger.log("Err: Auttoattack is started from another script! attacks_autoattack.py")
-            raise NotImplementedError("Err: Wrong Keyword use 'std' for 'ind' for AutoAttack!")
         else:
             logger.log('Err: unknown attack')
             raise NotImplementedError('Err: unknown attack')
@@ -163,7 +160,7 @@ def create_advs(logger, args, output_path_dir, clean_data_path, wanted_samples, 
             image = torch.squeeze(image)
             label = torch.squeeze(label)
 
-            if batch_size == 1:
+            if args.batch_size == 1:
                 image = torch.unsqueeze(image, 0)
                 label = torch.unsqueeze(label, 0)
 

@@ -56,8 +56,8 @@ CIF10_CKPT      = './submodules/pytorch-CelebAHQ/checkpoint/wideresnet_2810/wide
 CIF10_M_CKPT    =  './submodules/CD-VAE/pretrained/cd-vae-1.pth'
 
 CIF100_CKPT     = './submodules/pytorch-classification/checkpoints/cifar100/wideresnet2810/model_best.pth.tar'
-CIF10VGG_CKPT   = './checkpoint/vgg16/original/models/vgg_cif10.pth'
-CIF100VGG_CKPT  = './checkpoint/vgg16/original/models/vgg_cif100.pth'
+CIF10VGG_CKPT   = './checkpoint/vgg16/vgg_cif10.pth'
+CIF100VGG_CKPT  = './checkpoint/vgg16/vgg_cif100.pth'
 CIF10RN34_CKPT  = './submodules/pytorch-CelebAHQ/checkpoint/resnet_34/resnet_34_ckpt_test.pth'
 CIF100RN34_CKPT = './submodules/pytorch-CelebAHQ/checkpoint/cif100_resnet_34/resnet_34_ckpt_test.pth'
 
