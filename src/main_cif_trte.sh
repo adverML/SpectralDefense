@@ -16,12 +16,12 @@ DATASETS="cif10"
 
 # DATASETS="imagenet64 celebaHQ64 imagenet128 celebaHQ128"
 # RUNS="1 2 3"
-RUNS="1"
+RUNS="8"
 
 # ATTACKS="fgsm bim pgd std df cw"
 # ATTACKS="apgd-ce apgd-t fab-t square"
 # ATTACKS="std"
-ATTACKS="std"
+ATTACKS="std df"
 
 # ATTACKS="apgd-ce"
 
@@ -52,8 +52,10 @@ DETECTORSLAYERNR="LayerMFS"
 NRWANTEDSAMPLES="0"
 NRSAMPLES="0"
 # WANTEDSAMPLES_TR="5000"
-WANTEDSAMPLES_TR="0"
-WANTEDSAMPLES_TE="8000"
+
+# cif10 100
+WANTEDSAMPLES_TR="44000"
+WANTEDSAMPLES_TE="8600"
 
 #-----------------------------------------------------------------------------------------------------------------------------------
 log_msg "Networks are already trained!"

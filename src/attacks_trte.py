@@ -36,7 +36,7 @@ from utils import (
     get_debug_info
 )
 
-from attacks.helper_attack import (
+from attack.helper_attacks import (
     adapt_batchsize
 )
 
@@ -68,7 +68,7 @@ def create_advs(logger, args, output_path_dir, clean_data_path, wanted_samples, 
     dataset = torch.load(os.path.join(clean_data_path, clean_path))[:wanted_samples]
     get_debug_info( "actual len/wanted " + str(len(dataset)) + "/" + str(wanted_samples) )
 
-    test_loader = torch.utils.data.DataLoader(dataset, batch_size=batch_size, shuffle=args.shuffle_on)
+    test_loader = torch.utils.data.DataLoader(dataset, batch_size=args.batch_size, shuffle=args.shuffle_on)
 
     if args.attack == 'std' or args.attack == 'apgd-ce' or args.attack == 'apgd-t' or args.attack == 'fab-t' or args.attack == 'square':
         logger.log('INFO: Load data...')
@@ -89,7 +89,7 @@ def create_advs(logger, args, output_path_dir, clean_data_path, wanted_samples, 
                 x_test = torch.squeeze(x_test).cpu()
                 y_test = torch.squeeze(y_test).cpu()
 
-                if batch_size == 1:
+                if args.batch_size == 1:
                     x_test = torch.unsqueeze(x_test, 0)
                     y_test = torch.unsqueeze(y_test, 0)
 
@@ -265,7 +265,7 @@ if __name__ == '__main__':
     # load correctly classified data
     device_name = getdevicename()
     args.batch_size = adapt_batchsize(args, device_name)
-    logger.log('INFO: batch size: ' + str(batch_size))
+    logger.log('INFO: batch size: ' + str(args.batch_size))
 
     # input data    
     clean_data_path = create_dir_clean_data(args, root='./data/clean_data/')
