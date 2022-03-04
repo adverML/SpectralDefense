@@ -51,15 +51,15 @@ MNIST_CKPT = '/home/lorenzp/adversialml/src/pytorch-classification/checkpoint/mo
 # CIF10_CKPT  = '/home/lorenzp/adversialml/src/pytorch-CelebAHQ/checkpoint/wideresnet_2810_per_percentage/wide_resnet_ckpt_     70.13.pth'
 # CIF10_CKPT  = '/home/lorenzp/adversialml/src/pytorch-CelebAHQ/checkpoint/wideresnet_2810_per_percentage/wide_resnet_ckpt_     80.76.pth'
 
-CIF10_CKPT      = './checkpoint/wideresnet_2810/wide_resnet_ckpt.pth'
+CIF10_CKPT      = './submodules/pytorch-CelebAHQ/checkpoint/wideresnet_2810/wide_resnet_ckpt.pth'
 # CIF10_M_CKPT    = '/home/lorenzp/adversialml/src/src/submodules/CD-VAE/pretrained/wide_resnet.pth'
 CIF10_M_CKPT    =  './submodules/CD-VAE/pretrained/cd-vae-1.pth'
 
 CIF100_CKPT     = './submodules/pytorch-classification/checkpoints/cifar100/wideresnet2810/model_best.pth.tar'
 CIF10VGG_CKPT   = './checkpoint/vgg16/original/models/vgg_cif10.pth'
 CIF100VGG_CKPT  = './checkpoint/vgg16/original/models/vgg_cif100.pth'
-CIF10RN34_CKPT  = '/home/lorenzp/adversialml/src/pytorch-CelebAHQ/checkpoint/resnet_34/resnet_34_ckpt_test.pth'
-CIF100RN34_CKPT = '/home/lorenzp/adversialml/src/pytorch-CelebAHQ/checkpoint/cif100_resnet_34/resnet_34_ckpt_test.pth'
+CIF10RN34_CKPT  = './submodules/pytorch-CelebAHQ/checkpoint/resnet_34/resnet_34_ckpt_test.pth'
+CIF100RN34_CKPT = './submodules/pytorch-CelebAHQ/checkpoint/cif100_resnet_34/resnet_34_ckpt_test.pth'
 
 CIF10RN34_SOTA_CKPT = './submodules/adversarial-detection/expts/models/cifar10_cnn.pt'
 
@@ -75,19 +75,19 @@ IMAGENET64_CKPT_1000   = './submodules/pytorch-classification/checkpoints/imagen
 IMAGENET128_CKPT_1000  = './submodules/pytorch-classification/checkpoints/imagenet128/wideresent2810/model_best.pth.tar'
 
 # CELEBAHQ32_CKPT_2   =  './checkpoint/wrn2810/32x32_64_0.1_Smiling_a100_Wednesday_18_August_2021_16h_02m_16s/wrn2810-175-best.pth' # '/home/lorenzp/adversialml/src/src/checkpoint/wrn2810/32x32_64_0.1_Smiling_a100_Wednesday_18_August_2021_16h_02m_16s/wrn2810-175-best.pth'
-CELEBAHQ32_CKPT_2   = '/home/lorenzp/adversialml/src/pytorch-CelebAHQ/checkpoint/wrn2810/32x32_128_0.1_Smiling_Thursday_30_September_2021_11h_01m_19s/wrn2810-161-best.pth'
-CELEBAHQ64_CKPT_2   = '/home/lorenzp/adversialml/src/pytorch-CelebAHQ/checkpoint/wrn2810/64x64_128_0.1_Smiling_Thursday_30_September_2021_15h_35m_05s/wrn2810-141-best.pth'
-CELEBAHQ128_CKPT_2  = '/home/lorenzp/adversialml/src/pytorch-CelebAHQ/checkpoint/wrn2810/128x128_64_0.1_Smiling_Thursday_30_September_2021_15h_37m_55s/wrn2810-140-best.pth' # '/home/lorenzp/adversialml/src/src/checkpoint/wrn2810/128x128_64_0.1_Smiling_a100_Sunday_22_August_2021_13h_01m_15s/wrn2810-80-regular.pth'
+CELEBAHQ32_CKPT_2   = './submodules/pytorch-CelebAHQ/checkpoint/wrn2810/32x32_128_0.1_Smiling_Thursday_30_September_2021_11h_01m_19s/wrn2810-161-best.pth'
+CELEBAHQ64_CKPT_2   = './submodules/pytorch-CelebAHQ/checkpoint/wrn2810/64x64_128_0.1_Smiling_Thursday_30_September_2021_15h_35m_05s/wrn2810-141-best.pth'
+CELEBAHQ128_CKPT_2  = './submodules/pytorch-CelebAHQ/checkpoint/wrn2810/128x128_64_0.1_Smiling_Thursday_30_September_2021_15h_37m_55s/wrn2810-140-best.pth' # '/home/lorenzp/adversialml/src/src/checkpoint/wrn2810/128x128_64_0.1_Smiling_a100_Sunday_22_August_2021_13h_01m_15s/wrn2810-80-regular.pth'
 
-# CELEBAHQ32_CKPT_4   = '/home/lorenzp/adversialml/src/pytorch-CelebAHQ/checkpoint/wrn2810/32x32_128_0.1_Hair_Color_Saturday_05_February_2022_22h_47m_31s/wrn2810-9-0.512_perecent.pth'
-# CELEBAHQ32_CKPT_4   = '/home/lorenzp/adversialml/src/pytorch-CelebAHQ/checkpoint/wrn2810/32x32_128_0.1_Hair_Color_Saturday_05_February_2022_22h_47m_31s/wrn2810-25-     0.590_perecent.pth'
-# CELEBAHQ32_CKPT_4   = '/home/lorenzp/adversialml/src/pytorch-CelebAHQ/checkpoint/wrn2810/32x32_128_0.1_Hair_Color_Saturday_05_February_2022_22h_47m_31s/wrn2810-7-     0.705_perecent.pth'
-# CELEBAHQ32_CKPT_4   = '/home/lorenzp/adversialml/src/pytorch-CelebAHQ/checkpoint/wrn2810/32x32_128_0.1_Hair_Color_Saturday_05_February_2022_22h_47m_31s/wrn2810-41-     0.802_perecent.pth'
+# CELEBAHQ32_CKPT_4   = './submodules/pytorch-CelebAHQ/checkpoint/wrn2810/32x32_128_0.1_Hair_Color_Saturday_05_February_2022_22h_47m_31s/wrn2810-9-0.512_perecent.pth'
+# CELEBAHQ32_CKPT_4   = './submodules/pytorch-CelebAHQ/checkpoint/wrn2810/32x32_128_0.1_Hair_Color_Saturday_05_February_2022_22h_47m_31s/wrn2810-25-     0.590_perecent.pth'
+# CELEBAHQ32_CKPT_4   = './submodules/pytorch-CelebAHQ/checkpoint/wrn2810/32x32_128_0.1_Hair_Color_Saturday_05_February_2022_22h_47m_31s/wrn2810-7-     0.705_perecent.pth'
+# CELEBAHQ32_CKPT_4   = './submodules/pytorch-CelebAHQ/checkpoint/wrn2810/32x32_128_0.1_Hair_Color_Saturday_05_February_2022_22h_47m_31s/wrn2810-41-     0.802_perecent.pth'
 
-CELEBAHQ32_CKPT_4   = '/home/lorenzp/adversialml/src/pytorch-CelebAHQ/checkpoint/wrn2810/32x32_64_0.1_Hair_Color_Thursday_04_November_2021_14h_35m_14s/wrn2810-200-best.pth'
-CELEBAHQ64_CKPT_4   = '/home/lorenzp/adversialml/src/pytorch-CelebAHQ/checkpoint/wrn2810/64x64_64_0.1_Hair_Color_Thursday_04_November_2021_17h_25m_16s/wrn2810-171-best.pth'
-CELEBAHQ128_CKPT_4  = '/home/lorenzp/adversialml/src/pytorch-CelebAHQ/checkpoint/wrn2810/128x128_64_0.1_Hair_Color_Thursday_04_November_2021_17h_38m_53s/wrn2810-100-regular.pth' # 89%
-CELEBAHQ256_CKPT_4  = '/home/lorenzp/adversialml/src/pytorch-CelebAHQ/checkpoint/wrn2810/256x256_24_0.1_Hair_Color_Friday_05_November_2021_16h_44m_36s/wrn2810-70-regular.pth'  # 78%
+CELEBAHQ32_CKPT_4   = './submodules/pytorch-CelebAHQ/checkpoint/wrn2810/32x32_64_0.1_Hair_Color_Thursday_04_November_2021_14h_35m_14s/wrn2810-200-best.pth'
+CELEBAHQ64_CKPT_4   = './submodules/pytorch-CelebAHQ/checkpoint/wrn2810/64x64_64_0.1_Hair_Color_Thursday_04_November_2021_17h_25m_16s/wrn2810-171-best.pth'
+CELEBAHQ128_CKPT_4  = './submodules/pytorch-CelebAHQ/checkpoint/wrn2810/128x128_64_0.1_Hair_Color_Thursday_04_November_2021_17h_38m_53s/wrn2810-100-regular.pth' # 89%
+CELEBAHQ256_CKPT_4  = './submodules/pytorch-CelebAHQ/checkpoint/wrn2810/256x256_24_0.1_Hair_Color_Friday_05_November_2021_16h_44m_36s/wrn2810-70-regular.pth'  # 78%
 
 
 # Dataset Paths
