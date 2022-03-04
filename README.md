@@ -31,7 +31,7 @@ This repository is an expansion of [SpectralAdversarialDefense](https://github.c
 
 ## Overview
 
-![overview](pics/overview_readme.png)
+![overview](overview_readme.png)
 
 This image shows the pipeline from training a model, generating adversarial examples to defend them. 
 
