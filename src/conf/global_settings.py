@@ -110,9 +110,9 @@ ISSAMPLEMEANCALCULATED = False #True # Mahalannobis; set true if sample mean and
 
 # Detect Adversarials
 # ATTACKS_LIST = ['fgsm', 'bim', 'pgd', 'std', 'df', 'cw']
-# ATTACKS_LIST = ['df']
+ATTACKS_LIST = ['std', 'df']
 # ATTACKS_LIST = ['apgd-ce', 'apgd-t', 'fab-t', 'square']
-ATTACKS_LIST = [ 'gauss' ]
+# ATTACKS_LIST = [ 'gauss' ]
 
 # DETECTOR_LIST_LAYERS = ['InputMFS', 'LayerMFS', 'LID', 'Mahalanobis']
 DETECTOR_LIST_LAYERS = ['LayerPFS', 'LayerMFS']

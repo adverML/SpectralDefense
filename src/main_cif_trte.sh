@@ -12,8 +12,8 @@ function log_msg {
 # DATASETS="cif100rn34"
 # DATASETS="cif10_m"
 # DATASETS="cif10rn34sota"
-# DATASETS="cif10vgg cif100vgg cif100"
-DATASETS="cif10"
+DATASETS="cif10vgg cif100vgg"
+# DATASETS="cif100"
 
 # DATASETS="imagenet64 celebaHQ64 imagenet128 celebaHQ128"
 # RUNS="1 2 3"
@@ -310,7 +310,7 @@ detectadversarialslayer ()
 # printn
 # genereratecleandata
 # attacks
-# extractcharacteristics
+extractcharacteristics
 detectadversarials
 
 
