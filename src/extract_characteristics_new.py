@@ -72,7 +72,6 @@ args = parser.parse_args()
 # max frequency
 # if args.max_freq_on or ((args.net == 'cif100' or args.net == 'cif100vgg' or args.net == 'cif100rn34') and (args.attack=='cw' or args.attack=='df')):
 #     args.max_freq_on = True
-
 # output path dir
 output_path_dir = create_dir_extracted_characteristics(args, root='./data/extracted_characteristics/', wait_input=False)
 
@@ -141,17 +140,13 @@ elif args.detector == 'Mahalanobis':
     from defenses.DeepMahalanobis import deep_mahalanobis
     characteristics, characteristics_adv = deep_mahalanobis(args, logger, model, images, images_advs, layers, get_layer_feature_maps, activation, output_path_dir)
 
-####### Dknn section
+####### DkNN section
 elif args.detector == 'DkNN':
     import defenses.DeepkNN as DkNN
-    DkNN.calculate(args, model, images, images_advs, layers, 0, 0)
+    characteristics, characteristics_adv = DkNN.calculate(args, model, images, images_advs, layers, 0, 0)
 
 ####### Trust section
 elif args.detector == 'Trust':
-    pass
-
-####### LID_Class_Cond section
-elif args.detector == 'LID_Class_Cond':
     pass
 
 ####### ODD section https://github.com/jayaram-r/adversarial-detection
