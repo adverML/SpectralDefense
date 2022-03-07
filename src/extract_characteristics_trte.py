@@ -39,14 +39,12 @@ def extract_features(logger, args, model, input_path_dir, output_path_dir, wante
     """
     docstring
     """
-
     if option == 0:
         indicator = '_tr'
     elif option == 1:
         indicator = '_te'
     elif optino == 2:
         indicator = ''
-
 
     images_path, images_advs_path = create_save_dir_path(input_path_dir, args, filename='images' + indicator)
 
@@ -110,8 +108,8 @@ def extract_features(logger, args, model, input_path_dir, output_path_dir, wante
     else:
         logger.log('ERR: unknown detector')
 
-
     return characteristics, characteristics_adv
+
 
 if __name__ == '__main__':
     #processing the arguments

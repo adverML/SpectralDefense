@@ -92,7 +92,6 @@ if  args.wanted_samples_tr > 0 and args.wanted_samples_te > 0:
     characteristics_tr_path, characteristics_advs_tr_path = create_save_dir_path(extracted_characteristics_path, args, filename='characteristics_tr' )
     characteristics_te_path, characteristics_advs_te_path = create_save_dir_path(extracted_characteristics_path, args, filename='characteristics_te' )
 
-
     characteristics_tr =     torch.load(characteristics_tr_path)[:args.wanted_samples_tr]
     characteristics_tr_adv = torch.load(characteristics_advs_tr_path)[:args.wanted_samples_tr]
 
