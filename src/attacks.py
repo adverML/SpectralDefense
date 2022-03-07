@@ -160,12 +160,9 @@ if __name__ == '__main__':
                     break
 
     elif args.attack == 'fgsm' or args.attack == 'bim' or args.attack == 'pgd' or args.attack == 'df' or args.attack == 'cw': 
-
-        
         # testset = torch.load("/home/lorenzp/adversialml/src/pytorch-CelebAHQ/data/clean_data_cif1028_10")[:args.all_samples]
 
         logger.log("INFO: len(testset): {}".format(len(testset)))
-        
 
         #setup depending on attack
         if args.attack == 'fgsm':
@@ -241,10 +238,10 @@ if __name__ == '__main__':
             for itx, img in enumerate(image):
                 img_np = img.cpu().numpy().squeeze().transpose([1,2,0])
                 image_adv = torch.from_numpy( noisy(img_np, noise_typ='gauss').transpose([2, 1, 0]) ).cuda()
-                images.append( img.squeeze() )
-                images_advs.append( image_adv )
-                labels.append( label[itx] )
-                labels_advs.append( label[itx] )
+                images.append( img.squeeze().cpu() )
+                images_advs.append( image_adv.cpu() )
+                labels.append( label[itx].cpu() )
+                labels_advs.append( label[itx].cpu() )
                 
                 success_counter  = success_counter + 1
                 counter = counter + 1

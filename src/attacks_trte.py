@@ -108,10 +108,10 @@ def create_advs(logger, args, output_path_dir, clean_data_path, wanted_samples, 
                 # import pdb; pdb.set_trace()
                 for it, img in enumerate(x_adv):
                     if not (np.abs(x_test[it] - img) <= 1e-5).all():
-                        images.append(x_test[it])                      
-                        tmp_images_advs.append(img)
-                        labels.append(y_test[it])
-                        labels_advs.append(y_adv[it])  
+                        images.append(x_test[it].cpu())                      
+                        tmp_images_advs.append(img.cpu())
+                        labels.append(y_test[it].cpu())
+                        labels_advs.append(y_adv[it].cpu())  
                         success_counter = success_counter + 1
                         if (success_counter % 1000) == 0:
                             get_debug_info( msg="success_counter " + str(success_counter) + " / " + str(wanted_samples) )
@@ -183,8 +183,8 @@ def create_advs(logger, args, output_path_dir, clean_data_path, wanted_samples, 
             for idx, suc in enumerate(success):
                 counter = counter + 1
                 if suc:
-                    images_advs.append( adv_clip[idx].squeeze_(0) )
-                    images.append( image[idx].squeeze_(0) )
+                    images_advs.append( adv_clip[idx].squeeze_(0).cpu() )
+                    images.append( image[idx].squeeze_(0).cpu() )
 
                     labels.append( label[idx].cpu().item() )
                     labels_advs.append( predicted_adv[idx].cpu().item() )

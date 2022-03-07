@@ -72,11 +72,7 @@ attacks ()
             for att in $ATTACKS; do
                 for eps in $EPSILONS; do
                     if [ "$net" == imagenet ]; then
-                        if [ "$att" == std ]; then
-                            python -u attacks.py --net "$net" --attack "$att" --img_size 32 --batch_size 128 --num_classes 1000 --all_samples 8000 --all_samples $ALLSAMPLES --wanted_samples $WANTEDSAMPLES --eps "$eps" --run_nr "$run"
-                        else
-                            python -u attacks.py --net "$net" --attack "$att" --img_size 32 --batch_size 500 --num_classes 1000 --all_samples 8000 --all_samples $ALLSAMPLES --wanted_samples $WANTEDSAMPLES --eps "$eps" --run_nr "$run"
-                        fi
+                        python -u attacks.py --net "$net" --attack "$att" --img_size 32 --batch_size 500 --num_classes 1000 --all_samples 8000 --all_samples $ALLSAMPLES --wanted_samples $WANTEDSAMPLES --eps "$eps" --run_nr "$run"
                     fi 
                 done
             done

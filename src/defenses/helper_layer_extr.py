@@ -364,63 +364,63 @@ def get_whitebox_features(args, logger, model):
             model.relu.register_forward_hook(get_activation('relu'))
         else:
 
-            if args.detector == "LID":
+            # if args.detector == "LID":
 
-                model.conv2[0].residual[1].register_forward_hook( get_activation('conv2_0_relu_1') )
-                model.conv2[0].residual[4].register_forward_hook( get_activation('conv2_0_relu_4') )
+            #     model.conv2[0].residual[1].register_forward_hook( get_activation('conv2_0_relu_1') )
+            #     model.conv2[0].residual[4].register_forward_hook( get_activation('conv2_0_relu_4') )
 
-                model.conv2[1].residual[1].register_forward_hook( get_activation('conv2_1_relu_1') )
-                model.conv2[1].residual[4].register_forward_hook( get_activation('conv2_1_relu_4') )
+            #     model.conv2[1].residual[1].register_forward_hook( get_activation('conv2_1_relu_1') )
+            #     model.conv2[1].residual[4].register_forward_hook( get_activation('conv2_1_relu_4') )
 
-                model.conv4[0].residual[1].register_forward_hook(get_activation('conv4_0_relu_1'))
-                model.conv4[0].residual[4].register_forward_hook(get_activation('conv4_0_relu_4'))
+            #     model.conv4[0].residual[1].register_forward_hook(get_activation('conv4_0_relu_1'))
+            #     model.conv4[0].residual[4].register_forward_hook(get_activation('conv4_0_relu_4'))
 
-                model.conv4[1].residual[1].register_forward_hook(get_activation('conv4_1_relu_1'))
-                model.conv4[1].residual[4].register_forward_hook(get_activation('conv4_1_relu_4'))
+            #     model.conv4[1].residual[1].register_forward_hook(get_activation('conv4_1_relu_1'))
+            #     model.conv4[1].residual[4].register_forward_hook(get_activation('conv4_1_relu_4'))
 
-                model.conv4[2].residual[1].register_forward_hook(get_activation('conv4_2_relu_1'))
-                model.conv4[2].residual[4].register_forward_hook(get_activation('conv4_2_relu_4'))
+            #     model.conv4[2].residual[1].register_forward_hook(get_activation('conv4_2_relu_1'))
+            #     model.conv4[2].residual[4].register_forward_hook(get_activation('conv4_2_relu_4'))
 
+            #     model.conv4[3].residual[1].register_forward_hook(get_activation('conv4_3_relu_1'))
+            #     model.conv4[3].residual[4].register_forward_hook(get_activation('conv4_3_relu_4'))
+
+            #     model.relu.register_forward_hook(get_activation('relu'))
+
+            #     layers = [
+            #             'conv2_0_relu_1', 'conv2_0_relu_4', 'conv2_1_relu_1', 'conv2_1_relu_4', 'conv4_0_relu_1', 'conv4_0_relu_4',
+            #             'conv4_2_relu_1', 'conv4_2_relu_4', 'conv4_3_relu_1', 'conv4_3_relu_4', 'relu'
+            #         ]
+
+            # else:
+
+            if not (args.attack == 'df' or  args.attack == 'cw'):
+                # 5
+                model.conv3[1].residual[1].register_forward_hook(get_activation('conv3_1_relu_1'))
+                model.conv3[1].residual[4].register_forward_hook(get_activation('conv3_1_relu_4'))
+
+                # 7
+                model.conv3[3].residual[1].register_forward_hook(get_activation('conv3_3_relu_1'))
+                model.conv3[3].residual[4].register_forward_hook(get_activation('conv3_3_relu_4'))
+                layers = [
+                    'conv3_1_relu_1', 'conv3_1_relu_4', 'conv3_3_relu_1', 'conv3_3_relu_4'
+                ]
+
+                # import pdb; pdb.set_trace()
+            else:
                 model.conv4[3].residual[1].register_forward_hook(get_activation('conv4_3_relu_1'))
                 model.conv4[3].residual[4].register_forward_hook(get_activation('conv4_3_relu_4'))
-
                 model.relu.register_forward_hook(get_activation('relu'))
 
-                layers = [
-                        'conv2_0_relu_1', 'conv2_0_relu_4', 'conv2_1_relu_1', 'conv2_1_relu_4', 'conv4_0_relu_1', 'conv4_0_relu_4',
-                        'conv4_2_relu_1', 'conv4_2_relu_4', 'conv4_3_relu_1', 'conv4_3_relu_4', 'relu'
-                    ]
-
-            else:
-
-                if not (args.attack == 'df' or  args.attack == 'cw'):
-                    # 5
-                    model.conv3[1].residual[1].register_forward_hook(get_activation('conv3_1_relu_1'))
-                    model.conv3[1].residual[4].register_forward_hook(get_activation('conv3_1_relu_4'))
-
-                    # 7
-                    model.conv3[3].residual[1].register_forward_hook(get_activation('conv3_3_relu_1'))
-                    model.conv3[3].residual[4].register_forward_hook(get_activation('conv3_3_relu_4'))
+                if args.net == 'celebaHQ32' or args.net == 'celebaHQ64' or args.net == 'celebaHQ128' or args.net == 'celebaHQ256':
                     layers = [
-                        'conv3_1_relu_1', 'conv3_1_relu_4', 'conv3_3_relu_1', 'conv3_3_relu_4'
+                        'relu'
                     ]
-
-                    # import pdb; pdb.set_trace()
-                else:
-                    model.conv4[3].residual[1].register_forward_hook(get_activation('conv4_3_relu_1'))
-                    model.conv4[3].residual[4].register_forward_hook(get_activation('conv4_3_relu_4'))
-                    model.relu.register_forward_hook(get_activation('relu'))
-
-                    if args.net == 'celebaHQ32' or args.net == 'celebaHQ64' or args.net == 'celebaHQ128' or args.net == 'celebaHQ256':
-                        layers = [
-                            'relu'
-                        ]
-                    else: 
-                        layers = [
-                            # 'conv4_3_relu_1',
-                            # 'conv4_3_relu_4',
-                            'relu'
-                        ]
+                else: 
+                    layers = [
+                        # 'conv4_3_relu_1',
+                        # 'conv4_3_relu_4',
+                        'relu'
+                    ]
 
 
         # if layer_nr == 0:

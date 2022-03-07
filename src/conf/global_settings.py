@@ -108,9 +108,13 @@ CELEBAHQ256_PATH = "/home/DATA/ITWM/CelebAHQ/Img/hq/data256x256"
 # Extact Features 
 ISSAMPLEMEANCALCULATED = False #True # Mahalannobis; set true if sample mean and precision are already calculated
 
+###########################################################################
 # Detect Adversarials
+
+TRTE = False
+
 # ATTACKS_LIST = ['fgsm', 'bim', 'pgd', 'std', 'df', 'cw']
-ATTACKS_LIST = ['std', 'df']
+ATTACKS_LIST = ['gauss', 'bim', 'std', 'df']
 # ATTACKS_LIST = ['apgd-ce', 'apgd-t', 'fab-t', 'square']
 # ATTACKS_LIST = [ 'gauss' ]
 
@@ -119,13 +123,17 @@ DETECTOR_LIST_LAYERS = ['LayerPFS', 'LayerMFS']
 # DETECTOR_LIST_LAYERS = ['InputMFS', 'LayerMFS']
 
 # DETECTOR_LIST = [ 'LID', 'Mahalanobis' ]
-DETECTOR_LIST = [ 'InputMFS', 'LayerMFS' ]
+# DETECTOR_LIST = [ 'InputMFS', 'LayerMFS' ]
 # DETECTOR_LIST = ['InputPFS', 'InputMFS', 'LayerPFS', 'LayerMFS', 'LID', 'Mahalanobis']
 # DETECTOR_LIST = ['InputMFS', 'LayerMFS', 'LID', 'Mahalanobis']
-# DETECTOR_LIST = ['LayerMFS']
-# DETECTOR_LIST = ['Mahalanobis']
+DETECTOR_LIST = ['LayerMFS']
+# DETECTOR_LIST = [ 'InputMFS' ]
+# DETECTOR_LIST = ['LID']
 
 # DETECTOR_LIST = ['LID', 'Mahalanobis']
 
+# CLF = ['LR']
+# CLF = ['RF']
 CLF = ['LR', 'RF']
+
 SAVE_CLASSIFIER = True

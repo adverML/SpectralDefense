@@ -114,20 +114,22 @@ def get_clean_accuracy(paths):
         with open(path) as f_attack:
             lines_attack = f_attack.readlines()
 
-        # print('path: ', path)
+        search_text = "INFO: attack success rate:"
+        if settings.TRTE:
+            search_text = "INFO: te attack success rate:"
 
         asr_list = []
         for line in lines_attack:
-            if line.__contains__("INFO: attack success rate:"):
+
+            if line.__contains__(search_text):
                 
                 asr = float(line.strip().split(' ')[-1])
                 asr_list.append(asr)            
-
                 if attack_method  == 'std':
                     result[attack_method + '_' + eps] = asr_list[-1]
                 else:
                     result[attack_method] = asr_list[-1]
-        # print(path, asr_list[-1])
+
     
     return result
 
@@ -256,7 +258,8 @@ def extract_information(root='./data', net=['cif10'], dest='./data/detection', n
             csv_line = line_split[-1]
             if not csv_line[-1] == -1:
                 fnr = float(csv_line[-1]) / 100.
-                import pdb; pdb.set_trace()
+                # if asr_name[-1] == 'std_8_255':
+                #     # import pdb; pdb.set_trace()
                 asr = np.round(clean_acc[asr_name[-1]]*100, 2)
                 csv_line.append(asr)
                 asrd = np.round((fnr*asr), 2)
@@ -355,16 +358,16 @@ if __name__ == "__main__":
     OUT_PATH = "analysis/variance/run_"
     # OUT_PATH = "analysis/variance/run_gauss_"
     CSV_FILE_PATH = []
-
     # NR = [1,2,3]
-    NR = [8]
+    # NR = [8]
+    NR = [1]
 
 
     for nr in NR:
-        # CSV_FILE_PATH.append( extract_information(root='./data', net=['cif10'],       dest='./data/detection',  nr=nr, csv_filename='cif10.csv', layers=False) )
-        # CSV_FILE_PATH.append( extract_information(root='./data', net=['cif100'],      dest='./data/detection',  nr=nr, csv_filename='cif100.csv', layers=False) )
-        CSV_FILE_PATH.append( extract_information(root='./data', net=['cif10vgg'],    dest='./data/detection',  nr=nr, csv_filename='cif10vgg.csv', layers=False) )
-        CSV_FILE_PATH.append( extract_information(root='./data', net=['cif100vgg'],   dest='./data/detection',  nr=nr, csv_filename='cif100vgg.csv', layers=False) )
+        CSV_FILE_PATH.append( extract_information(root='./data', net=['cif10'],         dest='./data/detection',  nr=nr, csv_filename='cif10.csv', layers=False) )
+        # CSV_FILE_PATH.append( extract_information(root='./data', net=['cif100'],        dest='./data/detection',  nr=nr, csv_filename='cif100.csv', layers=False) )
+        # CSV_FILE_PATH.append( extract_information(root='./data', net=['cif10vgg'],      dest='./data/detection',  nr=nr, csv_filename='cif10vgg.csv', layers=False) )
+        # CSV_FILE_PATH.append( extract_information(root='./data', net=['cif100vgg'],     dest='./data/detection',  nr=nr, csv_filename='cif100vgg.csv', layers=False) )
 
         # CSV_FILE_PATH.append( extract_information(root='./data', net=['cif10rn34'],   dest='./data/detection', nr=nr, csv_filename='cifrn34.csv', layers=False) )
         # CSV_FILE_PATH.append( extract_information(root='./data', net=['cif100rn34'],  dest='./data/detection', nr=nr, csv_filename='cifrn34.csv', layers=False) )
@@ -381,10 +384,6 @@ if __name__ == "__main__":
         # CSV_FILE_PATH.append( extract_information(root='./data', net=['imagenet'],    dest='./data/detection',   nr=nr, csv_filename='imagenet.csv', layers=False) )
 
         copy_var(CSV_FILE_PATH, OUT_PATH, nr)
-
-
-
-
 
 
 # clean_root_folders( root='./data/clean_data', net=['cif10', 'cif10vgg', 'cif100', 'cif100vgg'] )
@@ -521,4 +520,4 @@ NR = [3]
 # extract_information(root='./data', net=['celebaHQ128'], dest='./data/detection', run_nr=NR, csv_filename=appendix, layers=False)
 
 # extract_information(root='./data', net=['cif10_rb'], dest='./data/detection',  run_nr=NR, csv_filename=appendix, layers=False)
-# extract_information(root='./data', net=['imagenet'], dest='./data/detection',  run_nr=NR, csv_filename=appendix, layers=False)r
+# extract_information(root='./data', net=['imagenet'], dest='./data/detection',  run_nr=NR, csv_filename=appendix, layers=False)

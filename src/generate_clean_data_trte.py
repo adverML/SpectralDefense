@@ -49,7 +49,7 @@ def generate_data_labels(logger, args, loader, wanted_samples, option=2):
 
         correct += (predicted == labels).sum().item()
         if (predicted == labels):
-            clean_dataset.append([images, labels])
+            clean_dataset.append([images.cpu(), labels.cpu()])
             # clean_dataset.append(images.cpu().numpy())
             # clean_labels.append(labels.cpu().numpy())
 
