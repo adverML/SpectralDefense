@@ -111,7 +111,7 @@ ISSAMPLEMEANCALCULATED = False #True # Mahalannobis; set true if sample mean and
 ###########################################################################
 # Detect Adversarials
 
-TRTE = False
+TRTE = True
 
 # ATTACKS_LIST = ['fgsm', 'bim', 'pgd', 'std', 'df', 'cw']
 ATTACKS_LIST = ['gauss', 'bim', 'std', 'df']

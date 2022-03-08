@@ -7,16 +7,12 @@ import numpy as np
 from utils import layer_name_cif10, layer_name_cif10vgg
 
 
-
-
-
 def test_activation(args, logger, model, images):
     activation = {}
     def get_activation(name):
         def hook(model, input, output):
             activation[name] = output.detach()
         return hook
-
     # 5
     model.conv3[1].residual[1].register_forward_hook(get_activation('conv3_1_relu_1'))
     layers = [
@@ -31,13 +27,12 @@ def test_activation(args, logger, model, images):
     return activation
 
 
-
 def dfknn_layer(args, model):
     if args.detector == 'DkNN':
         layers = {
             # 'relu1': model.conv3[1].residual[1],
             # 'relu2': model.conv3[1].residual[4],
-            # 'relu3': model.conv3[3].residual[1],
+            'relu3': model.conv3[3].residual[1],
             'relu4': model.conv3[3].residual[4]
         }
 
@@ -49,7 +44,6 @@ def dfknn_layer(args, model):
         return act_val_list        
 
     return layers
-
 
 
 def get_whitebox_features(args, logger, model):

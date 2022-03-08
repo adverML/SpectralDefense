@@ -93,7 +93,6 @@ def create_advs(logger, args, output_path_dir, clean_data_path, wanted_samples, 
                     x_test = torch.unsqueeze(x_test, 0)
                     y_test = torch.unsqueeze(y_test, 0)
 
-                
                 # import pdb; pdb.set_trace()
 
                 if not args.individual:
