@@ -30,8 +30,8 @@ def test_activation(args, logger, model, images):
 def dfknn_layer(args, model):
     if args.detector == 'DkNN':
         layers = {
-            # 'relu1': model.conv3[1].residual[1],
-            # 'relu2': model.conv3[1].residual[4],
+            'relu1': model.conv3[1].residual[1],
+            'relu2': model.conv3[1].residual[4],
             'relu3': model.conv3[3].residual[1],
             'relu4': model.conv3[3].residual[4]
         }
