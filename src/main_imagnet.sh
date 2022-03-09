@@ -7,17 +7,21 @@ function log_msg {
 # DATASETS=(cif10 cif10vgg cif100 cif100vgg imagenet imagenet32 imagenet64 imagenet128 celebaHQ32 celebaHQ64 celebaHQ128)
 DATASETS="imagenet"
 
-RUNS="1 2 3"
-# RUNS="8"
+# RUNS="1"
+# RUNS="1 2 3"
+RUNS="8"
 # RUNS="7"
 
 # ATTACKS="fgsm bim pgd"
-ATTACKS="gauss"
+# ATTACKS="gauss"
+ATTACKS="df std"
+
 
 # ATTACKS="fgsm bim std pgd df cw"
 # ATTACKS="apgd-ce apgd-t fab-t square"
 # DETECTORS="InputMFS LayerMFS LID Mahalanobis"
-DETECTORS="InputMFS LayerMFS"
+DETECTORS="LayerMFS"
+# DETECTORS="InputMFS LayerMFS"
 # DETECTORS="InputPFS LayerPFS InputMFS LayerMFS LID Mahalanobis"
 
 # EPSILONS="8./255. 4./255. 2./255. 1./255. 0.5/255."
@@ -28,23 +32,25 @@ CLF="LR RF"
 # CLF="IF"
 
 DATASETSLAYERNR="imagenet"
-ATTACKSLAYERNR="df"
+ATTACKSLAYERNR="std df"
 # ATTACKSLAYERNR="bim df"
 
 # ATTACKSLAYERNR="fgsm bim pgd std df cw"
 LAYERNR="0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16"
+# LAYERNR="16"
+
 # LAYERNR="3 5 6 7 8 9 10 11"
 
-DETECTORSLAYERNR="LayerPFS"
+DETECTORSLAYERNR="LayerMFS LayerPFS"
 # DETECTORSLAYERNR="LayerMFS LayerPFS"
 
 # NRSAMPLES="300 500 1000 1200 1500 2000"
-ALLSAMPLES="20000"
-WANTEDSAMPLES="18000"
+ALLSAMPLES="2000"
+WANTEDSAMPLES="2000"
 WANTEDSAMPLES_TR="18000"
 WANTEDSAMPLES_TE="18000"
 
-NRSAMPLES="18000" # detect
+NRSAMPLES="1500" # detect
 
 
 #-----------------------------------------------------------------------------------------------------------------------------------
@@ -103,17 +109,17 @@ detectadversarials ()
     log_msg "Detect Adversarials!"
     for run in $RUNS; do
         for net in $DATASETS; do
-                for att in $ATTACKS; do
-                    for det in $DETECTORS; do
-                        for nrsamples in $NRSAMPLES; do
-                            for classifier in $CLF; do
-                                for eps in $EPSILONS; do
-                                    python -u detect_adversarials.py --net "$net" --attack "$att" --detector "$det" --wanted_samples "$nrsamples" --clf "$classifier" --num_classes 1000  --eps "$eps"  --run_nr "$run" --pca_features 0
-                                done
+            for att in $ATTACKS; do
+                for det in $DETECTORS; do
+                    for nrsamples in $NRSAMPLES; do
+                        for classifier in $CLF; do
+                            for eps in $EPSILONS; do
+                                python -u detect_adversarials.py --net "$net" --attack "$att" --detector "$det" --wanted_samples "$nrsamples" --clf "$classifier" --num_classes 1000  --eps "$eps"  --run_nr "$run" --pca_features 0
                             done
                         done
                     done
                 done
+            done
         done
     done
 }
@@ -165,11 +171,11 @@ detectadversarialslayer ()
 
 # genereratecleandata
 attacks
-extractcharacteristics
-detectadversarials
+# extractcharacteristics
+# detectadversarials
 
-# extractcharacteristicslayer
-# detectadversarialslayer
+extractcharacteristicslayer
+detectadversarialslayer
 
 # #------------------------------------------------------------------------------------------------------------
 log_msg "finished"

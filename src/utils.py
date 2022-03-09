@@ -811,6 +811,7 @@ def get_model_info(args):
 
     return net, depth, widen_factor
 
+
 def check_args(args, logger):
     if args.net_normalization:
         if not args.attack == 'std' and not args.attack == 'apgd-ce' and not args.attack == 'apgd-t' and not args.attack == 'fab-t' and not args.attack == 'square':
@@ -1087,15 +1088,15 @@ def load_test_set(args, preprocessing=None, num_workers=4, download=True, IS_TRA
 
     elif args.net == 'imagenet':
 
-        if IS_TRAIN:
-            transform_list = [transforms.RandomResizedCrop(224), transforms.RandomHorizontalFlip(), transforms.ToTensor()] + normalization
-        else:
-            transform_list = [transforms.Resize(256), transforms.CenterCrop(224), transforms.ToTensor()] + normalization
-        if clean_data:
-            transform_list = [transforms.Resize(256), transforms.CenterCrop(224), transforms.ToTensor()] + normalization
+        transform_list = [transforms.Resize(256), transforms.CenterCrop(224), transforms.ToTensor()] + normalization
+        # if IS_TRAIN:
+        #     transform_list = [transforms.RandomResizedCrop(224), transforms.RandomHorizontalFlip(), transforms.ToTensor()] + normalization
+        # else:
+        #     transform_list = [transforms.Resize(256), transforms.CenterCrop(224), transforms.ToTensor()] + normalization
+        # if clean_data:
+        #     transform_list = [transforms.Resize(256), transforms.CenterCrop(224), transforms.ToTensor()] + normalization
 
         print("transform_list", transform_list)
-
         transform = transforms.Compose(transform_list)
 
         dataset_dir = os.path.join(settings.IMAGENET_PATH, 'val') if not IS_TRAIN else os.path.join(settings.IMAGENET_PATH, 'train')

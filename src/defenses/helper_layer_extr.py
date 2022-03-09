@@ -544,23 +544,28 @@ def get_whitebox_features(args, logger, model):
             # model.layer4[2].bn3.register_forward_hook( get_activation('layer_4_2_bn3') )
 
         else:
+            model.layer4[2].relu.register_forward_hook( get_activation('layer_4_2_relu') )
+
             if not (args.attack == 'df' or  args.attack == 'cw'):
 
-                model.layer4[0].bn3.register_forward_hook( get_activation('layer_4_0_bn3') )
-                model.layer4[1].bn3.register_forward_hook( get_activation('layer_4_1_bn3') )
-                model.layer4[2].bn3.register_forward_hook( get_activation('layer_4_2_bn3') )
+                # model.layer4[0].bn3.register_forward_hook( get_activation('layer_4_0_bn3') )
+                # model.layer4[1].bn3.register_forward_hook( get_activation('layer_4_1_bn3') )
+                # model.layer4[2].bn3.register_forward_hook( get_activation('layer_4_2_bn3') )
                 
                 layers = [
-                    'layer_4_1_bn3'
+                    'layer_4_2_relu'
+                    # 'layer_4_1_bn3'
                     # 'layer_4_0_relu', 'layer_4_1_relu', 'layer_4_2_relu'
                     # 'layer_1_0_relu', 'layer_1_1_relu', 'layer_1_2_relu', 'layer_2_0_relu'
                 ]
             else:
-                model.layer4[0].bn3.register_forward_hook( get_activation('layer_4_0_bn3') )
-                model.layer4[1].bn3.register_forward_hook( get_activation('layer_4_1_bn3') )
-                model.layer4[2].bn3.register_forward_hook( get_activation('layer_4_2_bn3') )
+                # model.layer4[0].bn3.register_forward_hook( get_activation('layer_4_0_bn3') )
+                # model.layer4[1].bn3.register_forward_hook( get_activation('layer_4_1_bn3') )
+                # model.layer4[2].bn3.register_forward_hook( get_activation('layer_4_2_bn3') )
+
                 layers = [
-                    'layer_4_0_bn3', 'layer_4_1_bn3', 'layer_4_2_bn3'
+                    # 'layer_4_0_bn3', 'layer_4_1_bn3', 'layer_4_2_bn3'
+                    'layer_4_2_relu'
                 ]
 
 

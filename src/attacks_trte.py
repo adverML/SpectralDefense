@@ -194,6 +194,29 @@ def create_advs(logger, args, output_path_dir, clean_data_path, wanted_samples, 
                 logger.log("INFO: wanted samples reached {}".format(wanted_samples))
                 break
 
+
+    elif args.attack == 'gauss':  # baseline accuracy
+        from attack.noise_baseline import noisy
+        
+        logger.log("INFO: len(testset): {}".format(len(test_loader)))
+
+        for image, label in test_loader:
+            for itx, img in enumerate(image):
+                img_np = img.cpu().numpy().squeeze().transpose([1,2,0])
+                image_adv = torch.from_numpy( noisy(img_np, noise_typ='gauss').transpose([2, 1, 0]) ).cuda()
+                images.append( img.squeeze().cpu() )
+                images_advs.append( image_adv.cpu() )
+                labels.append( label[itx].cpu() )
+                labels_advs.append( label[itx].cpu() )
+                
+                success_counter  = success_counter + 1
+                counter = counter + 1
+                
+                if success_counter >= args.wanted_samples:
+                    logger.log("INFO: wanted samples reached {}".format(args.wanted_samples))
+                    break
+
+
     logger.log("INFO: len(dataset):   {}".format( len(dataset) ))
     logger.log("INFO: success_counter {}".format(success_counter))
     logger.log("INFO: images {}".format(len(images)))

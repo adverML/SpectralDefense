@@ -119,7 +119,7 @@ if __name__ == '__main__':
 
     if args.attack == 'std' or args.attack == 'apgd-ce' or args.attack == 'apgd-t' or args.attack == 'fab-t' or args.attack == 'square':
         logger.log('INFO: Load data...')
-        testset = load_test_set(args,  shuffle=args.shuffle_on)
+        # testset = load_test_set(args,  shuffle=args.shuffle_on)
 
         sys.path.append("./submodules/autoattack")
         from submodules.autoattack.autoattack import AutoAttack as AutoAttack_mod
@@ -130,7 +130,10 @@ if __name__ == '__main__':
 
         # run attack and save images
         with torch.no_grad():
-            for x_test, y_test in testset:
+            for x_test, y_test in test_loader:
+                x_test = torch.squeeze(x_test).cpu()
+                y_test = torch.squeeze(y_test).cpu()
+
                 if not args.individual:
                     logger.log("INFO: mode: std; not individual")
                     adv_complete, max_nr = adversary.run_standard_evaluation(x_test, y_test, bs=args.batch_size)
