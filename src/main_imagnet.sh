@@ -170,7 +170,7 @@ detectadversarialslayer ()
 }
 
 # genereratecleandata
-attacks
+# attacks
 # extractcharacteristics
 # detectadversarials
 
@@ -180,5 +180,3 @@ detectadversarialslayer
 # #------------------------------------------------------------------------------------------------------------
 log_msg "finished"
 exit 0
-
-

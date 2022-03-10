@@ -139,10 +139,10 @@ elif args.detector == 'InputPFS':
     characteristics, characteristics_adv = blackbox_mfs_pfs(args, images, images_advs, typ='PFS')
 
 elif args.detector == 'LayerMFS': 
-    characteristics, characteristics_adv = whitebox_mfs_pfs(args, model, images, images_advs, layers, get_layer_feature_maps, activation, typ='MFS')
+    characteristics, characteristics_adv = whitebox_mfs_pfs(args, logger, model, images, images_advs, layers, get_layer_feature_maps, activation, typ='MFS')
 
 elif args.detector == 'LayerPFS':
-    characteristics, characteristics_adv = whitebox_mfs_pfs(args, model, images, images_advs, layers, get_layer_feature_maps, activation, typ='PFS')
+    characteristics, characteristics_adv = whitebox_mfs_pfs(args, logger, model, images, images_advs, layers, get_layer_feature_maps, activation, typ='PFS')
 
 ####### LID section
 elif args.detector == 'LID':
@@ -157,7 +157,7 @@ elif args.detector == 'Mahalanobis':
 ####### Dknn section
 elif args.detector == 'DkNN':
     import defenses.DeepkNN as DkNN
-    DkNN.calculate(args, model, images, images_advs, layers, 0, 0)
+    characteristics, characteristics_adv = DkNN.calculate(args, model, images, images_advs, layers, 0, 0)
     # DkNN.calculate_test(args, model, images, images_advs, layers, 0, 0)
 
 ####### Trust section

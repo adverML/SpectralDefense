@@ -104,7 +104,7 @@ def blackbox_mfs_pfs(args, images, images_advs, typ='MFS'):
     
 
 ###Fourier Layer   
-def whitebox_mfs_pfs(args, model, images, images_advs, layers, get_layer_feature_maps, activation, typ='MFS'):
+def whitebox_mfs_pfs(args, logger, model, images, images_advs, layers, get_layer_feature_maps, activation, typ='MFS'):
     """
     Extract the feature from the layers and apply FFT on that. 
     """
