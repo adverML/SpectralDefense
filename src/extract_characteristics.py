@@ -118,6 +118,8 @@ model = model.to(device)
 model = model.eval()
 
 
+import  pdb; pdb.set_trace()
+
 for i, m in enumerate(filter(lambda m: type(m) == torch.nn.Conv2d and m.kernel_size == (3, 3), model.modules())):
     w = (m.weight.detach().cpu().numpy().reshape(-1, 9).copy())
 
