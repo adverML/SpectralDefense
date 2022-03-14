@@ -11,6 +11,7 @@ from tqdm import tqdm
 
 from utils import normalize_images
 
+
 def calculate_fourier_spectrum(im, typ='MFS'):
     im = im.float()
     im = im.cpu()
@@ -18,7 +19,6 @@ def calculate_fourier_spectrum(im, typ='MFS'):
 
     # im = im[:,:100,:,:]
     # im = im[:,:100,:5,:5]
-
 
     fft = np.fft.fft2(im)
 

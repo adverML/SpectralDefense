@@ -107,7 +107,6 @@ model = model.eval()
 # activation = test_activation(args, logger, model, images)
 # print(activation)
 
-
 if args.detector == 'LayerMFS' or args.detector == 'LayerPFS' or args.detector == 'LID'  or args.detector == 'Mahalanobis':
     get_layer_feature_maps, layers, model, activation = get_whitebox_features(args, logger, model)
 elif args.detector == 'DkNN':
@@ -123,12 +122,12 @@ elif args.detector == 'InputMFS':
 
 elif args.detector == 'InputPFS':
     characteristics, characteristics_adv = blackbox_mfs_pfs(args, images, images_advs, typ='PFS')
-
+    
 elif args.detector == 'LayerMFS': 
-    characteristics, characteristics_adv = whitebox_mfs_pfs(args, model, images, images_advs, layers, get_layer_feature_maps, activation, typ='MFS')
+    characteristics, characteristics_adv = whitebox_mfs_pfs(args, logger, model, images, images_advs, layers, get_layer_feature_maps, activation, typ='MFS')
 
 elif args.detector == 'LayerPFS':
-    characteristics, characteristics_adv = whitebox_mfs_pfs(args, model, images, images_advs, layers, get_layer_feature_maps, activation, typ='PFS')
+    characteristics, characteristics_adv = whitebox_mfs_pfs(args, logger, model, images, images_advs, layers, get_layer_feature_maps, activation, typ='PFS')
 
 ####### LID section
 elif args.detector == 'LID':
@@ -163,7 +162,7 @@ characteristics_path, characteristics_advs_path = create_save_dir_path(output_pa
 logger.log('INFO: characteristics:     ' + characteristics_path)
 logger.log('INFO: characteristics_adv: ' + characteristics_advs_path)
 
-torch.save(characteristics,      characteristics_path, pickle_protocol=4)
+torch.save(characteristics,      characteristics_path,      pickle_protocol=4)
 torch.save(characteristics_adv,  characteristics_advs_path, pickle_protocol=4)
 
 logger.log('INFO: Done extracting and saving characteristics!')

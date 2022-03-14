@@ -791,7 +791,7 @@ def calculate(args, model, images, images_advs, layers, get_layer_feature_maps, 
         nearest_neighbor_backend=NearestNeighbor.BACKEND.FALCONN, nb_tables=nb_tables, number_bits=number_bits)
     dknn.calibrate(calibloader)
 
-    # path_dir = "./data/extracted_characteristics/run_8/cif10/wrn_28_10_10/fgsm/DkNN/"
+    # path_dir = "./data/extracted_characteristics/run_1/cif10/wrn_28_10_10/fgsm/DkNN/"
     # torch.save(dknn,       os.path.join(path_dir, 'dknn'), pickle_protocol=4)
 
     characteristics     = dknn.get_characteristics(testloader)
@@ -819,7 +819,7 @@ def calculate(args, model, images, images_advs, layers, get_layer_feature_maps, 
     print('targets: {}'.format(test_targets.shape))
 
 
-    path_dir = "./data/extracted_characteristics/run_8/cif10/wrn_28_10_10/{}/DkNN/".format(attack)
+    path_dir = "./data/extracted_characteristics/run_1/cif10/wrn_28_10_10/{}/DkNN/".format(attack)
     # torch.save(dknn_preds_advset, os.path.join(path_dir, 'dknn_preds_advset'), pickle_protocol=4)
     # torch.save(adv_targets,       os.path.join(path_dir, 'adv_targets'), pickle_protocol=4)
 
@@ -895,7 +895,7 @@ def calculate_test(args, model, images, images_advs, layers, get_layer_feature_m
     dknn = DkNN(model=model, nb_classes=nb_classes, neighbors=neighbors, layers=layers, trainloader=trainloader_dknn, nearest_neighbor_backend=NearestNeighbor.BACKEND.FALCONN, nb_tables=nb_tables, number_bits=number_bits)
     dknn.calibrate(calibloader)
 
-    path_dir = "./data/extracted_characteristics/run_8/cif10/wrn_28_10_10/fgsm/DkNN/"
+    path_dir = "./data/extracted_characteristics/run_1/cif10/wrn_28_10_10/fgsm/DkNN/"
     torch.save(dknn,       os.path.join(path_dir, 'dknn'), pickle_protocol=4)
 
     dknn_preds_testset, test_targets = dknn.fprop(testloader)
@@ -918,7 +918,7 @@ def calculate_test(args, model, images, images_advs, layers, get_layer_feature_m
     print('targets: {}'.format(test_targets.shape))
 
     # import pdb; pdb.set_trace()
-    path_dir = "./data/extracted_characteristics/run_8/cif10/wrn_28_10_10/fgsm/DkNN/"
+    path_dir = "./data/extracted_characteristics/run_1/cif10/wrn_28_10_10/fgsm/DkNN/"
     torch.save(dknn_preds_advset, os.path.join(path_dir, 'dknn_preds_advset'), pickle_protocol=4)
     torch.save(adv_targets,       os.path.join(path_dir, 'adv_targets'), pickle_protocol=4)
 
