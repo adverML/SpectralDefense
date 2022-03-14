@@ -171,11 +171,11 @@ detectadversarialslayer ()
 
 # genereratecleandata
 # attacks
-# extractcharacteristics
+extractcharacteristics
 # detectadversarials
 
-extractcharacteristicslayer
-detectadversarialslayer
+# extractcharacteristicslayer
+# detectadversarialslayer
 
 # #------------------------------------------------------------------------------------------------------------
 log_msg "finished"

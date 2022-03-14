@@ -569,6 +569,7 @@ def get_whitebox_features(args, logger, model):
                 ]
 
 
+        # model.layer4[2].conv2.register_forward_hook( get_activation('layer_4_2_conv2') )
 
             # if not (args.attack == 'df' or  args.attack == 'cw'):
 

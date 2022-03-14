@@ -92,8 +92,8 @@ def extract_features(logger, args, model, input_path_dir, output_path_dir, wante
     ####### Dknn section
     elif args.detector == 'DkNN':
         import defenses.DeepkNN as DkNN
-        DkNN.calculate(args, model, images, images_advs, layers, 0, 0)
-
+        characteristics, characteristics_adv = DkNN.calculate(args, model, images, images_advs, layers, 0, 0)
+        
     ####### Trust section
     elif args.detector == 'Trust':
         pass

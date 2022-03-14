@@ -16,6 +16,7 @@ import torchvision.transforms as transforms
 
 from torch.autograd import Variable
 from scipy.spatial.distance import cdist
+import scipy
 from tqdm import tqdm
 from collections import OrderedDict
 
@@ -74,8 +75,8 @@ parser.add_argument("--eps",       default='8./255.',       help=settings.HELP_A
 # parser.add_argument("--eps",       default='0.5/255.',       help=settings.HELP_AA_EPSILONS)
 
 # Frequency Analysis
-parser.add_argument("--fr", default='8',  type=int, help="InputMFS frequency analysis") 
-parser.add_argument("--to", default='24', type=int, help="InputMFS frequency analysis") 
+parser.add_argument("--fr", default='8',  type=int, help="InputMFS frequency analysis")
+parser.add_argument("--to", default='24', type=int, help="InputMFS frequency analysis")
 
 args = parser.parse_args()
 
@@ -112,10 +113,42 @@ logger.log("INFO: eps " + str(args.eps) + " INFO: nr_img " + str(number_images) 
 #load model
 logger.log('INFO: Loading model...')
 model, _ = load_model(args)
-
 device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 model = model.to(device)
 model = model.eval()
+
+
+for i, m in enumerate(filter(lambda m: type(m) == torch.nn.Conv2d and m.kernel_size == (3, 3), model.modules())):
+    w = (m.weight.detach().cpu().numpy().reshape(-1, 9).copy())
+
+
+    t = np.abs(w).max() / 100    
+    cache = np.ones_like(w)
+    cache[np.abs(w) < t] = 0
+    dead_mask = (cache.sum(axis=1) == 0)
+
+    with np.printoptions(edgeitems=1000):
+        dead_filter = np.where(dead_mask == True)[0]
+        print("sparsity: ", dead_filter)
+
+    usv = np.linalg.svd(w - w.mean(axis=0), full_matrices=False, compute_uv=True)
+    u = usv[0]
+    s = usv[1]
+    v = s**2 / (w.shape[0]-1)
+
+    e = scipy.stats.entropy(v, base=10)
+    
+    def H_T(n):
+        L, x0, k, b = (1.2618047,2.30436435,0.88767525,-0.31050834)  # min distr.
+        return L / (1 + np.exp(-k * (np.log2(n) - x0))) + b
+    
+    dead = (e >= H_T(w.shape[0])) | (e < 0.5)
+
+    print("dead_mask: ", )
+
+    print("i: ", i, ",dead: ", dead, ", e: ", e, ", H_T: ", H_T(w.shape[0]))
+
+import  pdb; pdb.set_trace()
 
 
 layer_nr = int(args.nr)

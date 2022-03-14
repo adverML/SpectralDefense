@@ -14,12 +14,12 @@ DATASETS="cif10"
 # DATASETS="cif10vgg"
 
 # DATASETS="imagenet64 celebaHQ64 imagenet128 celebaHQ128"
-RUNS="1"
+RUNS="8"
 
 # ATTACKS="fgsm bim pgd std df cw"
 # ATTACKS="apgd-ce apgd-t fab-t square"
 # ATTACKS="std"
-ATTACKS="bim df"
+ATTACKS="gauss bim std df"
 # ATTACKS="gauss bim std df"
 # ATTACKS="gauss"
 # ATTACKS="apgd-ce"
@@ -143,6 +143,7 @@ attacks ()
     done
 }
 
+
 #-----------------------------------------------------------------------------------------------------------------------------------
 extractcharacteristics ()
 {
@@ -169,12 +170,8 @@ extractcharacteristics ()
                                 python -u extract_characteristics.py --net "$net" --attack "$att" --detector "$det" --num_classes 10   --run_nr "$run"  --wanted_samples "$WANTEDSAMPLES" --take_inputimage_off 
                             fi  
 
-                            if [ "$net" == cif100 ]; then
-                                if  [ "$att" == std ]; then                                
-                                    python -u extract_characteristics.py --net "$net" --attack "$att" --detector "$det" --num_classes 100  --eps "$eps"  --run_nr "$run"  --wanted_samples "$WANTEDSAMPLES"  --take_inputimage_off 
-                                else 
-                                    python -u extract_characteristics.py --net "$net" --attack "$att" --detector "$det" --num_classes 100  --run_nr "$run"  --wanted_samples "$WANTEDSAMPLES" --take_inputimage_off 
-                                fi
+                            if [ "$net" == cif100 ]; then                            
+                                python -u extract_characteristics.py --net "$net" --attack "$att" --detector "$det" --num_classes 100  --eps "$eps"  --run_nr "$run"  --wanted_samples "$WANTEDSAMPLES"  --take_inputimage_off 
                             fi
 
                             if [ "$net" == cif100vgg ]; then
@@ -214,6 +211,7 @@ extractcharacteristicslayer ()
         done
     done
 }
+
 
 # #-----------------------------------------------------------------------------------------------------------------------------------
 detectadversarials ()
