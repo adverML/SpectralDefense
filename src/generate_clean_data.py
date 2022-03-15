@@ -20,20 +20,23 @@ from collections import OrderedDict
 from torch.utils.data import DataLoader, TensorDataset
 import torchvision.datasets as datasets
 
-from utils import *
-
 from utils import (
     Logger,
     log_header,
     save_args_to_file,
-    check_args_clean_data,
     create_dir_clean_data,
     load_model,
-    get_debug_info
+    get_debug_info,
+    load_test_set,
+    load_train_set
 )
 
 from datasets import smallimagenet
 
+from generate_clean_data import (
+    check_args_generate_clean_data,
+    generate_data_labels
+)
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
@@ -49,8 +52,7 @@ if __name__ == '__main__':
     parser.add_argument('--net_normalization', action='store_false', help=settings.HELP_NET_NORMALIZATION)
     
     args = parser.parse_args()
-
-    args = check_args_clean_data(args, logger)
+    args = check_args_generate_clean_data(args, logger)
 
     if not args.batch_size == 1:
         get_debug_info(msg='Err: Batch size must be always 1!')
@@ -74,39 +76,38 @@ if __name__ == '__main__':
     # import pdb; pdb.set_trace()
     test_loader  = load_test_set(args, shuffle=args.shuffle_off, preprocessing=None) # Data Normalizations; No Net Normaliztion
 
-    clean_dataset = []
-    correct = 0
-    total = 0
-    i = 0
 
-    logger.log('INFO: Classify images...')
+    clean_dataset = generate_data_labels(logger, args, model, test_loader, args.wanted_samples, output_path_dir, option=2)
 
-    for images, labels in test_loader:
-        if i == 0:
-            logger.log( "INFO: tensor size: " + str(images.size()) )
+    # clean_dataset = []
+    # correct = 0
+    # total = 0
+    # i = 0
 
-        images = images.cuda()
-        labels = labels.cuda()
+    # logger.log('INFO: Classify images...')
 
-        outputs = model(images)
-        _, predicted = torch.max(outputs.data, 1)
-        total += labels.size(0)
+    # for images, labels in test_loader:
+    #     if i == 0:
+    #         logger.log( "INFO: tensor size: " + str(images.size()) )
 
-        correct += (predicted == labels).sum().item()
-        if (predicted == labels):
-            clean_dataset.append([images.cpu(), labels.cpu()])
+    #     images = images.cuda()
+    #     labels = labels.cuda()
 
-        i = i + 1
-        if i % 500 == 0:
-            acc = (args.wanted_samples, i, 100 * correct / total)
-            logger.log('INFO: Accuracy of the network on the %d test images: %d, %d %%' % acc)
+    #     outputs = model(images)
+    #     _, predicted = torch.max(outputs.data, 1)
+    #     total += labels.size(0)
 
-        if len(clean_dataset) >= args.wanted_samples:
-            break
+    #     correct += (predicted == labels).sum().item()
+    #     if (predicted == labels):
+    #         clean_dataset.append([images.cpu(), labels.cpu()])
+
+    #     i = i + 1
+    #     if i % 500 == 0:
+    #         acc = (args.wanted_samples, i, 100 * correct / total)
+    #         logger.log('INFO: Accuracy of the network on the %d test images: %d, %d %%' % acc)
+
+    #     if len(clean_dataset) >= args.wanted_samples:
+    #         break
     
-    # pdb.set_trace()    
-    logger.log("INFO: initial accuracy: {:.2f}".format(acc[-1]))
-    logger.log("INFO: output_path_dir: " + output_path_dir + ", len(clean_dataset) " + str(len(clean_dataset)) )
-
     torch.save(clean_dataset, output_path_dir + os.sep + 'clean_data', pickle_protocol=4)
     logger.log('INFO: Done extracting and saving correctly classified images!')
