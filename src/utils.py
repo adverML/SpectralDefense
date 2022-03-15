@@ -812,11 +812,11 @@ def get_model_info(args):
     return net, depth, widen_factor
 
 
-def check_args(args, logger):
-    if args.net_normalization:
-        if not args.attack == 'std' and not args.attack == 'apgd-ce' and not args.attack == 'apgd-t' and not args.attack == 'fab-t' and not args.attack == 'square':
-            logger.log("Warning: Net normalization must be switched off!  Net normalization is switched off now!")
-            args.net_normalization = False
+def check_args_clean_data(args, logger):
+    if (args.net == 'imagenet' or args.net == 'imagenet32' or args.net == 'imagenet64' or args.net == 'imagenet128' ) and args.shuffle_off:
+        logger.log("Warning: Shuffle data for ImageNet must be switched off!")
+        args.shuffle_off = False
+    
     return args
 
 

@@ -304,8 +304,8 @@ detectadversarialslayer ()
 # detectadversarialslayer
 
 # printn
-# genereratecleandata
-attacks
+genereratecleandata
+# attacks
 # extractcharacteristics
 # detectadversarials
 

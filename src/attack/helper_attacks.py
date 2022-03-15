@@ -28,3 +28,13 @@ def adapt_batchsize(args, device_name):
         batch_size = 32
     
     return batch_size
+
+
+
+def check_args_attack(args, logger):
+    if args.net_normalization:
+        if not args.attack == 'std' and not args.attack == 'apgd-ce' and not args.attack == 'apgd-t' and not args.attack == 'fab-t' and not args.attack == 'square':
+            logger.log("Warning: Net normalization must be switched off!  Net normalization is switched off now!")
+            args.net_normalization = False
+            
+    return args

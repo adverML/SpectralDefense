@@ -27,7 +27,6 @@ from utils import (
     create_dir_extracted_characteristics, 
     save_args_to_file,
     getdevicename,
-    check_args,
     create_dir_attacks,
     create_save_dir_path,
     create_dir_clean_data,
@@ -38,7 +37,8 @@ from utils import (
 )
 
 from attack.helper_attacks import (
-    adapt_batchsize
+    adapt_batchsize,
+    check_args_attack
 )
 
 
@@ -82,7 +82,7 @@ if __name__ == '__main__':
     device_name =  getdevicename()
 
     # check args
-    args = check_args(args, logger)
+    args = check_args_attack(args, logger)
 
     #load model
     logger.log('INFO: Load model...')

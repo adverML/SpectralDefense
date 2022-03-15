@@ -26,7 +26,6 @@ from utils import (
     create_dir_extracted_characteristics, 
     save_args_to_file,
     getdevicename,
-    check_args,
     create_dir_attacks,
     create_save_dir_path,
     create_dir_clean_data,
@@ -37,7 +36,8 @@ from utils import (
 )
 
 from attack.helper_attacks import (
-    adapt_batchsize
+    adapt_batchsize,
+    check_args_attack
 )
 
 
@@ -68,7 +68,7 @@ def create_advs(logger, args, output_path_dir, clean_data_path, wanted_samples, 
     dataset = torch.load(os.path.join(clean_data_path, clean_path))[:wanted_samples]
     get_debug_info( "actual len/wanted " + str(len(dataset)) + "/" + str(wanted_samples) )
 
-    test_loader = torch.utils.data.DataLoader(dataset, batch_size=args.batch_size, shuffle=args.shuffle_on)
+    data_loader = torch.utils.data.DataLoader(dataset, batch_size=args.batch_size, shuffle=args.shuffle_on)
 
     if args.attack == 'std' or args.attack == 'apgd-ce' or args.attack == 'apgd-t' or args.attack == 'fab-t' or args.attack == 'square':
         logger.log('INFO: Load data...')
@@ -84,7 +84,7 @@ def create_advs(logger, args, output_path_dir, clean_data_path, wanted_samples, 
         # run attack and save images
         with torch.no_grad():
 
-            for x_test, y_test in test_loader:
+            for x_test, y_test in data_loader:
 
                 x_test = torch.squeeze(x_test).cpu()
                 y_test = torch.squeeze(y_test).cpu()
@@ -154,8 +154,9 @@ def create_advs(logger, args, output_path_dir, clean_data_path, wanted_samples, 
         fmodel = PyTorchModel(model, bounds=(0, 1), preprocessing=preprocessing)
         logger.log('eps: {}'.format(epsilons))
 
-        for image, label in test_loader:
 
+        for image, label in data_loader:
+            
             image = torch.squeeze(image)
             label = torch.squeeze(label)
 
@@ -198,10 +199,12 @@ def create_advs(logger, args, output_path_dir, clean_data_path, wanted_samples, 
     elif args.attack == 'gauss':  # baseline accuracy
         from attack.noise_baseline import noisy
         
-        logger.log("INFO: len(testset): {}".format(len(test_loader)))
+        logger.log("INFO: len(testset): {}".format(len(data_loader)))
 
-        for image, label in test_loader:
+        for image, label in data_loader:
             for itx, img in enumerate(image):
+                pdb.set_trace()
+                
                 img_np = img.cpu().numpy().squeeze().transpose([1,2,0])
                 image_adv = torch.from_numpy( noisy(img_np, noise_typ='gauss').transpose([2, 1, 0]) ).cuda()
                 images.append( img.squeeze().cpu() )
@@ -215,7 +218,6 @@ def create_advs(logger, args, output_path_dir, clean_data_path, wanted_samples, 
                 if success_counter >= args.wanted_samples:
                     logger.log("INFO: wanted samples reached {}".format(args.wanted_samples))
                     break
-
 
     logger.log("INFO: len(dataset):   {}".format( len(dataset) ))
     logger.log("INFO: success_counter {}".format(success_counter))

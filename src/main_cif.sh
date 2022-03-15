@@ -18,7 +18,7 @@ RUNS="1"
 
 # ATTACKS="fgsm bim pgd std df cw"
 # ATTACKS="apgd-ce apgd-t fab-t square"
-ATTACKS="df"
+ATTACKS="gauss"
 # ATTACKS="gauss bim std df"
 # ATTACKS="gauss bim std df"
 # ATTACKS="gauss"
@@ -295,9 +295,9 @@ detectadversarialslayer ()
 
 # printn
 # genereratecleandata
-# attacks
-extractcharacteristics
-detectadversarials
+attacks
+# extractcharacteristics
+# detectadversarials
 
 
 # python attacks.py --net cif10 --att std --batch_size 500 --eps 4./255.

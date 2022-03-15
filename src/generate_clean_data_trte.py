@@ -20,7 +20,18 @@ from collections import OrderedDict
 from torch.utils.data import DataLoader, TensorDataset
 import torchvision.datasets as datasets
 
-from utils import *
+from utils import (
+    Logger,
+    log_header,
+    create_dir_clean_data,
+    save_args_to_file,
+    load_model,
+    get_debug_info,
+    load_test_set,
+    load_train_set
+)
+
+
 
 from datasets import smallimagenet
 
@@ -91,7 +102,7 @@ if __name__ == '__main__':
 
     parser.add_argument('--net_normalization', action='store_false', help=settings.HELP_NET_NORMALIZATION)
     
-
+    
     args = parser.parse_args()
 
     if not args.batch_size == 1:
@@ -111,7 +122,6 @@ if __name__ == '__main__':
     model.eval()
 
     print("preprocessing", preprocessing)
-
     logger.log('INFO: Load dataset...')
 
     if args.wanted_samples > 0:

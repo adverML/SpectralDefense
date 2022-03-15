@@ -22,6 +22,16 @@ import torchvision.datasets as datasets
 
 from utils import *
 
+from utils import (
+    Logger,
+    log_header,
+    save_args_to_file,
+    check_args_clean_data,
+    create_dir_clean_data,
+    load_model,
+    get_debug_info
+)
+
 from datasets import smallimagenet
 
 
@@ -40,6 +50,7 @@ if __name__ == '__main__':
     
     args = parser.parse_args()
 
+    args = check_args_clean_data(args, logger)
 
     if not args.batch_size == 1:
         get_debug_info(msg='Err: Batch size must be always 1!')
@@ -83,7 +94,7 @@ if __name__ == '__main__':
 
         correct += (predicted == labels).sum().item()
         if (predicted == labels):
-            clean_dataset.append([images, labels])
+            clean_dataset.append([images.cpu(), labels.cpu()])
 
         i = i + 1
         if i % 500 == 0:
