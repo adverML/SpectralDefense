@@ -202,9 +202,6 @@ def get_whitebox_features(args, logger, model):
 
     elif args.net == 'cif10rn34' or args.net == 'cif100rn34':
 
-        # import pdb; pdb.set_trace()
-
-
         def get_layer_feature_maps(activation_dict, act_layer_list):
             act_val_list = []
             for it in act_layer_list:

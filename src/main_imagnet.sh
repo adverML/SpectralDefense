@@ -7,14 +7,14 @@ function log_msg {
 # DATASETS=(cif10 cif10vgg cif100 cif100vgg imagenet imagenet32 imagenet64 imagenet128 celebaHQ32 celebaHQ64 celebaHQ128)
 DATASETS="imagenet"
 
-# RUNS="1"
+RUNS="1"
 # RUNS="1 2 3"
-RUNS="8"
+# RUNS="8"
 # RUNS="7"
 
 # ATTACKS="fgsm bim pgd"
 # ATTACKS="gauss"
-ATTACKS="df std"
+ATTACKS="df"
 
 
 # ATTACKS="fgsm bim std pgd df cw"
@@ -172,7 +172,7 @@ detectadversarialslayer ()
 # genereratecleandata
 # attacks
 extractcharacteristics
-# detectadversarials
+detectadversarials
 
 # extractcharacteristicslayer
 # detectadversarialslayer

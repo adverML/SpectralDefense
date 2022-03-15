@@ -109,7 +109,6 @@ images_advs = torch.load(images_advs_path)[:args.wanted_samples]
 number_images = len(images)
 logger.log("INFO: eps " + str(args.eps) + " INFO: nr_img " + str(number_images) + " INFO: Wanted Samples: " + str(args.wanted_samples) )
 
-
 #load model
 logger.log('INFO: Loading model...')
 model, _ = load_model(args)
@@ -118,39 +117,47 @@ model = model.to(device)
 model = model.eval()
 
 
-import  pdb; pdb.set_trace()
+with torch.no_grad():
+    for i, m in enumerate(filter(lambda m: type(m) == torch.nn.Conv2d and m.kernel_size == (3, 3), model.modules())):
+        
+        weight = m.weight.detach().cpu().numpy().copy()
+        shape = weight.shape
+        w = (weight.reshape(-1, 9))
+        
+        t = np.abs(w).max() / 100    
+        cache = np.ones_like(w)
+        cache[np.abs(w) < t] = 0
+        dead_mask = (cache.sum(axis=1) == 0)
 
-for i, m in enumerate(filter(lambda m: type(m) == torch.nn.Conv2d and m.kernel_size == (3, 3), model.modules())):
-    w = (m.weight.detach().cpu().numpy().reshape(-1, 9).copy())
-
-
-    t = np.abs(w).max() / 100    
-    cache = np.ones_like(w)
-    cache[np.abs(w) < t] = 0
-    dead_mask = (cache.sum(axis=1) == 0)
-
-    with np.printoptions(edgeitems=1000):
+        # with np.printoptions(edgeitems=1000):
         dead_filter = np.where(dead_mask == True)[0]
-        print("sparsity: ", dead_filter)
+        # print("sparsity: ", dead_filter)
+        # dead_filter_reshaped = dead_filter.flatten().reshape(shape)
+        
+        
+        if len(dead_filter) > 0:
+            w[dead_filter, :] = 0
+            # import pdb; pdb.set_trace()
+        # m.weight = weight
 
-    usv = np.linalg.svd(w - w.mean(axis=0), full_matrices=False, compute_uv=True)
-    u = usv[0]
-    s = usv[1]
-    v = s**2 / (w.shape[0]-1)
+    # usv = np.linalg.svd(w - w.mean(axis=0), full_matrices=False, compute_uv=True)
+    # u = usv[0]
+    # s = usv[1]
+    # v = s**2 / (w.shape[0]-1)
 
-    e = scipy.stats.entropy(v, base=10)
+    # e = scipy.stats.entropy(v, base=10)
     
-    def H_T(n):
-        L, x0, k, b = (1.2618047,2.30436435,0.88767525,-0.31050834)  # min distr.
-        return L / (1 + np.exp(-k * (np.log2(n) - x0))) + b
+    # def H_T(n):
+    #     L, x0, k, b = (1.2618047,2.30436435,0.88767525,-0.31050834)  # min distr.
+    #     return L / (1 + np.exp(-k * (np.log2(n) - x0))) + b
     
-    dead = (e >= H_T(w.shape[0])) | (e < 0.5)
+    # dead = (e >= H_T(w.shape[0])) | (e < 0.5)
 
-    print("dead_mask: ", )
+    # print("dead_mask: ", )
 
-    print("i: ", i, ",dead: ", dead, ", e: ", e, ", H_T: ", H_T(w.shape[0]))
+    # print("i: ", i, ",dead: ", dead, ", e: ", e, ", H_T: ", H_T(w.shape[0]))
 
-import  pdb; pdb.set_trace()
+# import  pdb; pdb.set_trace()
 
 
 layer_nr = int(args.nr)
@@ -160,7 +167,6 @@ if args.detector == 'LayerMFS' or args.detector == 'LayerPFS' or args.detector =
     get_layer_feature_maps, layers, model, activation = get_whitebox_features(args, logger, model)
 elif args.detector == 'DkNN':
     layers = dfknn_layer(args, model)
-
 
 ################Sections for each different detector
 ####### Fourier section

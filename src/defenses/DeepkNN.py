@@ -27,7 +27,8 @@ import warnings
 
 
 from utils import (
-    get_num_classes
+    get_num_classes,
+    get_debug_info
 )
 
 num_epochs = 6            # number of training epochs
@@ -147,20 +148,20 @@ def get_activations(dataloader, model, layers):
         print('## Fetching Activations from Layer {}'.format(layer_name))
 
         # Get activations for the data
-        print("from layers")
+        # print("from layers")
         # import pdb; pdb.set_trace()
         layer = layers[layer_name]        
         activations['activations'][layer_name], targets = get_activations_from_layer(dataloader, model, layer)
 
         # Get the targets of that data
-        print("targets")
+        # print("targets")
         if targets is not None:
             if activations['targets'] is not None:
                 np.testing.assert_array_equal(activations['targets'], targets)
             else:
                 activations['targets'] = targets
 
-        print()
+        # print()
 
     return activations
 
@@ -181,9 +182,9 @@ def get_activations_from_layer(dataloader, model, layer):
 
     # Fetch activations
     for i, batch in enumerate(dataloader):
-        print('Processing Batch {}'.format(i))
-        print("batch len : ", len(batch))
-        print("batch size: ", batch[0].size())
+        get_debug_info('Processing Batch {}'.format(i))
+        get_debug_info("batch len : ", len(batch))
+        get_debug_info("batch size: ", batch[0].size())
         if use_cuda:
             batch = [b.cuda() for b in batch]
             # batch = batch.cuda()
@@ -193,7 +194,7 @@ def get_activations_from_layer(dataloader, model, layer):
         if len(batch) > 1:
           targets.append(batch[1].detach().cpu().numpy())
 
-    print("done!")
+    get_debug_info("done!")
 
     # Remove hook
     handle.remove()
@@ -734,8 +735,8 @@ def calculate(args, model, images, images_advs, layers, get_layer_feature_maps, 
     if attack == 'std':
         attack = 'std/8_255'
 
-    te_data_path = '/home/lorenzp/adversialml/src/data/attacks/run_1/cif10/wrn_28_10_10/{}/images_te'.format(attack)
-    te_targets_path = '/home/lorenzp/adversialml/src/data/attacks/run_1/cif10/wrn_28_10_10/{}/labels_te'.format(attack)
+    te_data_path = '/home/lorenzp/adversialml/src/data/attacks/run_{}/cif10/wrn_28_10_10/{}/images_te'.format(args.run_nr, attack)
+    te_targets_path = '/home/lorenzp/adversialml/src/data/attacks/run_{}/cif10/wrn_28_10_10/{}/labels_te'.format(args.run_nr, attack)
 
     te_data    =  torch.FloatTensor(torch.stack(torch.load(te_data_path)).cpu())
     te_targets =  torch.LongTensor( torch.load(te_targets_path) ).cpu()
@@ -770,8 +771,8 @@ def calculate(args, model, images, images_advs, layers, get_layer_feature_maps, 
     # adv_data = torch.FloatTensor(adversarials['adv_examples'])
     # adv_targets = torch.LongTensor(adversarials['targets'])
 
-    adv_data_path = '/home/lorenzp/adversialml/src/data/attacks/run_1/cif10/wrn_28_10_10/{}/images_te_adv'.format(attack)
-    adv_targets_path = '/home/lorenzp/adversialml/src/data/attacks/run_1/cif10/wrn_28_10_10/{}/labels_te_adv'.format(attack)
+    adv_data_path = '/home/lorenzp/adversialml/src/data/attacks/run_{}/cif10/wrn_28_10_10/{}/images_te_adv'.format(args.run_nr, attack)
+    adv_targets_path = '/home/lorenzp/adversialml/src/data/attacks/run_{}/cif10/wrn_28_10_10/{}/labels_te_adv'.format(args.run_nr, attack)
 
     adv_data    = torch.FloatTensor( torch.stack(torch.load(adv_data_path)).cpu())
     adv_targets = torch.LongTensor( torch.load(adv_targets_path) ).cpu()
@@ -819,7 +820,7 @@ def calculate(args, model, images, images_advs, layers, get_layer_feature_maps, 
     print('targets: {}'.format(test_targets.shape))
 
 
-    path_dir = "./data/extracted_characteristics/run_1/cif10/wrn_28_10_10/{}/DkNN/".format(attack)
+    path_dir = "./data/extracted_characteristics/run_{}/cif10/wrn_28_10_10/{}/DkNN/".format(args.run_nr, attack)
     # torch.save(dknn_preds_advset, os.path.join(path_dir, 'dknn_preds_advset'), pickle_protocol=4)
     # torch.save(adv_targets,       os.path.join(path_dir, 'adv_targets'), pickle_protocol=4)
 

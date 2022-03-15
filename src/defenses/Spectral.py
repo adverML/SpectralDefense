@@ -20,6 +20,7 @@ def calculate_fourier_spectrum(im, typ='MFS'):
     # im = im[:,:100,:,:]
     # im = im[:,:100,:5,:5]
 
+
     fft = np.fft.fft2(im)
 
     # im = im[:,:100,:5,:5]
@@ -66,8 +67,13 @@ def calculate_spectra_analysis(images, fr, to, typ='MFS'):
 
 def calculate_spectra(images, typ='MFS'):
     fs = []   
+    # dead_filter = torch.load('defenses/sparsity/wrn2810_dead.pkl')
+    # sparse = torch.load('defenses/sparsity/wrn2810.pkl')
+    # sparse = dead_filter[-4:]
+    
     for i in range(len(images)):
         image = images[i]
+        # import pdb; pdb.set_trace()
         fourier_image = calculate_fourier_spectrum(image, typ=typ)
         fs.append(fourier_image.flatten())
     return fs
@@ -100,7 +106,6 @@ def blackbox_mfs_pfs(args, images, images_advs, typ='MFS'):
     characteristics       = np.asarray(mfs, dtype=np.float32)
     characteristics_adv   = np.asarray(mfs_advs, dtype=np.float32)
     return characteristics, characteristics_adv
-
     
 
 ###Fourier Layer   
@@ -110,18 +115,14 @@ def whitebox_mfs_pfs(args, logger, model, images, images_advs, layers, get_layer
     """
     mfs = []
     mfs_advs = []
-
+    
     number_images = len(images)
     for it in tqdm(range(number_images)):
-
-        # import pdb; pdb.set_trace()
         image = images[it].unsqueeze_(0)
         adv = images_advs[it].unsqueeze_(0)
 
         image = normalize_images(image, args)
         adv   = normalize_images(adv, args)
-
-        # import pdb; pdb.set_trace()
         
         inputimage = []
         inputadv = []
@@ -129,18 +130,26 @@ def whitebox_mfs_pfs(args, logger, model, images, images_advs, layers, get_layer
             if args.take_inputimage_off:
                 inputimage = [image]
                 inputadv = [adv]
-            if args.nr == -1:
-                feat_img = model(image.cuda())
-                image_feature_maps = inputimage + get_layer_feature_maps(activation, layers)
+            
+            _ = model(image.cuda())
+            image_feature_maps = inputimage + get_layer_feature_maps(activation, layers)
+            # import pdb; pdb.set_trace()
 
-                feat_adv = model(adv.cuda())
-                adv_feature_maps   = inputadv   + get_layer_feature_maps(activation, layers)
-            else:
-                feat_img = model(image.cuda())
-                image_feature_maps = inputimage + get_layer_feature_maps(activation, layers)
+            _ = model(adv.cuda())
+            adv_feature_maps   = inputadv   + get_layer_feature_maps(activation, layers)
+            
+            # if args.nr == -1:
+            #     _ = model(image.cuda())
+            #     image_feature_maps = inputimage + get_layer_feature_maps(activation, layers)
 
-                feat_adv = model(adv.cuda())
-                adv_feature_maps   = inputadv   + get_layer_feature_maps(activation, layers)
+            #     _ = model(adv.cuda())
+            #     adv_feature_maps   = inputadv   + get_layer_feature_maps(activation, layers)
+            # else:
+            #     _ = model(image.cuda())
+            #     image_feature_maps = inputimage + get_layer_feature_maps(activation, layers)
+
+            #     _ = model(adv.cuda())
+            #     adv_feature_maps   = inputadv   + get_layer_feature_maps(activation, layers)
         else:
             image_c = image.cuda()
             adv_c = adv.cuda()
