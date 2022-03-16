@@ -26,10 +26,10 @@ ATTACKS="gauss"
 
 # DETECTORS="InputMFS LayerMFS"
 # DETECTORS="InputMFS LayerMFS LID Mahalanobis"
-DETECTORS="LayerMFS"
+# DETECTORS="LayerMFS"
 # DETECTORS="InputPFS LayerPFS InputMFS LayerMFS LID Mahalanobis"
 # DETECTORS="LID"
-# DETECTORS="DkNN"
+DETECTORS="DkNN"
 # EPSILONS="8./255. 4./255. 2./255. 1./255. 0.5/255."
 EPSILONS="8./255."
 
@@ -62,7 +62,6 @@ printn()
         echo "$index"
     done 
 }
-
 
 genereratecleandata ()
 {
@@ -109,33 +108,31 @@ attacks ()
             for att in $ATTACKS; do
                 for eps in $EPSILONS; do
                     if [ "$net" == cif10 ]; then     
-                        python -u attacks.py --net "$net" --num_classes 10 --attack "$att" --img_size 32 --batch_size 500 --net_normalization --eps "$eps" --run_nr "$run"  --wanted_samples "$WANTEDSAMPLES" --all_samples "$ALLSAMPLES"
+                        python -u attacks.py --net "$net"   --attack "$att"  --batch_size 500 --net_normalization --eps "$eps" --run_nr "$run"  --wanted_samples "$WANTEDSAMPLES" --all_samples "$ALLSAMPLES"
                     fi
 
                     if [ "$net" == cif10vgg ]; then                            
-                        python -u attacks.py --net "$net" --num_classes 10 --attack "$att" --img_size 32 --batch_size 500 --net_normalization --eps "$eps"  --run_nr "$run" --wanted_samples "$WANTEDSAMPLES" --all_samples "$ALLSAMPLES"
+                        python -u attacks.py --net "$net"   --attack "$att"  --batch_size 500 --net_normalization --eps "$eps"  --run_nr "$run" --wanted_samples "$WANTEDSAMPLES" --all_samples "$ALLSAMPLES"
                     fi 
 
                     if [ "$net" == cif10rn34 ]; then
-                        python -u attacks.py --net "$net" --num_classes 10 --attack "$att" --img_size 32 --batch_size 500 --net_normalization  --eps "$eps"  --run_nr "$run" --wanted_samples "$WANTEDSAMPLES" --all_samples "$ALLSAMPLES"
+                        python -u attacks.py --net "$net"   --attack "$att"  --batch_size 500 --net_normalization  --eps "$eps"  --run_nr "$run" --wanted_samples "$WANTEDSAMPLES" --all_samples "$ALLSAMPLES"
                     fi      
 
                     if [ "$net" == cif10rn34sota ]; then
-    
-                        python -u attacks.py --net "$net" --num_classes 10 --attack "$att" --img_size 32 --batch_size 500  --net_normalization --eps "$eps"  --run_nr "$run" --wanted_samples "$WANTEDSAMPLES" --all_samples "$ALLSAMPLES"
-
+                        python -u attacks.py --net "$net"   --attack "$att"  --batch_size 500  --net_normalization --eps "$eps"  --run_nr "$run" --wanted_samples "$WANTEDSAMPLES" --all_samples "$ALLSAMPLES"
                     fi                    
 
                     if [ "$net" == cif100 ]; then
-                        python -u attacks.py --net "$net" --num_classes 100 --attack "$att" --img_size 32 --batch_size 1000  --net_normalization --eps "$eps"  --run_nr "$run" --wanted_samples "$WANTEDSAMPLES" --all_samples "$ALLSAMPLES"
+                        python -u attacks.py --net "$net"  --attack "$att"  --batch_size 1000  --net_normalization --eps "$eps"  --run_nr "$run" --wanted_samples "$WANTEDSAMPLES" --all_samples "$ALLSAMPLES"
                     fi 
 
                     if [ "$net" == cif100vgg ]; then
-                        python -u attacks.py --net "$net" --num_classes 100 --attack "$att" --img_size 32 --batch_size 1000  --net_normalization --eps "$eps"  --run_nr "$run" --wanted_samples "$WANTEDSAMPLES" --all_samples "$ALLSAMPLES"
+                        python -u attacks.py --net "$net"  --attack "$att"  --batch_size 1000  --net_normalization --eps "$eps"  --run_nr "$run" --wanted_samples "$WANTEDSAMPLES" --all_samples "$ALLSAMPLES"
                     fi 
 
                     if [ "$net" == cif100rn34 ]; then
-                        python -u attacks.py --net "$net" --num_classes 100 --attack "$att" --img_size 32 --batch_size 1000  --net_normalization --eps "$eps"  --run_nr "$run" --wanted_samples "$WANTEDSAMPLES" --all_samples "$ALLSAMPLES"
+                        python -u attacks.py --net "$net"  --attack "$att"  --batch_size 1000  --net_normalization --eps "$eps"  --run_nr "$run" --wanted_samples "$WANTEDSAMPLES" --all_samples "$ALLSAMPLES"
                     fi 
                 done
             done
@@ -153,34 +150,34 @@ extractcharacteristics ()
             for att in $ATTACKS; do
                 for eps in $EPSILONS; do
                     for det in $DETECTORS; do
-                            if [ "$net" == cif10 ]; then
-                                # python -u extract_characteristics.py --net "$net" --attack "$att" --detector "$det"  --num_classes 10 --eps "$eps" --run_nr "$run" --take_inputimage 
-                                python -u extract_characteristics.py --net "$net" --attack "$att" --detector "$det"  --num_classes 10 --eps "$eps" --run_nr "$run"  --wanted_samples "$WANTEDSAMPLES" --take_inputimage_off
-                            fi
+                        if [ "$net" == cif10 ]; then
+                            # python -u extract_characteristics.py --net "$net" --attack "$att" --detector "$det"  --num_classes 10 --eps "$eps" --run_nr "$run" --take_inputimage 
+                            python -u extract_characteristics.py --net "$net" --attack "$att" --detector "$det"    --eps "$eps" --run_nr "$run"  --wanted_samples "$WANTEDSAMPLES" --take_inputimage_off
+                        fi
 
-                            if [ "$net" == cif10vgg ]; then
-                                python -u extract_characteristics.py --net "$net" --attack "$att" --detector "$det" --num_classes 10   --run_nr "$run"  --wanted_samples "$WANTEDSAMPLES" --take_inputimage_off 
-                            fi 
+                        if [ "$net" == cif10vgg ]; then
+                            python -u extract_characteristics.py --net "$net" --attack "$att" --detector "$det"    --eps "$eps" --run_nr "$run"  --wanted_samples "$WANTEDSAMPLES" --take_inputimage_off 
+                        fi 
 
-                            if [ "$net" == cif10rn34 ]; then
-                                python -u extract_characteristics.py --net "$net" --attack "$att" --detector "$det" --num_classes 10   --run_nr "$run"  --wanted_samples "$WANTEDSAMPLES" --take_inputimage_off 
-                            fi 
+                        if [ "$net" == cif10rn34 ]; then
+                            python -u extract_characteristics.py --net "$net" --attack "$att" --detector "$det"    --eps "$eps" --run_nr "$run"  --wanted_samples "$WANTEDSAMPLES" --take_inputimage_off 
+                        fi 
 
-                            if [ "$net" == cif10rn34sota ]; then
-                                python -u extract_characteristics.py --net "$net" --attack "$att" --detector "$det" --num_classes 10   --run_nr "$run"  --wanted_samples "$WANTEDSAMPLES" --take_inputimage_off 
-                            fi  
+                        if [ "$net" == cif10rn34sota ]; then
+                            python -u extract_characteristics.py --net "$net" --attack "$att" --detector "$det"     --eps "$eps"--run_nr "$run"  --wanted_samples "$WANTEDSAMPLES" --take_inputimage_off 
+                        fi  
 
-                            if [ "$net" == cif100 ]; then                            
-                                python -u extract_characteristics.py --net "$net" --attack "$att" --detector "$det" --num_classes 100  --eps "$eps"  --run_nr "$run"  --wanted_samples "$WANTEDSAMPLES"  --take_inputimage_off 
-                            fi
+                        if [ "$net" == cif100 ]; then                            
+                            python -u extract_characteristics.py --net "$net" --attack "$att" --detector "$det"    --eps "$eps"  --run_nr "$run"  --wanted_samples "$WANTEDSAMPLES"  --take_inputimage_off 
+                        fi
 
-                            if [ "$net" == cif100vgg ]; then
-                                python -u extract_characteristics.py --net "$net" --attack "$att" --detector "$det" --num_classes 100   --run_nr "$run"  --wanted_samples "$WANTEDSAMPLES"  --take_inputimage_off 
-                            fi 
+                        if [ "$net" == cif100vgg ]; then
+                            python -u extract_characteristics.py --net "$net" --attack "$att" --detector "$det"    --eps "$eps" --run_nr "$run"  --wanted_samples "$WANTEDSAMPLES"  --take_inputimage_off 
+                        fi 
 
-                            if [ "$net" == cif100rn34 ]; then
-                                python -u extract_characteristics.py --net "$net" --attack "$att" --detector "$det" --num_classes 100   --run_nr "$run"  --wanted_samples "$WANTEDSAMPLES"  --take_inputimage_off 
-                            fi 
+                        if [ "$net" == cif100rn34 ]; then
+                            python -u extract_characteristics.py --net "$net" --attack "$att" --detector "$det"    --eps "$eps" --run_nr "$run"  --wanted_samples "$WANTEDSAMPLES"  --take_inputimage_off 
+                        fi 
                     done
                 done
             done
@@ -199,11 +196,11 @@ extractcharacteristicslayer ()
                     for nr in $LAYERNR; do 
                         log_msg "Layer Nr. $nr; attack $att; detectors $det"
                         if [ "$net" == cif10 ]; then
-                            python -u extract_characteristics.py --net "$net" --attack "$att" --detector "$det" --num_classes 10 --nr "$nr" --run_nr "$run"   --wanted_samples "$WANTEDSAMPLES" --take_inputimage_off
+                            python -u extract_characteristics.py --net "$net" --attack "$att" --detector "$det" --nr "$nr" --run_nr "$run"  --wanted_samples "$WANTEDSAMPLES" --take_inputimage_off
                         fi
 
                         if [ "$net" == cif10vgg ]; then
-                            python -u extract_characteristics.py --net "$net" --attack "$att" --detector "$det" --num_classes 10 --nr "$nr" --run_nr "$run"   --wanted_samples "$WANTEDSAMPLES" --take_inputimage_off
+                            python -u extract_characteristics.py --net "$net" --attack "$att" --detector "$det" --nr "$nr" --run_nr "$run"  --wanted_samples "$WANTEDSAMPLES" --take_inputimage_off
                         fi 
                     done
                 done
@@ -295,23 +292,9 @@ detectadversarialslayer ()
 
 # printn
 # genereratecleandata
-attacks
+# attacks
 # extractcharacteristics
-# detectadversarials
-
-
-# python attacks.py --net cif10 --att std --batch_size 500 --eps 4./255.
-# python attacks.py --net cif10 --att std --batch_size 500 --eps 2./255.
-# python attacks.py --net cif10 --att std --batch_size 500 --eps 1./255.
-# python attacks.py --net cif10 --att std --batch_size 500 --eps 0.5/255.
-
-
-# python attacks.py --net cif10vgg --att std --batch_size 500 --eps 4./255.
-# python attacks.py --net cif10vgg --att std --batch_size 500 --eps 2./255.
-# python attacks.py --net cif10vgg --att std --batch_size 500 --eps 1./255.
-# python attacks.py --net cif10vgg --att std --batch_size 500 --eps 0.5/255.
-
-
+detectadversarials
 
 
 # #-----------------------------------------------------------------------------------------------------------------------------------

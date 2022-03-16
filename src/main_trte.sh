@@ -82,39 +82,39 @@ genereratecleandata ()
     for run in $RUNS; do
         for net in $DATASETS; do
             if [ "$net" == cif10 ]; then
-                python -u generate_clean_data_trte.py --net "$net" --num_classes 10  --run_nr "$run" --wanted_samples "$NRWANTEDSAMPLES" --wanted_samples_tr "$WANTEDSAMPLES_TR"  --wanted_samples_te "$WANTEDSAMPLES_TE" --shuffle_off
+                python -u generate_clean_data_trte.py --net "$net"  --run_nr "$run" --wanted_samples "$NRWANTEDSAMPLES" --wanted_samples_tr "$WANTEDSAMPLES_TR"  --wanted_samples_te "$WANTEDSAMPLES_TE" --shuffle_off
             fi 
 
             if [ "$net" == cif10_m ]; then
-                python -u generate_clean_data_trte.py --net "$net" --num_classes 10  --run_nr "$run" --wanted_samples "$NRWANTEDSAMPLES" --wanted_samples_tr "$WANTEDSAMPLES_TR"  --wanted_samples_te "$WANTEDSAMPLES_TE"  --shuffle_off
+                python -u generate_clean_data_trte.py --net "$net"  --run_nr "$run" --wanted_samples "$NRWANTEDSAMPLES" --wanted_samples_tr "$WANTEDSAMPLES_TR"  --wanted_samples_te "$WANTEDSAMPLES_TE"  --shuffle_off
             fi           
 
             if [ "$net" == cif10vgg ]; then
-                python -u generate_clean_data_trte.py --net "$net" --num_classes 10  --run_nr "$run" --wanted_samples "$NRWANTEDSAMPLES" --wanted_samples_tr "$WANTEDSAMPLES_TR"   --wanted_samples_te "$WANTEDSAMPLES_TE" --shuffle_off
+                python -u generate_clean_data_trte.py --net "$net"  --run_nr "$run" --wanted_samples "$NRWANTEDSAMPLES" --wanted_samples_tr "$WANTEDSAMPLES_TR"   --wanted_samples_te "$WANTEDSAMPLES_TE" --shuffle_off
             fi 
 
             if [ "$net" == cif10rn34sota ]; then
-                python -u generate_clean_data_trte.py --net "$net" --num_classes 10  --run_nr "$run" --wanted_samples "$NRWANTEDSAMPLES" --wanted_samples_tr "$WANTEDSAMPLES_TR"   --wanted_samples_te "$WANTEDSAMPLES_TE" --shuffle_off
+                python -u generate_clean_data_trte.py --net "$net"  --run_nr "$run" --wanted_samples "$NRWANTEDSAMPLES" --wanted_samples_tr "$WANTEDSAMPLES_TR"   --wanted_samples_te "$WANTEDSAMPLES_TE" --shuffle_off
             fi 
 
             if [ "$net" == cif10rn34 ]; then
-                python -u generate_clean_data_trte.py --net "$net" --num_classes 10  --run_nr "$run" --wanted_samples "$NRWANTEDSAMPLES" --wanted_samples_tr "$WANTEDSAMPLES_TR"   --wanted_samples_te "$WANTEDSAMPLES_TE" --shuffle_off
+                python -u generate_clean_data_trte.py --net "$net"  --run_nr "$run" --wanted_samples "$NRWANTEDSAMPLES" --wanted_samples_tr "$WANTEDSAMPLES_TR"   --wanted_samples_te "$WANTEDSAMPLES_TE" --shuffle_off
             fi 
 
             if [ "$net" == cif100rn34 ]; then
-                python -u generate_clean_data_trte.py --net "$net" --num_classes 100  --run_nr "$run" --wanted_samples "$NRWANTEDSAMPLES" --wanted_samples_tr "$WANTEDSAMPLES_TR"   --wanted_samples_te "$WANTEDSAMPLES_TE" --shuffle_off
+                python -u generate_clean_data_trte.py --net "$net"  --run_nr "$run" --wanted_samples "$NRWANTEDSAMPLES" --wanted_samples_tr "$WANTEDSAMPLES_TR"   --wanted_samples_te "$WANTEDSAMPLES_TE" --shuffle_off
             fi 
 
             if [ "$net" == cif100 ]; then
-                python -u generate_clean_data_trte.py --net "$net" --num_classes 100  --run_nr "$run" --wanted_samples "$NRWANTEDSAMPLES" --wanted_samples_tr "$WANTEDSAMPLES_TR"   --wanted_samples_te "$WANTEDSAMPLES_TE" --shuffle_off
+                python -u generate_clean_data_trte.py --net "$net"   --run_nr "$run" --wanted_samples "$NRWANTEDSAMPLES" --wanted_samples_tr "$WANTEDSAMPLES_TR"   --wanted_samples_te "$WANTEDSAMPLES_TE" --shuffle_off
             fi 
 
             if [ "$net" == cif100vgg ]; then 
-                python -u generate_clean_data_trte.py --net "$net" --num_classes 100  --run_nr "$run" --wanted_samples "$NRWANTEDSAMPLES" --wanted_samples_tr "$WANTEDSAMPLES_TR"   --wanted_samples_te "$WANTEDSAMPLES_TE" --shuffle_off
+                python -u generate_clean_data_trte.py --net "$net"   --run_nr "$run" --wanted_samples "$NRWANTEDSAMPLES" --wanted_samples_tr "$WANTEDSAMPLES_TR"   --wanted_samples_te "$WANTEDSAMPLES_TE" --shuffle_off
             fi 
 
             if [ "$net" == imagenet ]; then
-                python -u generate_clean_data_trte.py --net "$net" --num_classes 1000   --run_nr "$run" --wanted_samples "$NRWANTEDSAMPLES" --wanted_samples_tr "$WANTEDSAMPLES_TR"   --wanted_samples_te "$WANTEDSAMPLES_TE"
+                python -u generate_clean_data_trte.py --net "$net"  --run_nr "$run" --wanted_samples "$NRWANTEDSAMPLES" --wanted_samples_tr "$WANTEDSAMPLES_TR"   --wanted_samples_te "$WANTEDSAMPLES_TE"
             fi             
         done
     done
@@ -129,35 +129,35 @@ attacks ()
             for att in $ATTACKS; do
                 for eps in $EPSILONS; do
                     if [ "$net" == cif10 ]; then      
-                        python -u attacks_trte.py --net "$net" --num_classes 10 --attack "$att" --img_size 32 --batch_size 500 --eps "$eps"  --run_nr "$run"  --wanted_samples "$NRWANTEDSAMPLES" --wanted_samples_tr "$WANTEDSAMPLES_TR"   --wanted_samples_te "$WANTEDSAMPLES_TE"
+                       python -u attacks_trte.py --net "$net" --attack "$att"  --batch_size 500 --eps "$eps"  --run_nr "$run"  --wanted_samples "$NRWANTEDSAMPLES" --wanted_samples_tr "$WANTEDSAMPLES_TR"   --wanted_samples_te "$WANTEDSAMPLES_TE"
                     fi
 
                     if [ "$net" == cif10vgg ]; then                             
-                        python -u attacks_trte.py --net "$net" --num_classes 10 --attack "$att" --img_size 32 --batch_size 500 --eps "$eps"  --run_nr "$run"  --wanted_samples "$NRWANTEDSAMPLES" --wanted_samples_tr "$WANTEDSAMPLES_TR"   --wanted_samples_te "$WANTEDSAMPLES_TE"
+                        python -u attacks_trte.py --net "$net" --attack "$att"  --batch_size 500 --eps "$eps"  --run_nr "$run"  --wanted_samples "$NRWANTEDSAMPLES" --wanted_samples_tr "$WANTEDSAMPLES_TR"   --wanted_samples_te "$WANTEDSAMPLES_TE"
                     fi 
 
                     if [ "$net" == cif10rn34sota ]; then
-                        python -u attacks_trte_trte.py --net "$net" --num_classes 10 --attack "$att" --img_size 32 --batch_size 500 --eps "$eps"  --run_nr "$run" --wanted_samples "$NRWANTEDSAMPLES" --wanted_samples_tr "$WANTEDSAMPLES_TR"   --wanted_samples_te "$WANTEDSAMPLES_TE"
+                        python -u attacks_trte_trte.py --net "$net" --attack "$att"  --batch_size 500 --eps "$eps"  --run_nr "$run" --wanted_samples "$NRWANTEDSAMPLES" --wanted_samples_tr "$WANTEDSAMPLES_TR"   --wanted_samples_te "$WANTEDSAMPLES_TE"
                     fi  
 
                     if [ "$net" == cif10rn34 ]; then                          
-                            python -u attacks_trte.py --net "$net" --num_classes 10 --attack "$att" --img_size 32 --batch_size 500 --eps "$eps"  --run_nr "$run"  --wanted_samples "$NRWANTEDSAMPLES" --wanted_samples_tr "$WANTEDSAMPLES_TR"   --wanted_samples_te "$WANTEDSAMPLES_TE"
+                        python -u attacks_trte.py --net "$net" --attack "$att"  --batch_size 500 --eps "$eps"  --run_nr "$run"  --wanted_samples "$NRWANTEDSAMPLES" --wanted_samples_tr "$WANTEDSAMPLES_TR"   --wanted_samples_te "$WANTEDSAMPLES_TE"
                     fi                     
 
                     if [ "$net" == cif100 ]; then
-                        python -u attacks_trte.py --net "$net" --num_classes 100 --attack "$att" --img_size 32 --batch_size 1000  --run_nr "$run"  --wanted_samples "$NRWANTEDSAMPLES" --wanted_samples_tr "$WANTEDSAMPLES_TR"   --wanted_samples_te "$WANTEDSAMPLES_TE"
+                        python -u attacks_trte.py --net "$net"  --attack "$att"  --batch_size 1000  --run_nr "$run"  --wanted_samples "$NRWANTEDSAMPLES" --wanted_samples_tr "$WANTEDSAMPLES_TR"   --wanted_samples_te "$WANTEDSAMPLES_TE"
                     fi 
 
                     if [ "$net" == cif100vgg ]; then
-                        python -u attacks_trte.py --net "$net" --num_classes 100 --attack "$att" --img_size 32 --batch_size 1000  --run_nr "$run"  --wanted_samples "$NRWANTEDSAMPLES" --wanted_samples_tr "$WANTEDSAMPLES_TR"   --wanted_samples_te "$WANTEDSAMPLES_TE"
+                        python -u attacks_trte.py --net "$net"  --attack "$att"  --batch_size 1000  --run_nr "$run"  --wanted_samples "$NRWANTEDSAMPLES" --wanted_samples_tr "$WANTEDSAMPLES_TR"   --wanted_samples_te "$WANTEDSAMPLES_TE"
                     fi 
 
                     if [ "$net" == cif100rn34 ]; then
-                        python -u attacks_trte.py --net "$net" --num_classes 100 --attack "$att" --img_size 32 --batch_size 1000  --run_nr "$run"  --wanted_samples "$NRWANTEDSAMPLES" --wanted_samples_tr "$WANTEDSAMPLES_TR"   --wanted_samples_te "$WANTEDSAMPLES_TE"
+                        python -u attacks_trte.py --net "$net"  --attack "$att" --batch_size 1000  --run_nr "$run"  --wanted_samples "$NRWANTEDSAMPLES" --wanted_samples_tr "$WANTEDSAMPLES_TR"   --wanted_samples_te "$WANTEDSAMPLES_TE"
                     fi 
 
                     if [ "$net" == imagenet ]; then
-                        python -u attacks_trte.py --net "$net" --attack "$att"  --batch_size 500 --num_classes 1000 --eps "$eps" --run_nr "$run"  --wanted_samples "$NRWANTEDSAMPLES" --wanted_samples_tr "$WANTEDSAMPLES_TR"   --wanted_samples_te "$WANTEDSAMPLES_TE"
+                        python -u attacks_trte.py --net "$net" --attack "$att"  --batch_size 500  --eps "$eps" --run_nr "$run"  --wanted_samples "$NRWANTEDSAMPLES" --wanted_samples_tr "$WANTEDSAMPLES_TR"   --wanted_samples_te "$WANTEDSAMPLES_TE"
                     fi 
                 done
             done
@@ -175,20 +175,20 @@ extractcharacteristics ()
                 for eps in $EPSILONS; do
                     for det in $DETECTORS; do
                         if [ "$net" == cif10 ]; then
-                            # python -u extract_characteristics.py --net "$net" --attack "$att" --detector "$det"  --num_classes 10 --eps "$eps" --run_nr "$run" --take_inputimage 
-                            python -u extract_characteristics_trte.py --net "$net" --attack "$att" --detector "$det"  --num_classes 10 --eps "$eps" --run_nr "$run" --wanted_samples "$NRWANTEDSAMPLES" --wanted_samples_tr "$WANTEDSAMPLES_TR"   --wanted_samples_te "$WANTEDSAMPLES_TE" --take_inputimage_off
+                            # python -u extract_characteristics.py --net "$net" --attack "$att" --detector "$det"  --eps "$eps" --run_nr "$run" --take_inputimage 
+                            python -u extract_characteristics_trte.py --net "$net" --attack "$att" --detector "$det"  --eps "$eps" --run_nr "$run" --wanted_samples "$NRWANTEDSAMPLES" --wanted_samples_tr "$WANTEDSAMPLES_TR"   --wanted_samples_te "$WANTEDSAMPLES_TE" --take_inputimage_off
                         fi
 
                         if [ "$net" == cif10vgg ]; then
-                            python -u extract_characteristics_trte.py --net "$net" --attack "$att" --detector "$det" --num_classes 10 --eps "$eps"  --run_nr "$run"  --wanted_samples "$NRWANTEDSAMPLES" --wanted_samples_tr "$WANTEDSAMPLES_TR"   --wanted_samples_te "$WANTEDSAMPLES_TE" --take_inputimage_off 
+                            python -u extract_characteristics_trte.py --net "$net" --attack "$att" --detector "$det" --eps "$eps"  --run_nr "$run"  --wanted_samples "$NRWANTEDSAMPLES" --wanted_samples_tr "$WANTEDSAMPLES_TR"   --wanted_samples_te "$WANTEDSAMPLES_TE" --take_inputimage_off 
                         fi 
 
                         if [ "$net" == cif10rn34 ]; then
-                            python -u extract_characteristics_trte_trte.py --net "$net" --attack "$att" --detector "$det" --num_classes 10 --eps "$eps"  --run_nr "$run"  --wanted_samples "$NRWANTEDSAMPLES" --wanted_samples_tr "$WANTEDSAMPLES_TR"   --wanted_samples_te "$WANTEDSAMPLES_TE"--take_inputimage_off 
+                            python -u extract_characteristics_trte.py --net "$net" --attack "$att" --detector "$det" --eps "$eps"  --run_nr "$run"  --wanted_samples "$NRWANTEDSAMPLES" --wanted_samples_tr "$WANTEDSAMPLES_TR"   --wanted_samples_te "$WANTEDSAMPLES_TE"--take_inputimage_off 
                         fi 
 
                         if [ "$net" == cif10rn34sota ]; then
-                            python -u extract_characteristics_trte_trte.py --net "$net" --attack "$att" --detector "$det" --num_classes 10  --eps "$eps" --run_nr "$run"   --wanted_samples "$NRWANTEDSAMPLES" --wanted_samples_tr "$WANTEDSAMPLES_TR"   --wanted_samples_te "$WANTEDSAMPLES_TE" --take_inputimage_off 
+                            python -u extract_characteristics_trte.py --net "$net" --attack "$att" --detector "$det"  --eps "$eps" --run_nr "$run"   --wanted_samples "$NRWANTEDSAMPLES" --wanted_samples_tr "$WANTEDSAMPLES_TR"   --wanted_samples_te "$WANTEDSAMPLES_TE" --take_inputimage_off 
                         fi 
 
                         if [ "$net" == cif100 ]; then                              
@@ -228,7 +228,7 @@ detectadversarials ()
                                 if [ "$net" == imagenet ]; then
                                     python -u detect_adversarials_trte.py --net "$net" --attack "$att" --detector "$det"  --wanted_samples "$NRWANTEDSAMPLES" --wanted_samples_tr "$WANTEDSAMPLES_TR" --wanted_samples_te "$WANTEDSAMPLES_TE" --clf "$classifier" --eps "$eps" --num_classes 1000  --run_nr "$run"
                                 else
-                                     python -u detect_adversarials_trte.py --net "$net" --attack "$att" --detector "$det"  --wanted_samples "$NRWANTEDSAMPLES" --wanted_samples_tr "$WANTEDSAMPLES_TR" --wanted_samples_te "$WANTEDSAMPLES_TE" --clf "$classifier" --eps "$eps" --num_classes 10  --run_nr "$run"
+                                    python -u detect_adversarials_trte.py --net "$net" --attack "$att" --detector "$det"  --wanted_samples "$NRWANTEDSAMPLES" --wanted_samples_tr "$WANTEDSAMPLES_TR" --wanted_samples_te "$WANTEDSAMPLES_TE" --clf "$classifier" --eps "$eps"  --run_nr "$run"
                                 fi
                             done
                         done
@@ -250,15 +250,15 @@ extractcharacteristicslayer ()
                     for nr in $LAYERNR; do 
                         log_msg "Layer Nr. $nr; attack $att; detectors $det"
                         if [ "$net" == cif10 ]; then
-                            python -u extract_characteristics_trte.py --net "$net" --attack "$att" --detector "$det" --num_classes 10 --nr "$nr" --run_nr "$run"  --wanted_samples "$NRWANTEDSAMPLES" --wanted_samples_tr "$WANTEDSAMPLES_TR"   --wanted_samples_te "$WANTEDSAMPLES_TE" --take_inputimage_off
+                            python -u extract_characteristics_trte.py --net "$net" --attack "$att" --detector "$det" --nr "$nr" --run_nr "$run"  --wanted_samples "$NRWANTEDSAMPLES" --wanted_samples_tr "$WANTEDSAMPLES_TR"   --wanted_samples_te "$WANTEDSAMPLES_TE" --take_inputimage_off
                         fi
 
                         if [ "$net" == cif10vgg ]; then
-                            python -u extract_characteristics_trte.py --net "$net" --attack "$att" --detector "$det" --num_classes 10 --nr "$nr" --run_nr "$run"  --wanted_samples "$NRWANTEDSAMPLES" --wanted_samples_tr "$WANTEDSAMPLES_TR"   --wanted_samples_te "$WANTEDSAMPLES_TE" --take_inputimage_off
+                            python -u extract_characteristics_trte.py --net "$net" --attack "$att" --detector "$det" --nr "$nr" --run_nr "$run"  --wanted_samples "$NRWANTEDSAMPLES" --wanted_samples_tr "$WANTEDSAMPLES_TR"   --wanted_samples_te "$WANTEDSAMPLES_TE" --take_inputimage_off
                         fi 
 
                         if [ "$net" == cif10rn34sota ]; then
-                            python -u extract_characteristics_trte.py --net "$net" --attack "$att" --detector "$det" --num_classes 10 --nr "$nr" --run_nr "$run"  --wanted_samples "$NRWANTEDSAMPLES" --wanted_samples_tr "$WANTEDSAMPLES_TR"   --wanted_samples_te "$WANTEDSAMPLES_TE" --take_inputimage_off 
+                            python -u extract_characteristics_trte.py --net "$net" --attack "$att" --detector "$det" --nr "$nr" --run_nr "$run"  --wanted_samples "$NRWANTEDSAMPLES" --wanted_samples_tr "$WANTEDSAMPLES_TR"   --wanted_samples_te "$WANTEDSAMPLES_TE" --take_inputimage_off 
                         fi 
                     done
                 done
@@ -280,15 +280,15 @@ detectadversarialslayer ()
                             for nr in $LAYERNR; do 
                                 log_msg "Layer Nr. $nr"
                                 if [ "$net" == cif10 ]; then
-                                    python -u detect_adversarials_trte.py --net "$net" --attack "$att" --detector "$det" --wanted_samples "$nrsamples" --clf "$classifier" --num_classes 10 --nr "$nr" --run_nr  "$run" 
+                                    python -u detect_adversarials_trte.py --net "$net" --attack "$att" --detector "$det" --wanted_samples "$nrsamples" --clf "$classifier" --nr "$nr" --run_nr  "$run" 
                                 fi
 
                                 if [ "$net" == cif10vgg ]; then
-                                    python -u detect_adversarials_trte.py --net "$net" --attack "$att" --detector "$det" --wanted_samples "$nrsamples" --clf "$classifier" --num_classes 10 --nr "$nr" --run_nr  "$run" 
+                                    python -u detect_adversarials_trte.py --net "$net" --attack "$att" --detector "$det" --wanted_samples "$nrsamples" --clf "$classifier" --nr "$nr" --run_nr  "$run" 
                                 fi 
 
                                 if [ "$net" == cif10rn34sota ]; then
-                                    python -u detect_adversarials_trte.py --net "$net" --attack "$att" --detector "$det"  --clf "$classifier" --num_classes 10 --nr "$nr" --run_nr  "$run"   --wanted_samples 0 --wanted_samples_tr 2000   --wanted_samples_te 500 
+                                    python -u detect_adversarials_trte.py --net "$net" --attack "$att" --detector "$det"  --clf "$classifier" --nr "$nr" --run_nr  "$run"   --wanted_samples 0 --wanted_samples_tr 2000   --wanted_samples_te 500 
                                 fi 
                             done
                         done
@@ -304,11 +304,10 @@ detectadversarialslayer ()
 # detectadversarialslayer
 
 # printn
-genereratecleandata
+# genereratecleandata
 # attacks
-# extractcharacteristics
+extractcharacteristics
 # detectadversarials
-
 
 #-----------------------------------------------------------------------------------------------------------------------------------
 log_msg "finished"

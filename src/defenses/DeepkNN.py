@@ -741,7 +741,7 @@ def calculate(args, model, images, images_advs, layers, get_layer_feature_maps, 
     te_data    =  torch.FloatTensor(torch.stack(torch.load(te_data_path)).cpu())
     te_targets =  torch.LongTensor( torch.load(te_targets_path) ).cpu()
     
-    import pdb; pdb.set_trace()
+    # import pdb; pdb.set_trace()
 
     # te_data    =  np.stack(torch.load(te_data_path,    map_location='cpu'))
     # te_targets =  np.stack(torch.load(te_targets_path, map_location='cpu'))

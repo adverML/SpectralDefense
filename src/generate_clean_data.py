@@ -33,10 +33,13 @@ from utils import (
 
 from datasets import smallimagenet
 
-from generate_clean_data import (
-    check_args_generate_clean_data,
+from gen_clean_data.helper_generate_clean_data import (
+    check_args_generate_clean_data
+)
+from gen_clean_data.generate_data_labels import (
     generate_data_labels
 )
+
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
@@ -52,17 +55,15 @@ if __name__ == '__main__':
     parser.add_argument('--net_normalization', action='store_false', help=settings.HELP_NET_NORMALIZATION)
     
     args = parser.parse_args()
-    args = check_args_generate_clean_data(args, logger)
-
-    if not args.batch_size == 1:
-        get_debug_info(msg='Err: Batch size must be always 1!')
-        assert True
-
+    
     output_path_dir = create_dir_clean_data(args, root='./data/clean_data/')
 
     save_args_to_file(args, output_path_dir)
     logger = Logger(output_path_dir + os.sep + 'log.txt')
     log_header(logger, args, output_path_dir, sys)
+
+    args = check_args_generate_clean_data(args, logger)
+
 
     logger.log('INFO: Load model...')
 
@@ -77,37 +78,10 @@ if __name__ == '__main__':
     test_loader  = load_test_set(args, shuffle=args.shuffle_off, preprocessing=None) # Data Normalizations; No Net Normaliztion
 
 
+
     clean_dataset = generate_data_labels(logger, args, model, test_loader, args.wanted_samples, output_path_dir, option=2)
 
-    # clean_dataset = []
-    # correct = 0
-    # total = 0
-    # i = 0
 
-    # logger.log('INFO: Classify images...')
-
-    # for images, labels in test_loader:
-    #     if i == 0:
-    #         logger.log( "INFO: tensor size: " + str(images.size()) )
-
-    #     images = images.cuda()
-    #     labels = labels.cuda()
-
-    #     outputs = model(images)
-    #     _, predicted = torch.max(outputs.data, 1)
-    #     total += labels.size(0)
-
-    #     correct += (predicted == labels).sum().item()
-    #     if (predicted == labels):
-    #         clean_dataset.append([images.cpu(), labels.cpu()])
-
-    #     i = i + 1
-    #     if i % 500 == 0:
-    #         acc = (args.wanted_samples, i, 100 * correct / total)
-    #         logger.log('INFO: Accuracy of the network on the %d test images: %d, %d %%' % acc)
-
-    #     if len(clean_dataset) >= args.wanted_samples:
-    #         break
     
     torch.save(clean_dataset, output_path_dir + os.sep + 'clean_data', pickle_protocol=4)
     logger.log('INFO: Done extracting and saving correctly classified images!')

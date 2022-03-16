@@ -155,10 +155,11 @@ else:
     logger.log('ERR: unknown detector')
 
 
+
 # Save
 logger.log("INFO: Save extracted characteristics ...")
 
-characteristics_path, characteristics_advs_path = create_save_dir_path(output_path_dir, args, filename='characteristics' )
+characteristics_path, characteristics_advs_path = create_save_dir_path( output_path_dir, args, filename='characteristics' )
 logger.log('INFO: characteristics:     ' + characteristics_path)
 logger.log('INFO: characteristics_adv: ' + characteristics_advs_path)
 

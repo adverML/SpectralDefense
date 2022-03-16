@@ -31,14 +31,14 @@ from utils import (
     load_train_set
 )
 
-
 from datasets import smallimagenet
 
-from generate_clean_data import (
-    check_args_generate_clean_data,
+from gen_clean_data.helper_generate_clean_data import (
+    check_args_generate_clean_data
+)
+from gen_clean_data.generate_data_labels import (
     generate_data_labels
 )
-
 
 
 
@@ -60,13 +60,14 @@ if __name__ == '__main__':
     
     
     args = parser.parse_args()
-    args = check_args_generate_clean_data(args, logger)
 
     output_path_dir = create_dir_clean_data(args, root='./data/clean_data/')
 
     save_args_to_file(args, output_path_dir)
     logger = Logger(output_path_dir + os.sep + 'log.txt')
     log_header(logger, args, output_path_dir, sys)
+    
+    args = check_args_generate_clean_data(args, logger)
 
     logger.log('INFO: Load model...')
 

@@ -35,13 +35,13 @@ from utils import (
     log_header,
     create_dir_extracted_characteristics, 
     save_args_to_file,
-    check_args,
     create_dir_attacks,
     create_save_dir_path,
     get_num_classes,
     load_model
 )
 
+from attack.helper_attacks import check_args_attack
 
 from defenses.helper_layer_extr import get_whitebox_features, test_activation, dfknn_layer
 from defenses.Spectral import blackbox_mfs_analysis, blackbox_mfs_pfs, whitebox_mfs_pfs
@@ -92,7 +92,9 @@ logger = Logger(output_path_dir + os.sep + 'log.txt')
 log_header(logger, args, output_path_dir, sys) # './data/extracted_characteristics/imagenet32/wrn_28_10/std/8_255/LayerMFS'
 
 # check args
-args = check_args(args, logger)
+# args = check_args(args, logger)
+
+args = check_args_attack(args, logger)
 
 # input data
 input_path_dir = create_dir_attacks(args, root='./data/attacks/')
@@ -103,8 +105,6 @@ logger.log("INFO: images_advs " + images_advs_path)
 
 images =      torch.load(images_path)[:args.wanted_samples]
 images_advs = torch.load(images_advs_path)[:args.wanted_samples]
-
-# import pdb; pdb.set_trace()
 
 number_images = len(images)
 logger.log("INFO: eps " + str(args.eps) + " INFO: nr_img " + str(number_images) + " INFO: Wanted Samples: " + str(args.wanted_samples) )

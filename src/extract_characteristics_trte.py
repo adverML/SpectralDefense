@@ -24,7 +24,6 @@ from utils import (
     log_header,
     create_dir_extracted_characteristics, 
     save_args_to_file,
-    check_args,
     create_dir_attacks,
     create_save_dir_path,
     get_num_classes,
@@ -33,6 +32,8 @@ from utils import (
 
 from defenses.helper_layer_extr import get_whitebox_features, test_activation, dfknn_layer
 from defenses.Spectral import blackbox_mfs_analysis, blackbox_mfs_pfs, whitebox_mfs_pfs
+
+from attack.helper_attacks import check_args_attack
 
 
 def extract_features(logger, args, model, input_path_dir, output_path_dir, wanted_samples, option=1):
@@ -43,7 +44,7 @@ def extract_features(logger, args, model, input_path_dir, output_path_dir, wante
         indicator = '_tr'
     elif option == 1:
         indicator = '_te'
-    elif optino == 2:
+    elif option == 2:
         indicator = ''
 
     images_path, images_advs_path = create_save_dir_path(input_path_dir, args, filename='images' + indicator)
@@ -74,10 +75,10 @@ def extract_features(logger, args, model, input_path_dir, output_path_dir, wante
         characteristics, characteristics_adv = blackbox_mfs_pfs(args, images, images_advs, typ='PFS')
 
     elif args.detector == 'LayerMFS': 
-        characteristics, characteristics_adv = whitebox_mfs_pfs(args, model, images, images_advs, layers, get_layer_feature_maps, activation, typ='MFS')
+        characteristics, characteristics_adv = whitebox_mfs_pfs(args, logger, model, images, images_advs, layers, get_layer_feature_maps, activation, typ='MFS')
 
     elif args.detector == 'LayerPFS':
-        characteristics, characteristics_adv = whitebox_mfs_pfs(args, model, images, images_advs, layers, get_layer_feature_maps, activation, typ='PFS')
+        characteristics, characteristics_adv = whitebox_mfs_pfs(args, logger, model, images, images_advs, layers, get_layer_feature_maps, activation, typ='PFS')
 
     ####### LID section
     elif args.detector == 'LID':
@@ -162,7 +163,7 @@ if __name__ == '__main__':
     log_header(logger, args, output_path_dir, sys) # './data/extracted_characteristics/imagenet32/wrn_28_10/std/8_255/LayerMFS'
 
     # check args
-    args = check_args(args, logger)
+    args = check_args_attack (args, logger)
 
     #load model
     logger.log('INFO: Loading model...')
@@ -174,6 +175,7 @@ if __name__ == '__main__':
 
     layer_nr = int(args.nr)
     logger.log("INFO: layer_nr " + str(layer_nr) ) 
+
 
     if args.wanted_samples > 0:
 
@@ -201,6 +203,7 @@ if __name__ == '__main__':
         torch.save(characteristics_adv,  characteristics_advs_path, pickle_protocol=4)
 
         characteristics = []; characteristics_adv = []
+
 
     if args.wanted_samples_te > 0:
 
