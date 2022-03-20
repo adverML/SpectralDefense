@@ -15,34 +15,34 @@ function log_msg {
 # DATASETS="cif10vgg cif100vgg"
 # DATASETS="cif100"
 # DATASETS="imagenet"
-DATASETS="cif10"
+DATASETS="cif100"
 
 
 # DATASETS="imagenet64 celebaHQ64 imagenet128 celebaHQ128"
 # RUNS="1 2 3"
-RUNS="1"
+RUNS="8"
 
 # ATTACKS="fgsm bim pgd std df cw"
 # ATTACKS="apgd-ce apgd-t fab-t square"
 # ATTACKS="std df"
-ATTACKS="gauss"
+# ATTACKS="gauss"
+ATTACKS="std"
 
-# ATTACKS="apgd-ce"
 
-DETECTORS="InputMFS LayerMFS"
+
+# DETECTORS="InputMFS LayerMFS"
 # DETECTORS="InputMFS LayerMFS LID Mahalanobis"
-# DETECTORS="LayerMFS"
+DETECTORS="LayerMFS"
 # DETECTORS="InputPFS LayerPFS InputMFS LayerMFS LID Mahalanobis"
 # DETECTORS="LID Mahalanobis"
 # EPSILONS="8./255. 4./255. 2./255. 1./255. 0.5/255."
 EPSILONS="8./255."
 
 # CLF="LR RF"
-CLF="LR RF"
+CLF="LR"
 
 IMAGENET32CLASSES="25 50 100 250 1000"
 # NRSAMPLES="300 500 1000 1200 1500 2000" # only at detectadversarialslayer
-
 
 DATASETSLAYERNR="cif10rn34sota"
 ATTACKSLAYERNR="bim"
@@ -59,9 +59,12 @@ NRSAMPLES="0"
 
 # cif10 100
 # WANTEDSAMPLES_TR="30000"
-WANTEDSAMPLES_TE="8600"
-WANTEDSAMPLES_TR="44000"
+# WANTEDSAMPLES_TE="8600"
+# WANTEDSAMPLES_TR="44000"
 # WANTEDSAMPLES_TE="0"
+
+WANTEDSAMPLES_TE="2600"
+WANTEDSAMPLES_TR="5000"
 
 
 #-----------------------------------------------------------------------------------------------------------------------------------
@@ -306,8 +309,8 @@ detectadversarialslayer ()
 # printn
 # genereratecleandata
 # attacks
-extractcharacteristics
-# detectadversarials
+# extractcharacteristics
+detectadversarials
 
 #-----------------------------------------------------------------------------------------------------------------------------------
 log_msg "finished"

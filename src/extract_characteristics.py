@@ -30,6 +30,7 @@ import sklearn.covariance
 
 from conf import settings
 
+
 from utils import (
     Logger,
     log_header,
@@ -117,26 +118,26 @@ model = model.to(device)
 model = model.eval()
 
 
-with torch.no_grad():
-    for i, m in enumerate(filter(lambda m: type(m) == torch.nn.Conv2d and m.kernel_size == (3, 3), model.modules())):
+# with torch.no_grad():
+#     for i, m in enumerate(filter(lambda m: type(m) == torch.nn.Conv2d and m.kernel_size == (3, 3), model.modules())):
         
-        weight = m.weight.detach().cpu().numpy().copy()
-        shape = weight.shape
-        w = (weight.reshape(-1, 9))
+#         weight = m.weight.detach().cpu().numpy().copy()
+#         shape = weight.shape
+#         w = ( weight.reshape(-1, 9) )
         
-        t = np.abs(w).max() / 100    
-        cache = np.ones_like(w)
-        cache[np.abs(w) < t] = 0
-        dead_mask = (cache.sum(axis=1) == 0)
+#         t = np.abs(w).max() / 100    
+#         cache = np.ones_like(w)
+#         cache[np.abs(w) < t] = 0
+#         dead_mask = (cache.sum(axis=1) == 0)
 
-        # with np.printoptions(edgeitems=1000):
-        dead_filter = np.where(dead_mask == True)[0]
-        # print("sparsity: ", dead_filter)
-        # dead_filter_reshaped = dead_filter.flatten().reshape(shape)
+#         # with np.printoptions(edgeitems=1000):
+#         dead_filter = np.where(dead_mask == True)[0]
+#         # print("sparsity: ", dead_filter)
+#         # dead_filter_reshaped = dead_filter.flatten().reshape(shape)
         
         
-        if len(dead_filter) > 0:
-            w[dead_filter, :] = 0
+#         if len(dead_filter) > 0:
+#             w[dead_filter, :] = 0
             # import pdb; pdb.set_trace()
         # m.weight = weight
 
@@ -154,7 +155,6 @@ with torch.no_grad():
     # dead = (e >= H_T(w.shape[0])) | (e < 0.5)
 
     # print("dead_mask: ", )
-
     # print("i: ", i, ",dead: ", dead, ", e: ", e, ", H_T: ", H_T(w.shape[0]))
 
 # import  pdb; pdb.set_trace()
@@ -212,6 +212,7 @@ elif args.detector == 'LID_Class_Cond':
 ####### ODD section https://github.com/jayaram-r/adversarial-detection
 elif args.detector == 'ODD':
     pass
+
 else:
     logger.log('ERR: unknown detector')
 

@@ -20,7 +20,6 @@ def calculate_fourier_spectrum(im, typ='MFS'):
     # im = im[:,:100,:,:]
     # im = im[:,:100,:5,:5]
 
-
     fft = np.fft.fft2(im)
 
     # im = im[:,:100,:5,:5]
@@ -66,11 +65,7 @@ def calculate_spectra_analysis(images, fr, to, typ='MFS'):
 
 
 def calculate_spectra(images, typ='MFS'):
-    fs = []   
-    # dead_filter = torch.load('defenses/sparsity/wrn2810_dead.pkl')
-    # sparse = torch.load('defenses/sparsity/wrn2810.pkl')
-    # sparse = dead_filter[-4:]
-    
+    fs = []       
     for i in range(len(images)):
         image = images[i]
         # import pdb; pdb.set_trace()
@@ -115,11 +110,16 @@ def whitebox_mfs_pfs(args, logger, model, images, images_advs, layers, get_layer
     """
     mfs = []
     mfs_advs = []
-    
+    dead_filter_tmp = torch.load('defenses/sparsity/dead_filter_tmp.pkl')
+    threshold = np.mean(dead_filter_tmp)
+    dead_filter = np.where(dead_filter_tmp > threshold)[0]
     number_images = len(images)
     for it in tqdm(range(number_images)):
         image = images[it].unsqueeze_(0)
+        # image = images[it].unsqueeze_(0).clone()
+        # adv = images[it].clone()
         adv = images_advs[it].unsqueeze_(0)
+        # import pdb; pdb.set_trace()
 
         image = normalize_images(image, args)
         adv   = normalize_images(adv, args)
@@ -158,6 +158,18 @@ def whitebox_mfs_pfs(args, logger, model, images, images_advs, layers, get_layer
                 inputadv   = [adv_c]
             image_feature_maps = inputimage + get_layer_feature_maps(image_c, layers)
             adv_feature_maps   = inputadv   + get_layer_feature_maps(adv_c,   layers)
+            
+        # sparse = torch.load('defenses/sparsity/wrn2810.pkl')
+        # dead_filter = torch.load('defenses/sparsity/wrn2810_dead.pkl')
+        # sparse = dead_filter[-4:]
+        # print("len im:", len(image_feature_maps))
+
+        # print("print: ", image_feature_maps[0].shape)
+        # import pdb; pdb.set_trace()
+        # image_feature_maps[0] = torch.from_numpy(np.delete(image_feature_maps[0].cpu().numpy(), dead_filter, axis=1)).cuda()
+        # adv_feature_maps[0]   = torch.from_numpy(np.delete(adv_feature_maps[0].cpu().numpy(), dead_filter, axis=1)).cuda()
+        # print("print: ", image_feature_maps[0].shape)
+        # import pdb; pdb.set_trace()
         
         fourier_maps     = calculate_spectra(image_feature_maps, typ=typ)
         fourier_maps_adv = calculate_spectra(adv_feature_maps, typ=typ)

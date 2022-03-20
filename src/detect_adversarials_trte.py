@@ -24,7 +24,7 @@ from sklearn import svm
 import argparse
 
 from detection.helper_detection import show_results, split_data, save_load_clf
-
+from attack.helper_attacks import check_args_attack
 
 #processing the arguments
 parser = argparse.ArgumentParser()
@@ -63,6 +63,9 @@ log_header(logger, args, output_path_dir, sys) # './data/extracted_characteristi
 
 # load characteristics
 logger.log('INFO: Loading characteristics...')
+
+# check args
+args = check_args_attack(args, logger, net_normalization=False, img_size=False)
 
 # input data
 extracted_characteristics_path = create_dir_extracted_characteristics(args, root='./data/extracted_characteristics/', wait_input=False)

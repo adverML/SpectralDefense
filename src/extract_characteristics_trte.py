@@ -163,7 +163,7 @@ if __name__ == '__main__':
     log_header(logger, args, output_path_dir, sys) # './data/extracted_characteristics/imagenet32/wrn_28_10/std/8_255/LayerMFS'
 
     # check args
-    args = check_args_attack (args, logger)
+    args = check_args_attack(args, logger)
 
     #load model
     logger.log('INFO: Loading model...')

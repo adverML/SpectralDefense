@@ -78,7 +78,7 @@ attacks ()
             for att in $ATTACKS; do
                 for eps in $EPSILONS; do
                     if [ "$net" == imagenet ]; then
-                        python -u attacks.py --net "$net" --attack "$att" --img_size 32 --batch_size 500 --num_classes 1000 --all_samples 8000 --all_samples $ALLSAMPLES --wanted_samples $WANTEDSAMPLES --eps "$eps" --run_nr "$run"
+                        python -u attacks.py --net "$net" --attack "$att"  --batch_size 500 --all_samples 8000 --all_samples $ALLSAMPLES --wanted_samples $WANTEDSAMPLES --eps "$eps" --run_nr "$run"
                     fi 
                 done
             done
@@ -95,7 +95,7 @@ extractcharacteristics ()
             for att in $ATTACKS; do  
                 for eps in $EPSILONS; do
                     for det in $DETECTORS; do
-                        python -u extract_characteristics.py --net "$net" --attack "$att" --detector "$det" --num_classes 1000 --run_nr "$run"  --eps "$eps" --wanted_samples $WANTEDSAMPLES --take_inputimage_off
+                        python -u extract_characteristics.py --net "$net" --attack "$att" --detector "$det" --run_nr "$run"  --eps "$eps" --wanted_samples $WANTEDSAMPLES --take_inputimage_off
                     done
                 done
             done
@@ -114,7 +114,7 @@ detectadversarials ()
                     for nrsamples in $NRSAMPLES; do
                         for classifier in $CLF; do
                             for eps in $EPSILONS; do
-                                python -u detect_adversarials.py --net "$net" --attack "$att" --detector "$det" --wanted_samples "$nrsamples" --clf "$classifier" --num_classes 1000  --eps "$eps"  --run_nr "$run" --pca_features 0
+                                python -u detect_adversarials.py --net "$net" --attack "$att" --detector "$det" --wanted_samples "$nrsamples" --clf "$classifier"   --eps "$eps"  --run_nr "$run" --pca_features 0
                             done
                         done
                     done
@@ -172,7 +172,7 @@ detectadversarialslayer ()
 # genereratecleandata
 # attacks
 extractcharacteristics
-detectadversarials
+# detectadversarials
 
 # extractcharacteristicslayer
 # detectadversarialslayer

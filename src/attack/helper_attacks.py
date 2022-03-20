@@ -45,20 +45,25 @@ def adapt_batchsize(args, device_name):
     return batch_size
 
 
-def check_args_attack(args, logger):
+
+def check_net_normalization(args, logger):
     if args.net_normalization:
         if not args.attack == 'std' and not args.attack == 'apgd-ce' and not args.attack == 'apgd-t' and not args.attack == 'fab-t' and not args.attack == 'square':
             logger.log("Warning: Net normalization must be switched off!  Net normalization is switched off now!")
             args.net_normalization = False
+            
+    return args
+
+
+def check_args_attack(args, logger, net_normalization=True, img_size=True):
+    if net_normalization:
+        args = check_net_normalization(args, logger)
             
     if (args.net == 'cif10' or args.net == 'cif10vgg' or  args.net == 'cif10rb' or  args.net == 'cif10rn34' or args.net == 'cif10rn34sota')  and not args.num_classes == 10:
         args.num_classes = 10
         
     if (args.net == 'cif100' or args.net == 'cif100vgg' or  args.net == 'cif100rn34')  and not args.num_classes == 100:
         args.num_classes = 100
-        
-    if (args.net == 'cif10' or args.net == 'cif10vgg' or args.net == 'cif100' or args.net == 'cif100vgg' or args.net == 'cif10rb' or args.net == 'imagenet32' or args.net == 'celebaHQ32' or args.net == 'cif10rn34sota')  and not args.img_size == 32:
-        args.img_size = 32
 
     if (args.net == 'imagenet' or args.net == 'imagenet32' or args.net == 'imagenet64' or args.net == 'imagenet128')  and not args.num_classes == 1000:
         args.num_classes = 1000
@@ -66,11 +71,15 @@ def check_args_attack(args, logger):
     if (args.net == 'celebaHQ32' or args.net == 'celebaHQ64' or args.net == 'celebaHQ128')  and not args.num_classes == 4:
         args.num_classes = 4
 
-    if (args.net == 'imagenet64' or args.net == 'celebaHQ64' )  and not args.img_size == 64:
-        args.img_size =  64
-        
-    if (args.net == 'imagenet128' or args.net == 'celebaHQ128' )  and not args.img_size == 128:
-        args.img_size = 128
+    if img_size:
+        if (args.net == 'cif10' or args.net == 'cif10vgg' or args.net == 'cif100' or args.net == 'cif100vgg' or args.net == 'cif10rb' or args.net == 'imagenet32' or args.net == 'celebaHQ32' or args.net == 'cif10rn34sota')  and not args.img_size == 32:
+            args.img_size = 32
+
+        if (args.net == 'imagenet64' or args.net == 'celebaHQ64' )  and not args.img_size == 64:
+            args.img_size =  64
+            
+        if (args.net == 'imagenet128' or args.net == 'celebaHQ128' )  and not args.img_size == 128:
+            args.img_size = 128
 
     return args
 
@@ -127,7 +136,6 @@ def create_advs(logger, args, model, output_path_dir, clean_data_path, wanted_sa
                     x_test = torch.unsqueeze(x_test, 0)
                     y_test = torch.unsqueeze(y_test, 0)
 
-                # import pdb; pdb.set_trace()
 
                 if not args.individual:
                     logger.log("INFO: mode: std; not individual")
@@ -138,7 +146,6 @@ def create_advs(logger, args, model, output_path_dir, clean_data_path, wanted_sa
                     x_adv, y_adv = adv_complete[args.attack]
 
                 tmp_images_advs = []
-                # import pdb; pdb.set_trace()
                 for it, img in enumerate(x_adv):
                     if not (np.abs(x_test[it] - img) <= 1e-5).all():
                         images.append(x_test[it].cpu())                      
