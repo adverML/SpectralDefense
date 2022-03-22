@@ -10,23 +10,25 @@ function log_msg {
 # DATASETS="cif100vgg"
 # DATASETS="cif10rn34 cif100rn34"
 # DATASETS="cif10rn34sota"
-DATASETS="cif10"
+# DATASETS="cif10"
+
+DATASETS="cif10_rb"
 # DATASETS="cif10vgg"
 
 # DATASETS="imagenet64 celebaHQ64 imagenet128 celebaHQ128"
 RUNS="1"
 
-# ATTACKS="fgsm bim pgd std df cw"
+ATTACKS="gauss fgsm bim pgd std df cw"
 # ATTACKS="apgd-ce apgd-t fab-t square"
 # ATTACKS="gauss"
 # ATTACKS="gauss bim std df"
 # ATTACKS="gauss bim std df"
-ATTACKS="df"
+# ATTACKS="df"
 # ATTACKS="apgd-ce"
 
 # DETECTORS="InputMFS LayerMFS"
 # DETECTORS="InputMFS LayerMFS LID Mahalanobis"
-DETECTORS="LayerMFS"
+DETECTORS="InputMFS"
 # DETECTORS="InputPFS LayerPFS InputMFS LayerMFS LID Mahalanobis"
 # DETECTORS="LID"
 # DETECTORS="DkNN"
@@ -72,6 +74,10 @@ genereratecleandata ()
                 python -u generate_clean_data.py --net "$net" --num_classes 10  --run_nr "$run" --wanted_samples "$ALLSAMPLES" --shuffle_off
             fi 
 
+            if [ "$net" == cif10_rb ]; then
+                python -u generate_clean_data.py --net "$net" --num_classes 10  --run_nr "$run" --wanted_samples "$ALLSAMPLES" --shuffle_off
+            fi 
+
             if [ "$net" == cif10vgg ]; then
                 python -u generate_clean_data.py --net "$net" --num_classes 10  --run_nr "$run" --wanted_samples "$ALLSAMPLES" --shuffle_off
             fi 
@@ -108,6 +114,10 @@ attacks ()
             for att in $ATTACKS; do
                 for eps in $EPSILONS; do
                     if [ "$net" == cif10 ]; then     
+                        python -u attacks.py --net "$net"   --attack "$att"  --batch_size 500 --net_normalization --eps "$eps" --run_nr "$run"  --wanted_samples "$WANTEDSAMPLES" --all_samples "$ALLSAMPLES"
+                    fi
+
+                    if [ "$net" == cif10_rb ]; then     
                         python -u attacks.py --net "$net"   --attack "$att"  --batch_size 500 --net_normalization --eps "$eps" --run_nr "$run"  --wanted_samples "$WANTEDSAMPLES" --all_samples "$ALLSAMPLES"
                     fi
 
@@ -155,6 +165,10 @@ extractcharacteristics ()
                             python -u extract_characteristics.py --net "$net" --attack "$att" --detector "$det"    --eps "$eps" --run_nr "$run"  --wanted_samples "$WANTEDSAMPLES" --take_inputimage_off
                         fi
 
+                        if [ "$net" == cif10_rb ]; then
+                            python -u extract_characteristics.py --net "$net" --attack "$att" --detector "$det"    --eps "$eps" --run_nr "$run"  --wanted_samples "$WANTEDSAMPLES" --take_inputimage_off 
+                        fi 
+
                         if [ "$net" == cif10vgg ]; then
                             python -u extract_characteristics.py --net "$net" --attack "$att" --detector "$det"    --eps "$eps" --run_nr "$run"  --wanted_samples "$WANTEDSAMPLES" --take_inputimage_off 
                         fi 
@@ -199,6 +213,10 @@ extractcharacteristicslayer ()
                             python -u extract_characteristics.py --net "$net" --attack "$att" --detector "$det" --nr "$nr" --run_nr "$run"  --wanted_samples "$WANTEDSAMPLES" --take_inputimage_off
                         fi
 
+                        if [ "$net" == cif10_rb ]; then
+                            python -u extract_characteristics.py --net "$net" --attack "$att" --detector "$det" --nr "$nr" --run_nr "$run"  --wanted_samples "$WANTEDSAMPLES" --take_inputimage_off
+                        fi
+
                         if [ "$net" == cif10vgg ]; then
                             python -u extract_characteristics.py --net "$net" --attack "$att" --detector "$det" --nr "$nr" --run_nr "$run"  --wanted_samples "$WANTEDSAMPLES" --take_inputimage_off
                         fi 
@@ -222,6 +240,10 @@ detectadversarials ()
                         for nrsamples in $NRSAMPLES; do
                             for classifier in $CLF; do
                                 if [ "$net" == cif10 ]; then
+                                    python -u detect_adversarials.py --net "$net" --attack "$att" --detector "$det" --wanted_samples "$nrsamples" --clf "$classifier" --eps "$eps" --num_classes 10  --run_nr "$run"  --pca_features "$PCA_FEATURES"
+                                fi
+
+                                if [ "$net" == cif10_rb ]; then
                                     python -u detect_adversarials.py --net "$net" --attack "$att" --detector "$det" --wanted_samples "$nrsamples" --clf "$classifier" --eps "$eps" --num_classes 10  --run_nr "$run"  --pca_features "$PCA_FEATURES"
                                 fi
 
@@ -274,6 +296,10 @@ detectadversarialslayer ()
                                     python -u detect_adversarials.py --net "$net" --attack "$att" --detector "$det" --wanted_samples "$nrsamples" --clf "$classifier" --num_classes 10 --nr "$nr" --run_nr  "$run" 
                                 fi
 
+                                if [ "$net" == cif10_rb ]; then
+                                    python -u detect_adversarials.py --net "$net" --attack "$att" --detector "$det" --wanted_samples "$nrsamples" --clf "$classifier" --num_classes 10 --nr "$nr" --run_nr  "$run" 
+                                fi
+
                                 if [ "$net" == cif10vgg ]; then
                                     python -u detect_adversarials.py --net "$net" --attack "$att" --detector "$det" --wanted_samples "$nrsamples" --clf "$classifier" --num_classes 10 --nr "$nr" --run_nr  "$run" 
                                 fi 
@@ -293,8 +319,8 @@ detectadversarialslayer ()
 # printn
 # genereratecleandata
 # attacks
-extractcharacteristics
-detectadversarials
+# extractcharacteristics
+# detectadversarials
 
 # #-----------------------------------------------------------------------------------------------------------------------------------
 log_msg "finished"

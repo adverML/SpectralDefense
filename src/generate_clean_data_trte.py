@@ -60,6 +60,7 @@ if __name__ == '__main__':
     
     
     args = parser.parse_args()
+    args = check_args_generate_clean_data(args)
 
     output_path_dir = create_dir_clean_data(args, root='./data/clean_data/')
 
@@ -67,7 +68,6 @@ if __name__ == '__main__':
     logger = Logger(output_path_dir + os.sep + 'log.txt')
     log_header(logger, args, output_path_dir, sys)
     
-    args = check_args_generate_clean_data(args, logger)
 
     logger.log('INFO: Load model...')
 

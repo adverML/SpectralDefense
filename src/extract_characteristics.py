@@ -80,7 +80,7 @@ parser.add_argument("--fr", default='8',  type=int, help="InputMFS frequency ana
 parser.add_argument("--to", default='24', type=int, help="InputMFS frequency analysis")
 
 args = parser.parse_args()
-
+args = check_args_attack(args)
 # max frequency
 # if args.max_freq_on or ((args.net == 'cif100' or args.net == 'cif100vgg' or args.net == 'cif100rn34') and (args.attack=='cw' or args.attack=='df')):
 #     args.max_freq_on = True
@@ -95,7 +95,7 @@ log_header(logger, args, output_path_dir, sys) # './data/extracted_characteristi
 # check args
 # args = check_args(args, logger)
 
-args = check_args_attack(args, logger)
+
 
 # input data
 input_path_dir = create_dir_attacks(args, root='./data/attacks/')

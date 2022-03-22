@@ -46,29 +46,26 @@ def adapt_batchsize(args, device_name):
 
 
 
-def check_net_normalization(args, logger):
+def check_net_normalization(args):
     if args.net_normalization:
         if not args.attack == 'std' and not args.attack == 'apgd-ce' and not args.attack == 'apgd-t' and not args.attack == 'fab-t' and not args.attack == 'square':
-            logger.log("Warning: Net normalization must be switched off!  Net normalization is switched off now!")
+            get_debug_info("Warning: Net normalization must be switched off!  Net normalization is switched off now!")
             args.net_normalization = False
             
     return args
 
 
-def check_args_attack(args, logger, net_normalization=True, img_size=True):
+def check_args_attack(args, net_normalization=True, img_size=True):
     if net_normalization:
-        args = check_net_normalization(args, logger)
+        args = check_net_normalization(args)
             
     if (args.net == 'cif10' or args.net == 'cif10vgg' or  args.net == 'cif10rb' or  args.net == 'cif10rn34' or args.net == 'cif10rn34sota')  and not args.num_classes == 10:
-        args.num_classes = 10
-        
-    if (args.net == 'cif100' or args.net == 'cif100vgg' or  args.net == 'cif100rn34')  and not args.num_classes == 100:
+        args.num_classes = 10  
+    elif (args.net == 'cif100' or args.net == 'cif100vgg' or  args.net == 'cif100rn34')  and not args.num_classes == 100:
         args.num_classes = 100
-
-    if (args.net == 'imagenet' or args.net == 'imagenet32' or args.net == 'imagenet64' or args.net == 'imagenet128')  and not args.num_classes == 1000:
+    elif (args.net == 'imagenet' or args.net == 'imagenet32' or args.net == 'imagenet64' or args.net == 'imagenet128')  and not args.num_classes == 1000:
         args.num_classes = 1000
-
-    if (args.net == 'celebaHQ32' or args.net == 'celebaHQ64' or args.net == 'celebaHQ128')  and not args.num_classes == 4:
+    elif (args.net == 'celebaHQ32' or args.net == 'celebaHQ64' or args.net == 'celebaHQ128')  and not args.num_classes == 4:
         args.num_classes = 4
 
     if img_size:

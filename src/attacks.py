@@ -15,9 +15,6 @@ from tqdm import tqdm
 
 from conf import settings
 
-
-
-
 from utils import (
     Logger,
     log_header,
@@ -64,7 +61,8 @@ if __name__ == '__main__':
     parser.add_argument('--net_normalization', action='store_false', help=settings.HELP_NET_NORMALIZATION)
 
     args = parser.parse_args()
-
+    args = check_args_attack(args)
+    
     if args.attack == 'apgd-ce' or args.attack == 'apgd-t' or args.attack == 'fab-t' or args.attack == 'square':
         args.individual = True
         args.version = 'custom'
@@ -78,8 +76,6 @@ if __name__ == '__main__':
 
     device_name =  getdevicename()
 
-    # check args
-    args = check_args_attack(args, logger)
 
     #load model
     logger.log('INFO: Load model...')

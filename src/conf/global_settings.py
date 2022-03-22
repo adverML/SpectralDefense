@@ -87,14 +87,16 @@ CELEBAHQ128_CKPT_2  = './submodules/pytorch-CelebAHQ/checkpoint/wrn2810/128x128_
 CELEBAHQ32_CKPT_4   = './submodules/pytorch-CelebAHQ/checkpoint/wrn2810/32x32_64_0.1_Hair_Color_Thursday_04_November_2021_14h_35m_14s/wrn2810-200-best.pth'
 CELEBAHQ64_CKPT_4   = './submodules/pytorch-CelebAHQ/checkpoint/wrn2810/64x64_64_0.1_Hair_Color_Thursday_04_November_2021_17h_25m_16s/wrn2810-171-best.pth'
 CELEBAHQ128_CKPT_4  = './submodules/pytorch-CelebAHQ/checkpoint/wrn2810/128x128_64_0.1_Hair_Color_Thursday_04_November_2021_17h_38m_53s/wrn2810-100-regular.pth' # 89%
-CELEBAHQ256_CKPT_4  = './submodules/pytorch-CelebAHQ/checkpoint/wrn2810/256x256_24_0.1_Hair_Color_Friday_05_November_2021_16h_44m_36s/wrn2810-70-regular.pth'  # 78%
+CELEBAHQ256_CKPT_4  = './submodules/pytorch-CelebAHQ/checkpoint/wrn2810/256x256_24_0.1_Hair_Color_Friday_05_November_2021_16h_44m_36s/wrn2810-70-regular.pth'    # 78%
 
 
 # Dataset Paths
 MNIST_PATH       = "./data"
 CIF10_PATH       = "./data"
 CIF100_PATH      = "./data"
-IMAGENET_PATH    = "/home/DATA/ITWM/ImageNet"
+
+IMAGENET_PATH    = "/home/DATA/ITWM/ImageNetHierarchy"
+# IMAGENET_PATH    = "/home/DATA/ITWM/ImageNet"
 IMAGENET32_PATH  = "/home/DATA/ITWM/Imagenet32x32"
 IMAGENET64_PATH  = "/home/DATA/ITWM/Imagenet64x64"
 IMAGENET128_PATH = "/home/DATA/ITWM/Imagenet128x128"

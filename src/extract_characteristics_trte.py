@@ -147,7 +147,7 @@ if __name__ == '__main__':
     parser.add_argument("--to", default='24', type=int, help="InputMFS frequency analysis") 
 
     args = parser.parse_args()
-
+    args = check_args_attack(args)
     # max frequency
     # if args.max_freq_on or ((args.net == 'cif100' or args.net == 'cif100vgg' or args.net == 'cif100rn34') and (args.attack=='cw' or args.attack=='df')):
     #     args.max_freq_on = True
@@ -160,10 +160,7 @@ if __name__ == '__main__':
 
     save_args_to_file(args, output_path_dir)
     logger = Logger(output_path_dir + os.sep + 'log.txt')
-    log_header(logger, args, output_path_dir, sys) # './data/extracted_characteristics/imagenet32/wrn_28_10/std/8_255/LayerMFS'
-
-    # check args
-    args = check_args_attack(args, logger)
+    log_header(logger, args, output_path_dir, sys) # './data/extracted_characteristics/imagenet32/wrn_28_10/std/8_255/LayerMFS'    
 
     #load model
     logger.log('INFO: Loading model...')
@@ -217,8 +214,6 @@ if __name__ == '__main__':
         torch.save(characteristics_adv,  characteristics_advs_path, pickle_protocol=4)
 
         characteristics = []; characteristics_adv = []
-
-
 
     logger.log('INFO: Done performing extracting features!')
     

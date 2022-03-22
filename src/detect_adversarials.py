@@ -24,6 +24,7 @@ from sklearn import svm
 import argparse
 
 from detection.helper_detection import show_results, split_data, save_load_clf
+from attack.helper_attacks import check_args_attack
 
 #processing the arguments
 parser = argparse.ArgumentParser()
@@ -51,6 +52,9 @@ parser.add_argument("--eps",    default='8./255.',     help=settings.HELP_AA_EPS
 # parser.add_argument("--eps",    default='0.5/255.',  help="epsilon: 4/255, 3/255, 2/255, 1/255, 0.5/255")
 
 args = parser.parse_args()
+# check args
+args = check_args_attack(args, net_normalization=False, img_size=False)
+
 
 # output data
 output_path_dir = create_dir_detection(args, root='./data/detection/')

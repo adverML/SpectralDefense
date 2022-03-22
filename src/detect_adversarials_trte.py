@@ -54,6 +54,8 @@ parser.add_argument("--eps",       default='8./255.',            help=settings.H
 # parser.add_argument("--eps",       default='0.5/255.',      help="epsilon: 4/255, 3/255, 2/255, 1/255, 0.5/255")
 
 args = parser.parse_args()
+# check args
+args = check_args_attack(args, net_normalization=False, img_size=False)
 
 # output data
 output_path_dir = create_dir_detection(args, root='./data/detection/')
@@ -64,8 +66,7 @@ log_header(logger, args, output_path_dir, sys) # './data/extracted_characteristi
 # load characteristics
 logger.log('INFO: Loading characteristics...')
 
-# check args
-args = check_args_attack(args, logger, net_normalization=False, img_size=False)
+
 
 # input data
 extracted_characteristics_path = create_dir_extracted_characteristics(args, root='./data/extracted_characteristics/', wait_input=False)
@@ -112,7 +113,6 @@ if  args.wanted_samples_tr > 0 and args.wanted_samples_te > 0:
 
     k = np.shape(characteristics_tr)[0]
     perm_indices_k = np.random.permutation(2*k)
-    # import pdb; pdb.set_trace()
     X_train = np.concatenate(( characteristics_tr, characteristics_tr_adv) )[perm_indices_k]
     y_train = np.concatenate(( np.zeros(k), np.ones(k)) )[perm_indices_k]
 

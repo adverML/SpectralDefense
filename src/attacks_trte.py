@@ -68,7 +68,7 @@ if __name__ == '__main__':
     parser.add_argument('--net_normalization', action='store_false', help=settings.HELP_NET_NORMALIZATION)
 
     args = parser.parse_args()
-
+    args = check_args_attack(args)
 
     if args.attack == 'apgd-ce' or args.attack == 'apgd-t' or args.attack == 'fab-t' or args.attack == 'square':
         args.individual = True
@@ -80,10 +80,7 @@ if __name__ == '__main__':
     save_args_to_file(args, output_path_dir)
     logger = Logger(output_path_dir + os.sep + 'log.txt')
     log_header(logger, args, output_path_dir, sys) # './data/attacks/imagenet32/wrn_28_10/fgsm'
-
-    # check args
-    args = check_args_attack(args, logger)
-
+    
     #load model
     logger.log('INFO: Load model...')
     model, preprocessing = load_model(args)
