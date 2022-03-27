@@ -27,9 +27,10 @@ from utils import (
 
 def adapt_batchsize(args, device_name):
     batch_size = 128 
+    
     if device_name == 'titan v' and (args.net == 'imagenet128' or args.net == 'celebaHQ128'):
         batch_size = 24
-    if device_name == 'a100' and (args.net == 'imagenet' or  args.net == 'imagenet128' or args.net == 'celebaHQ128'):
+    if device_name == 'a100' and (args.net == 'imagenet' or args.net == 'imagenet_hierarchy' or args.net == 'imagenet128' or args.net == 'celebaHQ128'):
         batch_size = 48
 
     if device_name == 'titan v' and (args.attack == "apgd-ce" or args.attack == "apgd-t" or args.attack == "fab-t" or args.attack == "square"):
@@ -63,7 +64,7 @@ def check_args_attack(args, net_normalization=True, img_size=True):
         args.num_classes = 10  
     elif (args.net == 'cif100' or args.net == 'cif100vgg' or  args.net == 'cif100rn34')  and not args.num_classes == 100:
         args.num_classes = 100
-    elif (args.net == 'imagenet' or args.net == 'imagenet32' or args.net == 'imagenet64' or args.net == 'imagenet128')  and not args.num_classes == 1000:
+    elif (args.net == 'imagenet' or args.net == 'imagenet_hierarchy' or args.net == 'imagenet32' or args.net == 'imagenet64' or args.net == 'imagenet128')  and not args.num_classes == 1000:
         args.num_classes = 1000
     elif (args.net == 'celebaHQ32' or args.net == 'celebaHQ64' or args.net == 'celebaHQ128')  and not args.num_classes == 4:
         args.num_classes = 4

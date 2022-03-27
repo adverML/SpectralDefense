@@ -76,7 +76,6 @@ if __name__ == '__main__':
 
     device_name =  getdevicename()
 
-
     #load model
     logger.log('INFO: Load model...')
     model, preprocessing = load_model(args)
@@ -87,6 +86,7 @@ if __name__ == '__main__':
 
     #load correctly classified data
     args.batch_size = adapt_batchsize(args, device_name)
+    args.batch_size = 48
     logger.log('INFO: batch size: ' + str(args.batch_size))
 
     # input data    

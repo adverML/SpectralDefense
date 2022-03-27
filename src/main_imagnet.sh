@@ -5,13 +5,15 @@ function log_msg {
 }
 
 # DATASETS=(cif10 cif10vgg cif100 cif100vgg imagenet imagenet32 imagenet64 imagenet128 celebaHQ32 celebaHQ64 celebaHQ128)
-DATASETS="imagenet"
+# DATASETS="imagenet"
+DATASETS="imagenet_hierarchy"
+
 
 # RUNS="1"
 # RUNS="1 2 3"
-# RUNS="8"
+RUNS="8"
 # RUNS="7"
-RUNS="10"
+# RUNS="10"
 
 
 # ATTACKS="fgsm bim pgd"
@@ -63,9 +65,7 @@ genereratecleandata ()
     log_msg "Generate Clean Data for Foolbox Attacks and Autoattack!"
     for run in $RUNS; do
         for net in $DATASETS; do
-            if [ "$net" == imagenet ]; then
-                python -u generate_clean_data.py --net "$net" --num_classes 1000   --run_nr "$run" --wanted_samples "$ALLSAMPLES" #--shuffle_off
-            fi 
+            python -u generate_clean_data.py --net "$net" --num_classes 1000   --run_nr "$run" --wanted_samples "$ALLSAMPLES" #--shuffle_off
         done
     done
 }
@@ -78,9 +78,7 @@ attacks ()
         for net in $DATASETS; do
             for att in $ATTACKS; do
                 for eps in $EPSILONS; do
-                    if [ "$net" == imagenet ]; then
-                        python -u attacks.py --net "$net" --attack "$att"  --batch_size 500 --all_samples 8000 --all_samples $ALLSAMPLES --wanted_samples $WANTEDSAMPLES --eps "$eps" --run_nr "$run"
-                    fi 
+                    python -u attacks.py --net "$net" --attack "$att"  --batch_size 500 --all_samples 8000 --all_samples $ALLSAMPLES --wanted_samples $WANTEDSAMPLES --eps "$eps" --run_nr "$run"
                 done
             done
         done
@@ -170,8 +168,8 @@ detectadversarialslayer ()
     done
 }
 
-genereratecleandata
-attacks
+# genereratecleandata
+# attacks
 extractcharacteristics
 detectadversarials
 

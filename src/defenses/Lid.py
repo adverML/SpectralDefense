@@ -134,7 +134,7 @@ def lid(args, model, images, images_advs, layers, get_layer_feature_maps, activa
         
         for i in range(lid_dim):
             X_act[i]       = np.asarray(X_act[i].cpu().detach().numpy()    , dtype=np.float32).reshape((n_feed, -1))
-            X_adv_act[i]   = np.asarray(X_adv_act[i].cpu().detach().numpy()  , dtype=np.float32).reshape((n_feed, -1))
+            X_adv_act[i]   = np.asarray(X_adv_act[i].cpu().detach().numpy(), dtype=np.float32).reshape((n_feed, -1))
             # Maximum likelihood estimation of local intrinsic dimensionality (LID)
             lid_batch[:, i]       = mle_batch(X_act[i], X_act[i]      , k=k)
             lid_batch_adv[:, i]   = mle_batch(X_act[i], X_adv_act[i]  , k=k)

@@ -10,14 +10,15 @@ function log_msg {
 # DATASETS="cif100vgg"
 # DATASETS="cif10rn34 cif100rn34"
 # DATASETS="cif10rn34sota"
-# DATASETS="cif10"
-
 DATASETS="cif10_rb"
+
+# DATASETS="cif10_rb"
 # DATASETS="cif10vgg"
 
 # DATASETS="imagenet64 celebaHQ64 imagenet128 celebaHQ128"
-RUNS="1"
+RUNS="2 3"
 
+# ATTACKS="gauss"
 ATTACKS="gauss fgsm bim pgd std df cw"
 # ATTACKS="apgd-ce apgd-t fab-t square"
 # ATTACKS="gauss"
@@ -26,9 +27,9 @@ ATTACKS="gauss fgsm bim pgd std df cw"
 # ATTACKS="df"
 # ATTACKS="apgd-ce"
 
-# DETECTORS="InputMFS LayerMFS"
+DETECTORS="InputMFS LayerMFS"
 # DETECTORS="InputMFS LayerMFS LID Mahalanobis"
-DETECTORS="InputMFS"
+# DETECTORS="LayerMFS"
 # DETECTORS="InputPFS LayerPFS InputMFS LayerMFS LID Mahalanobis"
 # DETECTORS="LID"
 # DETECTORS="DkNN"
@@ -114,35 +115,35 @@ attacks ()
             for att in $ATTACKS; do
                 for eps in $EPSILONS; do
                     if [ "$net" == cif10 ]; then     
-                        python -u attacks.py --net "$net"   --attack "$att"  --batch_size 500 --net_normalization --eps "$eps" --run_nr "$run"  --wanted_samples "$WANTEDSAMPLES" --all_samples "$ALLSAMPLES"
+                        python -u attacks.py --net "$net" --attack "$att"  --batch_size 500 --net_normalization --eps "$eps" --run_nr "$run"  --wanted_samples "$WANTEDSAMPLES" --all_samples "$ALLSAMPLES"
                     fi
 
                     if [ "$net" == cif10_rb ]; then     
-                        python -u attacks.py --net "$net"   --attack "$att"  --batch_size 500 --net_normalization --eps "$eps" --run_nr "$run"  --wanted_samples "$WANTEDSAMPLES" --all_samples "$ALLSAMPLES"
+                        python -u attacks.py --net "$net" --attack "$att"  --batch_size 500 --net_normalization --eps "$eps" --run_nr "$run"  --wanted_samples "$WANTEDSAMPLES" --all_samples "$ALLSAMPLES"
                     fi
 
                     if [ "$net" == cif10vgg ]; then                            
-                        python -u attacks.py --net "$net"   --attack "$att"  --batch_size 500 --net_normalization --eps "$eps"  --run_nr "$run" --wanted_samples "$WANTEDSAMPLES" --all_samples "$ALLSAMPLES"
+                        python -u attacks.py --net "$net" --attack "$att"  --batch_size 500 --net_normalization --eps "$eps"  --run_nr "$run" --wanted_samples "$WANTEDSAMPLES" --all_samples "$ALLSAMPLES"
                     fi 
 
                     if [ "$net" == cif10rn34 ]; then
-                        python -u attacks.py --net "$net"   --attack "$att"  --batch_size 500 --net_normalization  --eps "$eps"  --run_nr "$run" --wanted_samples "$WANTEDSAMPLES" --all_samples "$ALLSAMPLES"
+                        python -u attacks.py --net "$net" --attack "$att"  --batch_size 500 --net_normalization  --eps "$eps"  --run_nr "$run" --wanted_samples "$WANTEDSAMPLES" --all_samples "$ALLSAMPLES"
                     fi      
 
                     if [ "$net" == cif10rn34sota ]; then
-                        python -u attacks.py --net "$net"   --attack "$att"  --batch_size 500  --net_normalization --eps "$eps"  --run_nr "$run" --wanted_samples "$WANTEDSAMPLES" --all_samples "$ALLSAMPLES"
+                        python -u attacks.py --net "$net" --attack "$att"  --batch_size 500  --net_normalization --eps "$eps"  --run_nr "$run" --wanted_samples "$WANTEDSAMPLES" --all_samples "$ALLSAMPLES"
                     fi                    
 
                     if [ "$net" == cif100 ]; then
-                        python -u attacks.py --net "$net"  --attack "$att"  --batch_size 1000  --net_normalization --eps "$eps"  --run_nr "$run" --wanted_samples "$WANTEDSAMPLES" --all_samples "$ALLSAMPLES"
+                        python -u attacks.py --net "$net" --attack "$att"  --batch_size 1000  --net_normalization --eps "$eps"  --run_nr "$run" --wanted_samples "$WANTEDSAMPLES" --all_samples "$ALLSAMPLES"
                     fi 
 
                     if [ "$net" == cif100vgg ]; then
-                        python -u attacks.py --net "$net"  --attack "$att"  --batch_size 1000  --net_normalization --eps "$eps"  --run_nr "$run" --wanted_samples "$WANTEDSAMPLES" --all_samples "$ALLSAMPLES"
+                        python -u attacks.py --net "$net" --attack "$att"  --batch_size 1000  --net_normalization --eps "$eps"  --run_nr "$run" --wanted_samples "$WANTEDSAMPLES" --all_samples "$ALLSAMPLES"
                     fi 
 
                     if [ "$net" == cif100rn34 ]; then
-                        python -u attacks.py --net "$net"  --attack "$att"  --batch_size 1000  --net_normalization --eps "$eps"  --run_nr "$run" --wanted_samples "$WANTEDSAMPLES" --all_samples "$ALLSAMPLES"
+                        python -u attacks.py --net "$net" --attack "$att"  --batch_size 1000  --net_normalization --eps "$eps"  --run_nr "$run" --wanted_samples "$WANTEDSAMPLES" --all_samples "$ALLSAMPLES"
                     fi 
                 done
             done
@@ -319,8 +320,8 @@ detectadversarialslayer ()
 # printn
 # genereratecleandata
 # attacks
-# extractcharacteristics
-# detectadversarials
+extractcharacteristics
+detectadversarials
 
 # #-----------------------------------------------------------------------------------------------------------------------------------
 log_msg "finished"

@@ -31,9 +31,9 @@ from torch.utils.data import DataLoader
 
 from datasets.celbahq import CelebaDataset, CelebaDatasetPath
 from datasets import smallimagenet
+from datasets.imagenet_hierarchy import ImageNetDataSet
 
 from conf import settings
-
 from collections import OrderedDict
 
 from models.vgg_cif10 import VGG
@@ -99,7 +99,7 @@ def get_num_classes(args):
         num_classes = settings.MAX_CLASSES_CIF10
     elif args.net == 'cif100' or args.net == 'cif100vgg'  or args.net == 'cif100rn34':
         num_classes = settings.MAX_CLASSES_CIF100
-    elif args.net == 'imagenet' or args.net == 'imagenet64' or args.net == 'imagenet128':
+    elif args.net == 'imagenet' or args.net == 'imagenet_hierarchy' or args.net == 'imagenet64' or args.net == 'imagenet128':
         num_classes = settings.MAX_CLASSES_IMAGENET
     elif args.net == 'imagenet32':
         num_classes = args.num_classes
@@ -740,7 +740,7 @@ def get_normalization(args):
     elif args.net == 'imagenet32' or args.net == 'imagenet64' or args.net == 'imagenet128':
         mean = [0.4810, 0.4574, 0.4078]
         std  = [0.2146, 0.2104, 0.2138]
-    elif args.net == 'imagenet':        
+    elif args.net == 'imagenet' or args.net == 'imagenet_hierarchy':        
         mean = [0.485, 0.456, 0.406] # https://pytorch.org/vision/stable/models.html#wide-resnet
         std  = [0.229, 0.224, 0.225]
     elif args.net == 'celebaHQ32' or args.net == 'celebaHQ64' or args.net == 'celebaHQ128' or args.net == 'celebaHQ256':
@@ -795,7 +795,7 @@ def get_model_info(args):
     depth = 28
     widen_factor = 10
 
-    if args.net == 'imagenet':
+    if args.net == 'imagenet' or args.net == 'imagenet_hierarchy':
         depth = 50
         widen_factor = 2
     elif args.net == 'cif10rn34' or args.net == 'cif100rn34' or args.net == 'cif10rn34sota':
@@ -933,7 +933,7 @@ def load_model(args):
         model.load_state_dict(new_state_dict)
 
 
-    elif args.net == 'imagenet':
+    elif args.net == 'imagenet' or args.net == 'imagenet_hierarchy':
         model = wide_resnet50_2(pretrained=True, preprocessing=net_normalization)
 
 
@@ -1053,11 +1053,10 @@ def create_save_dir_path(save_dir, args, filename='images'):
 
 
 def load_train_set(args, preprocessing=None, clean_data=False, shuffle=True):
-
     return load_test_set(args, preprocessing=preprocessing, IS_TRAIN=True, clean_data=clean_data, shuffle=shuffle)
 
 
-def load_test_set(args, preprocessing=None, num_workers=4, download=True, IS_TRAIN=False , clean_data=False, shuffle=True):
+def load_test_set(args, preprocessing=None, num_workers=4, download=True, IS_TRAIN=False, clean_data=False, shuffle=True):
 
     normalization = []
     if not preprocessing == None:
@@ -1070,24 +1069,32 @@ def load_test_set(args, preprocessing=None, num_workers=4, download=True, IS_TRA
         item = datasets.MNIST(root=settings.MNIST_PATH, train=IS_TRAIN, transform=transform, download=download)
         data_loader = torch.utils.data.DataLoader(item, batch_size=args.batch_size, shuffle=shuffle, num_workers=num_workers)
 
-
     elif args.net == 'cif10' or args.net == 'cif10_m' or args.net == 'cif10vgg' or args.net == 'cif10rn34' or args.net == 'cif10rn34sota' or args.net == 'cif10_rb':
         
         transform_list = [transforms.ToTensor()] + normalization
         transform = transforms.Compose(transform_list)
         item = datasets.CIFAR10(root=settings.CIF10_PATH, train=IS_TRAIN, transform=transform, download=download)
         data_loader = torch.utils.data.DataLoader(item, batch_size=args.batch_size, shuffle=shuffle, num_workers=num_workers)
-        
 
     elif args.net == 'cif100' or args.net == 'cif100vgg' or args.net == 'cif100rn34':
 
         transform_list = [transforms.ToTensor()] + normalization
         transform = transforms.Compose(transform_list)
         item = datasets.CIFAR100(root=settings.CIF100_PATH, train=IS_TRAIN, transform=transform, download=download)
-        data_loader =  torch.utils.data.DataLoader(item, batch_size=args.batch_size, shuffle=shuffle, num_workers=num_workers)
+        data_loader = torch.utils.data.DataLoader(item, batch_size=args.batch_size, shuffle=shuffle, num_workers=num_workers)
 
+
+    elif args.net == 'imagenet_hierarchy':
+        transform_list = [transforms.Resize(256), transforms.CenterCrop(224), transforms.ToTensor()] + normalization
+        transform = transforms.Compose(transform_list)
+        dataset_dir_path = os.path.join(settings.IMAGENET_HIERARCHY_PATH, 'val') if not IS_TRAIN else os.path.join(settings.IMAGENET_HIERARCHY_PATH, 'train')   
+        dataset = ImageNetDataSet(img_path=dataset_dir_path, transform=transform)
+        
+        data_loader = torch.utils.data.DataLoader(dataset, batch_size=args.batch_size, shuffle=shuffle, num_workers=num_workers, pin_memory=True)
 
     elif args.net == 'imagenet':
+
+        # source
 
         transform_list = [transforms.Resize(256), transforms.CenterCrop(224), transforms.ToTensor()] + normalization
         # if IS_TRAIN:
@@ -1100,31 +1107,29 @@ def load_test_set(args, preprocessing=None, num_workers=4, download=True, IS_TRA
         print("transform_list", transform_list)
         transform = transforms.Compose(transform_list)
 
-        dataset_dir = os.path.join(settings.IMAGENET_PATH, 'val') if not IS_TRAIN else os.path.join(settings.IMAGENET_PATH, 'train')
-        data_loader = torch.utils.data.DataLoader(datasets.ImageFolder(dataset_dir, transform), batch_size=args.batch_size, shuffle=shuffle, 
+        dataset_dir_path = os.path.join(settings.IMAGENET_PATH, 'val') if not IS_TRAIN else os.path.join(settings.IMAGENET_PATH, 'train')
+        get_debug_info(msg="dir path: " + dataset_dir_path)
+        # import pdb; pdb.set_trace()
+        data_loader = torch.utils.data.DataLoader(datasets.ImageFolder(dataset_dir_path, transform), batch_size=args.batch_size, shuffle=shuffle, 
                             num_workers=num_workers, pin_memory=True)
-
-        get_debug_info(msg="ImageNet is always shuffled!")
-
-        data_loader
 
 
     elif args.net == 'imagenet32' or args.net == 'imagenet64' or args.net == 'imagenet128' or args.net == 'imagenet240':
         if args.img_size == 32:
-            dataset_dir = os.path.join(settings.IMAGENET32_PATH, 'train_data') if IS_TRAIN else settings.IMAGENET32_PATH           
-            data_loader = get_dataloader("SmallImageNet", dataset_dir, is_train=IS_TRAIN, batch_size=args.batch_size, workers=num_workers, 
+            dataset_dir_path = os.path.join(settings.IMAGENET32_PATH, 'train_data') if IS_TRAIN else settings.IMAGENET32_PATH           
+            data_loader = get_dataloader("SmallImageNet", dataset_dir_path, is_train=IS_TRAIN, batch_size=args.batch_size, workers=num_workers, 
                             resolution=args.img_size, classes=args.num_classes, preprocessing=preprocessing, shuffle=shuffle)
         elif args.img_size == 64:
-            dataset_dir = os.path.join(settings.IMAGENET64_PATH, 'train_data') if IS_TRAIN else settings.IMAGENET64_PATH
-            data_loader = get_dataloader("SmallImageNet", dataset_dir, is_train=IS_TRAIN, batch_size=args.batch_size, workers=num_workers, 
+            dataset_dir_path = os.path.join(settings.IMAGENET64_PATH, 'train_data') if IS_TRAIN else settings.IMAGENET64_PATH
+            data_loader = get_dataloader("SmallImageNet", dataset_dir_path, is_train=IS_TRAIN, batch_size=args.batch_size, workers=num_workers, 
                             resolution=args.img_size, classes=settings.MAX_CLASSES_IMAGENET, preprocessing=preprocessing, shuffle=shuffle)
         elif args.img_size == 128: 
             # dataset_dir = os.path.join(settings.IMAGENET128_PATH, 'val/box') if IS_TRAIN else  os.path.join(settings.IMAGENET128_PATH, 'train/box')
-            dataset_dir = os.path.join(settings.IMAGENET128_PATH, 'val_data/box') if IS_TRAIN else  os.path.join(settings.IMAGENET128_PATH, 'train_data/box')
+            dataset_dir_path = os.path.join(settings.IMAGENET128_PATH, 'val_data/box') if IS_TRAIN else  os.path.join(settings.IMAGENET128_PATH, 'train_data/box')
             # normalize = transforms.Normalize(mean=[0.4810, 0.4574, 0.4078], std=[0.2146, 0.2104, 0.2138])
             transform_list = [transforms.ToTensor()] + normalization
             transform = transforms.Compose(transform_list)
-            data_loader = torch.utils.data.DataLoader(datasets.ImageFolder(dataset_dir, transform), batch_size=args.batch_size, shuffle=shuffle, num_workers=num_workers)
+            data_loader = torch.utils.data.DataLoader(datasets.ImageFolder(dataset_dir_path, transform), batch_size=args.batch_size, shuffle=shuffle, num_workers=num_workers)
         else:
             get_debug_info(msg="Err: Only imagenet-32, 64, 128 implemented!")
 
@@ -1212,8 +1217,8 @@ def epsilon_to_float(epsilon):
 
 def epsilon_to_string(epsilon):
     """
-        Ex.: 0.5/255 to 05_255
-        Ex.: 8./255. to 8_255        
+    Ex.: 0.5/255 to 05_255
+    Ex.: 8./255. to 8_255        
     """
     if epsilon.isdigit():
         get_debug_info("ERR: Input must be string!")
@@ -1263,7 +1268,6 @@ def create_dir_extracted_characteristics(args, root='./data/extracted_characteri
     output_filename = create_output_filename(args, TRANSFER=TRANSFER)
     layer_nr = check_layer_nr(args)
     epsilon = check_epsilon(args, TRANSFER=TRANSFER)
-
 
     if TRANSFER == None:
         output_path_dir = os.path.join(root, 'run_' + str(args.run_nr), args.net,      output_filename, args.attack,      epsilon, args.detector, layer_nr)
@@ -1318,7 +1322,6 @@ def log_header(logger, args, output_path_dir, sys):
     logger.log('OUTPUT_PATH_DIR: ' + output_path_dir)
 
 
-
 def perf_measure(y_actual, y_hat):
     TP = 0
     FP = 0
@@ -1334,8 +1337,7 @@ def perf_measure(y_actual, y_hat):
            TN += 1
         if y_hat[i]==0 and y_actual[i]!=y_hat[i]:
            FN += 1
-           
-    
+
     print("TP: ", TP)
     print("FP: ", FP)
     print("TN: ", TN)

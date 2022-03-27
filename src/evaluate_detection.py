@@ -135,7 +135,6 @@ def get_clean_accuracy(paths):
 
 def sort_paths_by_layer(paths):
     # './log_evaluation/cif/cif10/run_1/data/detection/cif10/wrn_28_10_10/fgsm/LayerPFS/layer_0/LR/log.txt'
-
     sorted_paths = sorted(paths, key=lambda x: int(x.split('/')[-3].split('_')[-1]))
 
     return sorted_paths
@@ -257,8 +256,9 @@ def extract_information(root='./data', net=['cif10'], dest='./data/detection', n
             csv_line = line_split[-1]
             if not csv_line[-1] == -1:
                 fnr = float(csv_line[-1]) / 100.
+                # import pdb; pdb.set_trace()
                 # if asr_name[-1] == 'std_8_255':
-                #     # import pdb; pdb.set_trace()
+                #     import pdb; pdb.set_trace()
                 asr = np.round(clean_acc[asr_name[-1]]*100, 2)
                 csv_line.append(asr)
                 asrd = np.round((fnr*asr), 2)
@@ -363,7 +363,7 @@ if __name__ == "__main__":
 
 
     for nr in NR:
-        CSV_FILE_PATH.append( extract_information(root='./data', net=['cif10'],         dest='./data/detection',  nr=nr, csv_filename='cif10.csv', layers=False) )
+        # CSV_FILE_PATH.append( extract_information(root='./data', net=['cif10'],         dest='./data/detection',  nr=nr, csv_filename='cif10.csv', layers=False) )
         # CSV_FILE_PATH.append( extract_information(root='./data', net=['cif100'],        dest='./data/detection',  nr=nr, csv_filename='cif100.csv', layers=False) )
         # CSV_FILE_PATH.append( extract_information(root='./data', net=['cif10vgg'],      dest='./data/detection',  nr=nr, csv_filename='cif10vgg.csv', layers=False) )
         # CSV_FILE_PATH.append( extract_information(root='./data', net=['cif100vgg'],     dest='./data/detection',  nr=nr, csv_filename='cif100vgg.csv', layers=False) )
@@ -379,7 +379,7 @@ if __name__ == "__main__":
         # CSV_FILE_PATH.append( extract_information(root='./data', net=['celebaHQ64'],  dest='./data/detection', nr=nr, csv_filename='celebaHQ64.csv', layers=False) )
         # CSV_FILE_PATH.append( extract_information(root='./data', net=['celebaHQ128'], dest='./data/detection', nr=nr, csv_filename='celebaHQ128.csv', layers=False) )
 
-        # CSV_FILE_PATH.append( extract_information(root='./data', net=['cif10_rb'],    dest='./data/detection',   nr=nr, csv_filename='cif10_rb.csv', layers=False) )
+        CSV_FILE_PATH.append( extract_information(root='./data', net=['cif10_rb'],    dest='./data/detection',   nr=nr, csv_filename='cif10_rb.csv', layers=False) )
         # CSV_FILE_PATH.append( extract_information(root='./data', net=['imagenet'],    dest='./data/detection',   nr=nr, csv_filename='imagenet.csv', layers=False) )
 
         copy_var(CSV_FILE_PATH, OUT_PATH, nr)

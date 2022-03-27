@@ -110,9 +110,9 @@ def whitebox_mfs_pfs(args, logger, model, images, images_advs, layers, get_layer
     """
     mfs = []
     mfs_advs = []
-    dead_filter_tmp = torch.load('defenses/sparsity/dead_filter_tmp.pkl')
-    threshold = np.mean(dead_filter_tmp)
-    dead_filter = np.where(dead_filter_tmp > threshold)[0]
+    # dead_filter_tmp = torch.load('defenses/sparsity/dead_filter_tmp.pkl')
+    # threshold = np.mean(dead_filter_tmp)
+    # dead_filter = np.where(dead_filter_tmp > threshold)[0]
     number_images = len(images)
     for it in tqdm(range(number_images)):
         image = images[it].unsqueeze_(0)
@@ -165,9 +165,16 @@ def whitebox_mfs_pfs(args, logger, model, images, images_advs, layers, get_layer
         # print("len im:", len(image_feature_maps))
 
         # print("print: ", image_feature_maps[0].shape)
-        # import pdb; pdb.set_trace()
+        
         # image_feature_maps[0] = torch.from_numpy(np.delete(image_feature_maps[0].cpu().numpy(), dead_filter, axis=1)).cuda()
         # adv_feature_maps[0]   = torch.from_numpy(np.delete(adv_feature_maps[0].cpu().numpy(), dead_filter, axis=1)).cuda()
+        # import pdb; pdb.set_trace()
+        # root = '/home/lorenzp/adversialml/src/analysis/extr_features/cif10'
+        # image_feature_maps[0] = torch.from_numpy( image_feature_maps[0].cpu().numpy() )
+        # adv_feature_maps[0]   = torch.from_numpy( adv_feature_maps[0].cpu().numpy()   )
+        
+        
+        
         # print("print: ", image_feature_maps[0].shape)
         # import pdb; pdb.set_trace()
         

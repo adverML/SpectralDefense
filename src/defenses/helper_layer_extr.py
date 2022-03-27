@@ -209,7 +209,6 @@ def get_whitebox_features(args, logger, model):
                 act_val_list.append(act_val)
             return act_val_list
 
-
         layer_name = layer_name_cif10
 
         if not args.nr == -1:
@@ -498,7 +497,7 @@ def get_whitebox_features(args, logger, model):
             logger.log( "INFO: layer nr > 24" + ", args.nr " + str(args.nr) )
             assert True
 
-    elif args.net == 'imagenet':
+    elif args.net == 'imagenet' or args.net == 'imagenet_hierarchy':
 
         # print(model)
         # import pdb; pdb.set_trace()
@@ -510,9 +509,7 @@ def get_whitebox_features(args, logger, model):
                 act_val_list.append(act_val)
             return act_val_list
 
-
         if not args.nr == -1:
-
             model.relu.register_forward_hook( get_activation('0_relu') )
 
             model.layer1[0].relu.register_forward_hook( get_activation('layer_1_0_relu') )

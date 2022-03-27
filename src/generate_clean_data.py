@@ -63,26 +63,16 @@ if __name__ == '__main__':
     logger = Logger(output_path_dir + os.sep + 'log.txt')
     log_header(logger, args, output_path_dir, sys)
 
-    
-
-
     logger.log('INFO: Load model...')
 
     model, preprocessing = load_model(args)
     model.cuda()
     model.eval()
-    
-    # import pdb; pdb.set_trace()
 
     logger.log('INFO: Load dataset...')
-    # import pdb; pdb.set_trace()
-    test_loader  = load_test_set(args, shuffle=args.shuffle_off, preprocessing=None) # Data Normalizations; No Net Normaliztion
 
-
-
+    test_loader   = load_test_set(args, shuffle=args.shuffle_off, preprocessing=None) # Data Normalizations; No Net Normaliztion
     clean_dataset = generate_data_labels(logger, args, model, test_loader, args.wanted_samples, output_path_dir, option=2)
-
-
     
     torch.save(clean_dataset, output_path_dir + os.sep + 'clean_data', pickle_protocol=4)
     logger.log('INFO: Done extracting and saving correctly classified images!')

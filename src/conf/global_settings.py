@@ -91,12 +91,12 @@ CELEBAHQ256_CKPT_4  = './submodules/pytorch-CelebAHQ/checkpoint/wrn2810/256x256_
 
 
 # Dataset Paths
-MNIST_PATH       = "./data"
-CIF10_PATH       = "./data"
-CIF100_PATH      = "./data"
+MNIST_PATH   = "./data"
+CIF10_PATH   = "./data"
+CIF100_PATH  = "./data"
 
-IMAGENET_PATH    = "/home/DATA/ITWM/ImageNetHierarchy"
-# IMAGENET_PATH    = "/home/DATA/ITWM/ImageNet"
+IMAGENET_HIERARCHY_PATH = "/home/DATA/ITWM/ImageNetHierarchy"
+IMAGENET_PATH    = "/home/DATA/ITWM/ImageNet"
 IMAGENET32_PATH  = "/home/DATA/ITWM/Imagenet32x32"
 IMAGENET64_PATH  = "/home/DATA/ITWM/Imagenet64x64"
 IMAGENET128_PATH = "/home/DATA/ITWM/Imagenet128x128"
@@ -108,15 +108,15 @@ CELEBAHQ256_PATH = "/home/DATA/ITWM/CelebAHQ/Img/hq/data256x256"
 
 
 # Extact Features 
-ISSAMPLEMEANCALCULATED = False #True # Mahalannobis; set true if sample mean and precision are already calculated
+ISSAMPLEMEANCALCULATED = False # True # Mahalannobis; set true if sample mean and precision are already calculated
 
 ###########################################################################
 # Detect Adversarials
 
-TRTE = True
+TRTE = False
 
-# ATTACKS_LIST = ['fgsm', 'bim', 'pgd', 'std', 'df', 'cw']
-ATTACKS_LIST = ['gauss', 'bim', 'std', 'df']
+ATTACKS_LIST = ['gauss', 'fgsm', 'bim', 'pgd', 'std', 'df', 'cw']
+# ATTACKS_LIST = ['gauss', 'bim', 'std', 'df']
 # ATTACKS_LIST = ['apgd-ce', 'apgd-t', 'fab-t', 'square']
 # ATTACKS_LIST = [ 'gauss' ]
 
@@ -125,11 +125,11 @@ DETECTOR_LIST_LAYERS = ['LayerPFS', 'LayerMFS']
 # DETECTOR_LIST_LAYERS = ['InputMFS', 'LayerMFS']
 
 # DETECTOR_LIST = [ 'LID', 'Mahalanobis' ]
-# DETECTOR_LIST = [ 'InputMFS', 'LayerMFS' ]
+DETECTOR_LIST = [ 'InputMFS', 'LayerMFS' ]
 # DETECTOR_LIST = ['InputPFS', 'InputMFS', 'LayerPFS', 'LayerMFS', 'LID', 'Mahalanobis']
 # DETECTOR_LIST = ['InputMFS', 'LayerMFS', 'LID', 'Mahalanobis']
 # DETECTOR_LIST = ['LayerMFS']
-DETECTOR_LIST = ['DkNN']
+# DETECTOR_LIST = ['DkNN']
 # DETECTOR_LIST = [ 'InputMFS' ]
 # DETECTOR_LIST = ['LID']
 
