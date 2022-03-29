@@ -58,7 +58,7 @@ if __name__ == '__main__':
 
     parser.add_argument('--net_normalization', action='store_false', help=settings.HELP_NET_NORMALIZATION)
     
-    
+
     args = parser.parse_args()
     args = check_args_generate_clean_data(args)
 
@@ -83,7 +83,7 @@ if __name__ == '__main__':
         args.wanted_samples_tr = 0
         args.wanted_samples_te = 0
         
-        test_loader  = load_test_set(args, shuffle=args.shuffle_off, preprocessing=None) # Data Normalizations; No Net Normaliztion
+        test_loader  = load_test_set(args, shuffle=args.shuffle_off, preprocessing=None) # No Data Normalizations; Net Normaliztion
         clean_data   = generate_data_labels(logger, args, model, test_loader, args.wanted_samples_te, output_path_dir, option=2)
 
         torch.save(clean_data,   output_path_dir + os.sep + 'clean_data',   pickle_protocol=4)
@@ -99,7 +99,7 @@ if __name__ == '__main__':
         clean_tr_data = []; #clean_tr_labels = []
 
     if args.wanted_samples_te > 0:
-        test_loader   = load_test_set(args, shuffle=args.shuffle_off, preprocessing=None) # Data Normalizations; No Net Normaliztion
+        test_loader   = load_test_set(args, shuffle=args.shuffle_off, preprocessing=None) # No Data Normalizations; Net Normaliztion
         clean_te_data = generate_data_labels(logger, args, model, test_loader, args.wanted_samples_te, output_path_dir, option=1)
 
         torch.save(clean_te_data,   output_path_dir + os.sep + 'clean_te_data',   pickle_protocol=4)

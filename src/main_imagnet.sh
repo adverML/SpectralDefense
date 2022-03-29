@@ -6,25 +6,25 @@ function log_msg {
 
 # DATASETS=(cif10 cif10vgg cif100 cif100vgg imagenet imagenet32 imagenet64 imagenet128 celebaHQ32 celebaHQ64 celebaHQ128)
 # DATASETS="imagenet"
-DATASETS="imagenet_hierarchy"
-
+# DATASETS="imagenet_hierarchy"
+DATASETS="restricted_imagenet"
 
 # RUNS="1"
-# RUNS="1 2 3"
-RUNS="8"
+RUNS="1 2 3"
+# RUNS="8"
 # RUNS="7"
 # RUNS="10"
 
 
 # ATTACKS="fgsm bim pgd"
 # ATTACKS="gauss"
-ATTACKS="df"
+ATTACKS="gauss fgsm bim pgd std df"
 
 
 # ATTACKS="fgsm bim std pgd df cw"
 # ATTACKS="apgd-ce apgd-t fab-t square"
 # DETECTORS="InputMFS LayerMFS LID Mahalanobis"
-DETECTORS="LayerMFS"
+DETECTORS="InputMFS LayerMFS"
 # DETECTORS="InputMFS LayerMFS"
 # DETECTORS="InputPFS LayerPFS InputMFS LayerMFS LID Mahalanobis"
 
@@ -168,8 +168,8 @@ detectadversarialslayer ()
     done
 }
 
-# genereratecleandata
-# attacks
+genereratecleandata
+attacks
 extractcharacteristics
 detectadversarials
 

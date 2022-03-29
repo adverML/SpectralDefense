@@ -15,8 +15,9 @@ function log_msg {
 # DATASETS="cif10vgg cif100vgg"
 # DATASETS="cif100"
 # DATASETS="imagenet"
-DATASETS="cif100"
+# DATASETS="cif100"
 
+DATASETS="restricted_imagenet"
 
 # DATASETS="imagenet64 celebaHQ64 imagenet128 celebaHQ128"
 # RUNS="1 2 3"
@@ -26,13 +27,13 @@ RUNS="8"
 # ATTACKS="apgd-ce apgd-t fab-t square"
 # ATTACKS="std df"
 # ATTACKS="gauss"
-ATTACKS="std"
+ATTACKS="std df"
 
 
 
-# DETECTORS="InputMFS LayerMFS"
+DETECTORS="InputMFS LayerMFS"
 # DETECTORS="InputMFS LayerMFS LID Mahalanobis"
-DETECTORS="LayerMFS"
+# DETECTORS="LayerMFS"
 # DETECTORS="InputPFS LayerPFS InputMFS LayerMFS LID Mahalanobis"
 # DETECTORS="LID Mahalanobis"
 # EPSILONS="8./255. 4./255. 2./255. 1./255. 0.5/255."
@@ -58,13 +59,13 @@ NRSAMPLES="0"
 # WANTEDSAMPLES_TR="5000"
 
 # cif10 100
-# WANTEDSAMPLES_TR="30000"
-# WANTEDSAMPLES_TE="8600"
+WANTEDSAMPLES_TR="30000"
+WANTEDSAMPLES_TE="8600"
 # WANTEDSAMPLES_TR="44000"
 # WANTEDSAMPLES_TE="0"
 
-WANTEDSAMPLES_TE="2600"
-WANTEDSAMPLES_TR="5000"
+# WANTEDSAMPLES_TE="2600"
+# WANTEDSAMPLES_TR="5000"
 
 
 #-----------------------------------------------------------------------------------------------------------------------------------
@@ -118,7 +119,11 @@ genereratecleandata ()
 
             if [ "$net" == imagenet ]; then
                 python -u generate_clean_data_trte.py --net "$net"  --run_nr "$run" --wanted_samples "$NRWANTEDSAMPLES" --wanted_samples_tr "$WANTEDSAMPLES_TR"   --wanted_samples_te "$WANTEDSAMPLES_TE"
-            fi             
+            fi      
+
+            if [ "$net" == restricted_imagenet ]; then
+                python -u generate_clean_data_trte.py --net "$net"  --run_nr "$run" --wanted_samples "$NRWANTEDSAMPLES" --wanted_samples_tr "$WANTEDSAMPLES_TR"   --wanted_samples_te "$WANTEDSAMPLES_TE"
+            fi         
         done
     done
 }
@@ -160,6 +165,10 @@ attacks ()
                     fi 
 
                     if [ "$net" == imagenet ]; then
+                        python -u attacks_trte.py --net "$net" --attack "$att"  --batch_size 500  --eps "$eps" --run_nr "$run"  --wanted_samples "$NRWANTEDSAMPLES" --wanted_samples_tr "$WANTEDSAMPLES_TR"   --wanted_samples_te "$WANTEDSAMPLES_TE"
+                    fi 
+
+                    if [ "$net" == restricted_imagenet ]; then
                         python -u attacks_trte.py --net "$net" --attack "$att"  --batch_size 500  --eps "$eps" --run_nr "$run"  --wanted_samples "$NRWANTEDSAMPLES" --wanted_samples_tr "$WANTEDSAMPLES_TR"   --wanted_samples_te "$WANTEDSAMPLES_TE"
                     fi 
                 done
@@ -209,6 +218,10 @@ extractcharacteristics ()
                         if [ "$net" == imagenet ]; then
                             python -u extract_characteristics_trte.py --net "$net" --attack "$att" --detector "$det" --num_classes 1000 --run_nr "$run"  --eps "$eps" --wanted_samples "$NRWANTEDSAMPLES" --wanted_samples_tr "$WANTEDSAMPLES_TR"   --wanted_samples_te "$WANTEDSAMPLES_TE" --take_inputimage_off
                         fi
+
+                        if [ "$net" == imagenet ]; then
+                            python -u extract_characteristics_trte.py --net "$net" --attack "$att" --detector "$det" --num_classes 1000 --run_nr "$run"  --eps "$eps" --wanted_samples "$NRWANTEDSAMPLES" --wanted_samples_tr "$WANTEDSAMPLES_TR"   --wanted_samples_te "$WANTEDSAMPLES_TE" --take_inputimage_off
+                        fi
                     done
                 done
             done
@@ -228,11 +241,7 @@ detectadversarials ()
                     for det in $DETECTORS; do
                         for nrsamples in $NRSAMPLES; do
                             for classifier in $CLF; do
-                                if [ "$net" == imagenet ]; then
-                                    python -u detect_adversarials_trte.py --net "$net" --attack "$att" --detector "$det"  --wanted_samples "$NRWANTEDSAMPLES" --wanted_samples_tr "$WANTEDSAMPLES_TR" --wanted_samples_te "$WANTEDSAMPLES_TE" --clf "$classifier" --eps "$eps" --num_classes 1000  --run_nr "$run"
-                                else
-                                    python -u detect_adversarials_trte.py --net "$net" --attack "$att" --detector "$det"  --wanted_samples "$NRWANTEDSAMPLES" --wanted_samples_tr "$WANTEDSAMPLES_TR" --wanted_samples_te "$WANTEDSAMPLES_TE" --clf "$classifier" --eps "$eps"  --run_nr "$run"
-                                fi
+                                python -u detect_adversarials_trte.py --net "$net" --attack "$att" --detector "$det"  --wanted_samples "$NRWANTEDSAMPLES" --wanted_samples_tr "$WANTEDSAMPLES_TR" --wanted_samples_te "$WANTEDSAMPLES_TE" --clf "$classifier" --eps "$eps" --num_classes 1000  --run_nr "$run"
                             done
                         done
                     done
@@ -308,9 +317,9 @@ detectadversarialslayer ()
 
 # printn
 # genereratecleandata
-# attacks
+attacks
 # extractcharacteristics
-detectadversarials
+# detectadversarials
 
 #-----------------------------------------------------------------------------------------------------------------------------------
 log_msg "finished"

@@ -86,7 +86,6 @@ if __name__ == '__main__':
 
     #load correctly classified data
     args.batch_size = adapt_batchsize(args, device_name)
-    args.batch_size = 48
     logger.log('INFO: batch size: ' + str(args.batch_size))
 
     # input data    

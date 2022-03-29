@@ -91,10 +91,10 @@ CELEBAHQ256_CKPT_4  = './submodules/pytorch-CelebAHQ/checkpoint/wrn2810/256x256_
 
 
 # Dataset Paths
-MNIST_PATH   = "./data"
-CIF10_PATH   = "./data"
-CIF100_PATH  = "./data"
-
+MNIST_PATH   = "/home/DATA/ITWM/mnist"
+CIF10_PATH   = "/home/DATA/ITWM/cifar10"
+CIF100_PATH  = "/home/DATA/ITWM/cifar100"
+RESTRICTED_IMAGENET_PATH = "/home/DATA/ITWM/Restricted_ImageNet"
 IMAGENET_HIERARCHY_PATH = "/home/DATA/ITWM/ImageNetHierarchy"
 IMAGENET_PATH    = "/home/DATA/ITWM/ImageNet"
 IMAGENET32_PATH  = "/home/DATA/ITWM/Imagenet32x32"

@@ -624,6 +624,114 @@ def get_whitebox_features(args, logger, model):
             assert True
 
 
+    elif args.net == 'restricted_imagenet':
+
+        # print(model)
+        # import pdb; pdb.set_trace()
+
+        def get_layer_feature_maps(activation_dict, act_layer_list):
+            act_val_list = []
+            for it in act_layer_list:
+                act_val = activation_dict[it]
+                act_val_list.append(act_val)
+            return act_val_list
+        
+        
+
+        if not args.nr == -1:
+            model.relu.register_forward_hook( get_activation('0_relu') )
+
+            model.layer1[0].relu.register_forward_hook( get_activation('layer_1_0_relu') )
+            model.layer1[1].relu.register_forward_hook( get_activation('layer_1_1_relu') )
+            model.layer1[2].relu.register_forward_hook( get_activation('layer_1_2_relu') )
+
+            model.layer2[0].relu.register_forward_hook( get_activation('layer_2_0_relu') )
+            model.layer2[1].relu.register_forward_hook( get_activation('layer_2_1_relu') )
+            model.layer2[2].relu.register_forward_hook( get_activation('layer_2_2_relu') )
+            model.layer2[3].relu.register_forward_hook( get_activation('layer_2_3_relu') )
+
+            model.layer3[0].relu.register_forward_hook( get_activation('layer_3_0_relu') )
+            model.layer3[1].relu.register_forward_hook( get_activation('layer_3_1_relu') )
+            model.layer3[2].relu.register_forward_hook( get_activation('layer_3_2_relu') )
+            model.layer3[3].relu.register_forward_hook( get_activation('layer_3_3_relu') )
+            model.layer3[4].relu.register_forward_hook( get_activation('layer_3_4_relu') )
+            model.layer3[5].relu.register_forward_hook( get_activation('layer_3_5_relu') )
+
+            model.layer4[0].relu.register_forward_hook( get_activation('layer_4_0_relu') )
+            model.layer4[1].relu.register_forward_hook( get_activation('layer_4_1_relu') )
+            model.layer4[2].relu.register_forward_hook( get_activation('layer_4_2_relu') )
+
+            # model.layer4[0].bn3.register_forward_hook( get_activation('layer_4_0_bn3') )
+            # model.layer4[1].bn3.register_forward_hook( get_activation('layer_4_1_bn3') )
+            # model.layer4[2].bn3.register_forward_hook( get_activation('layer_4_2_bn3') )
+
+        else:
+            model.layer4[2].relu.register_forward_hook( get_activation('layer_4_2_relu') )
+
+            if not (args.attack == 'df' or  args.attack == 'cw'):
+
+                # model.layer4[0].bn3.register_forward_hook( get_activation('layer_4_0_bn3') )
+                # model.layer4[1].bn3.register_forward_hook( get_activation('layer_4_1_bn3') )
+                # model.layer4[2].bn3.register_forward_hook( get_activation('layer_4_2_bn3') )
+                
+                layers = [
+                    'layer_4_2_relu'
+                    # 'layer_4_1_bn3'
+                    # 'layer_4_0_relu', 'layer_4_1_relu', 'layer_4_2_relu'
+                    # 'layer_1_0_relu', 'layer_1_1_relu', 'layer_1_2_relu', 'layer_2_0_relu'
+                ]
+            else:
+                # model.layer4[0].bn3.register_forward_hook( get_activation('layer_4_0_bn3') )
+                # model.layer4[1].bn3.register_forward_hook( get_activation('layer_4_1_bn3') )
+                # model.layer4[2].bn3.register_forward_hook( get_activation('layer_4_2_bn3') )
+
+                layers = [
+                    # 'layer_4_0_bn3', 'layer_4_1_bn3', 'layer_4_2_bn3'
+                    'layer_4_2_relu'
+                ]
+
+
+        
+        if layer_nr == 0:
+            layers = ['0_relu']
+        elif layer_nr == 1:
+            layers = ['layer_1_0_relu']
+        elif layer_nr == 2:
+            layers = ['layer_1_1_relu']
+        elif layer_nr == 3:
+            layers = ['layer_1_2_relu']
+        elif layer_nr == 4:
+            layers = ['layer_2_0_relu']
+        elif layer_nr == 5:
+            layers = ['layer_2_1_relu']
+        elif layer_nr == 6:
+            layers = ['layer_2_2_relu']
+        elif layer_nr == 7:
+            layers = ['layer_2_3_relu']
+        elif layer_nr == 8:
+            layers = ['layer_3_0_relu']
+        elif layer_nr == 9:
+            layers = ['layer_3_1_relu']
+        elif layer_nr == 10:
+            layers = ['layer_3_2_relu']
+        elif layer_nr == 11:
+            layers = ['layer_3_3_relu']
+        elif layer_nr == 12:
+            layers = ['layer_3_4_relu']
+        elif layer_nr == 13:
+            layers = ['layer_3_5_relu']
+        elif layer_nr == 14:
+            layers = ['layer_4_0_relu']
+        elif layer_nr == 15:
+            layers = ['layer_4_1_relu']
+        elif layer_nr == 16:
+            layers = ['layer_4_2_relu']
+        else:
+            logger.log( "INFO: layer nr > 16" + ", args.nr " + str(args.nr) )
+            assert True
+
+
+
     elif args.net == 'cif10_rb':
 
         def get_layer_feature_maps(activation_dict, act_layer_list):

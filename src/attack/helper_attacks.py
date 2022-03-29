@@ -26,11 +26,13 @@ from utils import (
 )
 
 def adapt_batchsize(args, device_name):
+    get_debug_info(msg="device_name: " + device_name)
     batch_size = 128 
     
     if device_name == 'titan v' and (args.net == 'imagenet128' or args.net == 'celebaHQ128'):
         batch_size = 24
-    if device_name == 'a100' and (args.net == 'imagenet' or args.net == 'imagenet_hierarchy' or args.net == 'imagenet128' or args.net == 'celebaHQ128'):
+        
+    if device_name == 'nvidia a100' and (args.net == 'imagenet' or args.net == 'imagenet_hierarchy' or args.net == 'restricted_imagenet' or args.net == 'imagenet128' or args.net == 'celebaHQ128'):
         batch_size = 48
 
     if device_name == 'titan v' and (args.attack == "apgd-ce" or args.attack == "apgd-t" or args.attack == "fab-t" or args.attack == "square"):
@@ -46,7 +48,6 @@ def adapt_batchsize(args, device_name):
     return batch_size
 
 
-
 def check_net_normalization(args):
     if args.net_normalization:
         if not args.attack == 'std' and not args.attack == 'apgd-ce' and not args.attack == 'apgd-t' and not args.attack == 'fab-t' and not args.attack == 'square':
@@ -56,26 +57,26 @@ def check_net_normalization(args):
     return args
 
 
-def check_args_attack(args, net_normalization=True, img_size=True):
+def check_args_attack(args, net_normalization=True, num_classes=True, img_size=True):
+    
     if net_normalization:
         args = check_net_normalization(args)
-            
-    if (args.net == 'cif10' or args.net == 'cif10vgg' or  args.net == 'cif10rb' or  args.net == 'cif10rn34' or args.net == 'cif10rn34sota')  and not args.num_classes == 10:
-        args.num_classes = 10  
-    elif (args.net == 'cif100' or args.net == 'cif100vgg' or  args.net == 'cif100rn34')  and not args.num_classes == 100:
-        args.num_classes = 100
-    elif (args.net == 'imagenet' or args.net == 'imagenet_hierarchy' or args.net == 'imagenet32' or args.net == 'imagenet64' or args.net == 'imagenet128')  and not args.num_classes == 1000:
-        args.num_classes = 1000
-    elif (args.net == 'celebaHQ32' or args.net == 'celebaHQ64' or args.net == 'celebaHQ128')  and not args.num_classes == 4:
-        args.num_classes = 4
+    
+    if num_classes:
+        if (args.net == 'cif10' or args.net == 'cif10vgg' or  args.net == 'cif10rb' or  args.net == 'cif10rn34' or args.net == 'cif10rn34sota')  and not args.num_classes == 10:
+            args.num_classes = 10  
+        elif (args.net == 'cif100' or args.net == 'cif100vgg' or  args.net == 'cif100rn34')  and not args.num_classes == 100:
+            args.num_classes = 100
+        elif (args.net == 'imagenet' or args.net == 'imagenet_hierarchy' or args.net == 'restricted_imagenet' or args.net == 'imagenet32' or args.net == 'imagenet64' or args.net == 'imagenet128')  and not args.num_classes == 1000:
+            args.num_classes = 1000
+        elif (args.net == 'celebaHQ32' or args.net == 'celebaHQ64' or args.net == 'celebaHQ128')  and not args.num_classes == 4:
+            args.num_classes = 4
 
     if img_size:
         if (args.net == 'cif10' or args.net == 'cif10vgg' or args.net == 'cif100' or args.net == 'cif100vgg' or args.net == 'cif10rb' or args.net == 'imagenet32' or args.net == 'celebaHQ32' or args.net == 'cif10rn34sota')  and not args.img_size == 32:
             args.img_size = 32
-
         if (args.net == 'imagenet64' or args.net == 'celebaHQ64' )  and not args.img_size == 64:
             args.img_size =  64
-            
         if (args.net == 'imagenet128' or args.net == 'celebaHQ128' )  and not args.img_size == 128:
             args.img_size = 128
 

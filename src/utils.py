@@ -41,6 +41,7 @@ from models.vgg import vgg16_bn
 from models.wideresidual import WideResNet, WideBasic
 from models.wide_resnet import Wide_ResNet
 from models.orig_resnet import wide_resnet50_2
+from models.orig_resnet import resnet50
 from models.resnet import resnet34
 from models.resnet_sota import ResNet34_SOTA
 
@@ -99,7 +100,7 @@ def get_num_classes(args):
         num_classes = settings.MAX_CLASSES_CIF10
     elif args.net == 'cif100' or args.net == 'cif100vgg'  or args.net == 'cif100rn34':
         num_classes = settings.MAX_CLASSES_CIF100
-    elif args.net == 'imagenet' or args.net == 'imagenet_hierarchy' or args.net == 'imagenet64' or args.net == 'imagenet128':
+    elif args.net == 'imagenet' or args.net == 'imagenet_hierarchy' or args.net == 'restricted_imagenet' or args.net == 'imagenet64' or args.net == 'imagenet128':
         num_classes = settings.MAX_CLASSES_IMAGENET
     elif args.net == 'imagenet32':
         num_classes = args.num_classes
@@ -740,7 +741,7 @@ def get_normalization(args):
     elif args.net == 'imagenet32' or args.net == 'imagenet64' or args.net == 'imagenet128':
         mean = [0.4810, 0.4574, 0.4078]
         std  = [0.2146, 0.2104, 0.2138]
-    elif args.net == 'imagenet' or args.net == 'imagenet_hierarchy':        
+    elif args.net == 'imagenet' or args.net == 'imagenet_hierarchy' or args.net == 'restricted_imagenet' :        
         mean = [0.485, 0.456, 0.406] # https://pytorch.org/vision/stable/models.html#wide-resnet
         std  = [0.229, 0.224, 0.225]
     elif args.net == 'celebaHQ32' or args.net == 'celebaHQ64' or args.net == 'celebaHQ128' or args.net == 'celebaHQ256':
@@ -798,6 +799,10 @@ def get_model_info(args):
     if args.net == 'imagenet' or args.net == 'imagenet_hierarchy':
         depth = 50
         widen_factor = 2
+    elif args.net == 'restricted_imagenet':
+        net = 'rn'
+        depth = 50
+        widen_factor = 0
     elif args.net == 'cif10rn34' or args.net == 'cif100rn34' or args.net == 'cif10rn34sota':
         net = 'rn'
         depth = 34
@@ -936,6 +941,8 @@ def load_model(args):
     elif args.net == 'imagenet' or args.net == 'imagenet_hierarchy':
         model = wide_resnet50_2(pretrained=True, preprocessing=net_normalization)
 
+    elif args.net == 'restricted_imagenet':
+        model = resnet50(pretrained=True, preprocessing=net_normalization)
 
     elif args.net == 'imagenet32':
         model = WideResNet(num_classes=args.num_classes, block=WideBasic, depth=depth, widen_factor=widen_factor, preprocessing=net_normalization)
@@ -1084,18 +1091,25 @@ def load_test_set(args, preprocessing=None, num_workers=4, download=True, IS_TRA
         data_loader = torch.utils.data.DataLoader(item, batch_size=args.batch_size, shuffle=shuffle, num_workers=num_workers)
 
 
-    elif args.net == 'imagenet_hierarchy':
+    elif args.net == 'imagenet_hierarchy' or args.net == 'restricted_imagenet':
+        
+        path = settings.IMAGENET_HIERARCHY_PATH
+        if args.net == 'restricted_imagenet':
+            path = settings.RESTRICTED_IMAGENET_PATH
+        
         transform_list = [transforms.Resize(256), transforms.CenterCrop(224), transforms.ToTensor()] + normalization
         transform = transforms.Compose(transform_list)
-        dataset_dir_path = os.path.join(settings.IMAGENET_HIERARCHY_PATH, 'val') if not IS_TRAIN else os.path.join(settings.IMAGENET_HIERARCHY_PATH, 'train')   
+        dataset_dir_path = os.path.join(path, 'val') if not IS_TRAIN else os.path.join(path, 'train')   
         dataset = ImageNetDataSet(img_path=dataset_dir_path, transform=transform)
         
         data_loader = torch.utils.data.DataLoader(dataset, batch_size=args.batch_size, shuffle=shuffle, num_workers=num_workers, pin_memory=True)
 
-    elif args.net == 'imagenet':
 
+    elif args.net == 'imagenet' or args.net == 'imagenet_hierarchy' or args.net == 'restricted_imagenet':
+        
+        path = settings.IMAGENET_PATH
+                
         # source
-
         transform_list = [transforms.Resize(256), transforms.CenterCrop(224), transforms.ToTensor()] + normalization
         # if IS_TRAIN:
         #     transform_list = [transforms.RandomResizedCrop(224), transforms.RandomHorizontalFlip(), transforms.ToTensor()] + normalization
@@ -1107,7 +1121,7 @@ def load_test_set(args, preprocessing=None, num_workers=4, download=True, IS_TRA
         print("transform_list", transform_list)
         transform = transforms.Compose(transform_list)
 
-        dataset_dir_path = os.path.join(settings.IMAGENET_PATH, 'val') if not IS_TRAIN else os.path.join(settings.IMAGENET_PATH, 'train')
+        dataset_dir_path = os.path.join(path, 'val') if not IS_TRAIN else os.path.join(settings.IMAGENET_PATH, 'train')
         get_debug_info(msg="dir path: " + dataset_dir_path)
         # import pdb; pdb.set_trace()
         data_loader = torch.utils.data.DataLoader(datasets.ImageFolder(dataset_dir_path, transform), batch_size=args.batch_size, shuffle=shuffle, 
@@ -1204,7 +1218,6 @@ def epsilon_to_float(epsilon):
 
     if not '/' in epsilon:
         return float(epsilon)
-
     try:
         num, denom = epsilon.split('/')
         num = float(num)
