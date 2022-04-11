@@ -309,7 +309,6 @@ def get_whitebox_features(args, logger, model):
         # fourier_act_layers = [ 'conv2_0_relu_1', 'conv2_0_relu_4', 'conv2_1_relu_1', 'conv2_1_relu_4', 'conv2_2_relu_1', 'conv2_2_relu_4', 'conv2_3_relu_1', 'conv2_3_relu_4']
 
         if not args.nr == -1:
-
             model.conv2[0].residual[1].register_forward_hook( get_activation('conv2_0_relu_1') )
             model.conv2[0].residual[4].register_forward_hook( get_activation('conv2_0_relu_4') )
 

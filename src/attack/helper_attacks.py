@@ -4,11 +4,12 @@ from conf import settings
 
 import torch
 import os, sys
+import pdb
 import numpy as np
 import matplotlib.pyplot as plt
 import foolbox
 from foolbox import PyTorchModel, accuracy, samples
-from foolbox.attacks import  L2DeepFoolAttack, LinfBasicIterativeAttack, FGSM, L2CarliniWagnerAttack, FGM, PGD
+import foolbox.attacks as fa
 
 from utils import (
     Logger,
@@ -64,11 +65,20 @@ def check_args_attack(args, net_normalization=True, num_classes=True, img_size=T
     
     if num_classes:
         if (args.net == 'cif10' or args.net == 'cif10vgg' or  args.net == 'cif10rb' or  args.net == 'cif10rn34' or args.net == 'cif10rn34sota')  and not args.num_classes == 10:
-            args.num_classes = 10  
+            args.num_classes = 10
         elif (args.net == 'cif100' or args.net == 'cif100vgg' or  args.net == 'cif100rn34')  and not args.num_classes == 100:
             args.num_classes = 100
         elif (args.net == 'imagenet' or args.net == 'imagenet_hierarchy' or args.net == 'restricted_imagenet' or args.net == 'imagenet32' or args.net == 'imagenet64' or args.net == 'imagenet128')  and not args.num_classes == 1000:
-            args.num_classes = 1000
+            
+            if args.net == 'imagenet32' and not args.num_classes == 1000:
+                imagnet32_class_set = set([10, 25, 50, 75, 100, 250])
+                if args.num_classes in imagnet32_class_set:
+                    get_debug_info(msg='Info: Num classes dont need to be checked!')
+                else:
+                    args.num_classes = 1000
+            else:
+                args.num_classes = 1000
+            
         elif (args.net == 'celebaHQ32' or args.net == 'celebaHQ64' or args.net == 'celebaHQ128')  and not args.num_classes == 4:
             args.num_classes = 4
 
@@ -125,16 +135,13 @@ def create_advs(logger, args, model, output_path_dir, clean_data_path, wanted_sa
 
         # run attack and save images
         with torch.no_grad():
-
             for x_test, y_test in data_loader:
-
                 x_test = torch.squeeze(x_test).cpu()
                 y_test = torch.squeeze(y_test).cpu()
 
                 if args.batch_size == 1:
                     x_test = torch.unsqueeze(x_test, 0)
                     y_test = torch.unsqueeze(y_test, 0)
-
 
                 if not args.individual:
                     logger.log("INFO: mode: std; not individual")
@@ -165,27 +172,33 @@ def create_advs(logger, args, model, output_path_dir, clean_data_path, wanted_sa
                     get_debug_info( " success: {:2f}".format(success_rate) )
                     break
 
-    elif args.attack == 'fgsm' or args.attack == 'bim' or args.attack == 'pgd' or args.attack == 'df' or args.attack == 'cw': 
+    elif args.attack == 'fgsm' or args.attack == 'bim' or args.attack == 'pgd' or args.attack == 'l2pgd' or args.attack == 'df' or args.attack == 'linfdf' or args.attack == 'cw': 
 
         logger.log("INFO: len(dataset): {}".format(len(dataset)))
 
         #setup depending on attack
         if args.attack == 'fgsm':
-            attack = FGSM()
+            attack = fa.FGSM() #linfs
             epsilons = [epsilon_to_float(args.eps)]
             if args.net == 'mnist':
                 epsilons = [0.3] 
         elif args.attack == 'bim':
-            attack = LinfBasicIterativeAttack()
+            attack = fa.LinfBasicIterativeAttack()
             epsilons = [epsilon_to_float(args.eps)]
         elif args.attack == 'pgd':
-            attack = PGD()
+            attack = fa.PGD()
             epsilons = [epsilon_to_float(args.eps)]
+        elif args.attack == 'l2pgd':
+            attack = fa.L2PGD()
+            epsilons = [0.3]
         elif args.attack == 'df':
-            attack = L2DeepFoolAttack()
+            attack = fa.L2DeepFoolAttack()
+            epsilons = None
+        elif args.attack == 'linfdf':
+            attack = fa.LinfDeepFoolAttack(steps=20)
             epsilons = None
         elif args.attack == 'cw':
-            attack = L2CarliniWagnerAttack(steps=1000)
+            attack = fa.L2CarliniWagnerAttack(steps=1000)
             epsilons = None
         else:
             logger.log('Err: unknown attack')
@@ -203,13 +216,13 @@ def create_advs(logger, args, model, output_path_dir, clean_data_path, wanted_sa
             if args.batch_size == 1:
                 image = torch.unsqueeze(image, 0)
                 label = torch.unsqueeze(label, 0)
-
+            
             image = image.cuda()
             label = label.cuda()
 
             adv, adv_clip, success = attack(fmodel, image, criterion=foolbox.criteria.Misclassification(label), epsilons=epsilons)
 
-            if not (args.attack == 'cw' or args.attack == 'df'):
+            if not (args.attack == 'cw' or args.attack == 'df' or args.attack == 'linfdf'):
                 adv_clip = adv_clip[0] # list to tensor
                 success = success[0]
                 adv = adv[0]

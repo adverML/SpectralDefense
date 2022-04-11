@@ -219,7 +219,7 @@ extractcharacteristics ()
                             python -u extract_characteristics_trte.py --net "$net" --attack "$att" --detector "$det" --num_classes 1000 --run_nr "$run"  --eps "$eps" --wanted_samples "$NRWANTEDSAMPLES" --wanted_samples_tr "$WANTEDSAMPLES_TR"   --wanted_samples_te "$WANTEDSAMPLES_TE" --take_inputimage_off
                         fi
 
-                        if [ "$net" == imagenet ]; then
+                        if [ "$net" == restricted_imagenet ]; then
                             python -u extract_characteristics_trte.py --net "$net" --attack "$att" --detector "$det" --num_classes 1000 --run_nr "$run"  --eps "$eps" --wanted_samples "$NRWANTEDSAMPLES" --wanted_samples_tr "$WANTEDSAMPLES_TR"   --wanted_samples_te "$WANTEDSAMPLES_TE" --take_inputimage_off
                         fi
                     done
@@ -317,9 +317,9 @@ detectadversarialslayer ()
 
 # printn
 # genereratecleandata
-attacks
-# extractcharacteristics
-# detectadversarials
+# attacks
+extractcharacteristics
+detectadversarials
 
 #-----------------------------------------------------------------------------------------------------------------------------------
 log_msg "finished"

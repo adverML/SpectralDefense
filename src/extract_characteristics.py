@@ -30,7 +30,6 @@ import sklearn.covariance
 
 from conf import settings
 
-
 from utils import (
     Logger,
     log_header,
@@ -55,8 +54,8 @@ parser.add_argument("--run_nr",          default=1,              type=int, help=
 
 parser.add_argument("--attack"  ,        default='fgsm',          help=settings.HELP_ATTACK)
 parser.add_argument("--detector",        default='LayerMFS',      help=settings.HELP_DETECTOR)
-parser.add_argument('--take_inputimage_off', action='store_false',    help='Input Images for feature extraction. Default = True')
-parser.add_argument("--max_freq_on",     action='store_true',      help="Switch max frequency normalization on")
+parser.add_argument('--take_inputimage_off', action='store_false', help='Input Images for feature extraction. Default = True')
+parser.add_argument("--max_freq_on",     action='store_true',     help="Switch max frequency normalization on")
 
 parser.add_argument("--net",            default='cif10',          help=settings.HELP_NET)
 parser.add_argument("--nr",             default='-1',   type=int, help=settings.HELP_LAYER_NR)
@@ -64,7 +63,7 @@ parser.add_argument("--wanted_samples", default='2000', type=int, help=settings.
 parser.add_argument('--img_size',       default='32',   type=int, help=settings.HELP_IMG_SIZE)
 parser.add_argument("--num_classes",    default='10',   type=int, help=settings.HELP_NUM_CLASSES)
 
-parser.add_argument("--shuffle_on",     action='store_true',      help="Switch shuffle data on")
+parser.add_argument("--shuffle_on",        action='store_true',   help="Switch shuffle data on")
 parser.add_argument('--net_normalization', action='store_true',   help=settings.HELP_NET_NORMALIZATION)
 
 # parser.add_argument("--eps",       default='-1',       help=settings.HELP_AA_EPSILONS) # to activate the best layers
@@ -95,8 +94,6 @@ log_header(logger, args, output_path_dir, sys) # './data/extracted_characteristi
 # check args
 # args = check_args(args, logger)
 
-
-
 # input data
 input_path_dir = create_dir_attacks(args, root='./data/attacks/')
 images_path, images_advs_path = create_save_dir_path(input_path_dir, args)
@@ -120,50 +117,40 @@ model = model.eval()
 
 # with torch.no_grad():
 #     for i, m in enumerate(filter(lambda m: type(m) == torch.nn.Conv2d and m.kernel_size == (3, 3), model.modules())):
-        
 #         weight = m.weight.detach().cpu().numpy().copy()
 #         shape = weight.shape
 #         w = ( weight.reshape(-1, 9) )
-        
 #         t = np.abs(w).max() / 100    
 #         cache = np.ones_like(w)
 #         cache[np.abs(w) < t] = 0
 #         dead_mask = (cache.sum(axis=1) == 0)
-
 #         # with np.printoptions(edgeitems=1000):
 #         dead_filter = np.where(dead_mask == True)[0]
 #         # print("sparsity: ", dead_filter)
 #         # dead_filter_reshaped = dead_filter.flatten().reshape(shape)
         
-        
 #         if len(dead_filter) > 0:
 #             w[dead_filter, :] = 0
             # import pdb; pdb.set_trace()
         # m.weight = weight
-
     # usv = np.linalg.svd(w - w.mean(axis=0), full_matrices=False, compute_uv=True)
     # u = usv[0]
     # s = usv[1]
     # v = s**2 / (w.shape[0]-1)
-
     # e = scipy.stats.entropy(v, base=10)
-    
     # def H_T(n):
     #     L, x0, k, b = (1.2618047,2.30436435,0.88767525,-0.31050834)  # min distr.
     #     return L / (1 + np.exp(-k * (np.log2(n) - x0))) + b
     
     # dead = (e >= H_T(w.shape[0])) | (e < 0.5)
-
     # print("dead_mask: ", )
     # print("i: ", i, ",dead: ", dead, ", e: ", e, ", H_T: ", H_T(w.shape[0]))
-
-# import  pdb; pdb.set_trace()
 
 
 layer_nr = int(args.nr)
 logger.log("INFO: layer_nr " + str(layer_nr) ) 
 
-if args.detector == 'LayerMFS' or args.detector == 'LayerPFS' or args.detector == 'LID'  or args.detector == 'Mahalanobis':
+if args.detector == 'LayerMFS' or args.detector == 'LayerPFS' or args.detector == 'LID'  or args.detector == 'LIDNOISE' or args.detector == 'Mahalanobis':
     get_layer_feature_maps, layers, model, activation = get_whitebox_features(args, logger, model)
 elif args.detector == 'DkNN':
     layers = dfknn_layer(args, model)
@@ -190,6 +177,11 @@ elif args.detector == 'LID':
     from defenses.Lid import lid
     characteristics, characteristics_adv = lid(args, model, images, images_advs, layers, get_layer_feature_maps, activation)
 
+####### LIDNOISE 
+elif args.detector == 'LIDNOISE':
+    from defenses.Lid import lidnoise
+    characteristics, characteristics_adv = lidnoise(args, model, images, images_advs, layers, get_layer_feature_maps, activation)
+
 ####### Mahalanobis section
 elif args.detector == 'Mahalanobis':
     from defenses.DeepMahalanobis import deep_mahalanobis
@@ -201,12 +193,12 @@ elif args.detector == 'DkNN':
     characteristics, characteristics_adv = DkNN.calculate(args, model, images, images_advs, layers, 0, 0)
     # DkNN.calculate_test(args, model, images, images_advs, layers, 0, 0)
 
-####### Trust section
-elif args.detector == 'Trust':
+####### CDVAE
+elif args.detector == 'CDVAE':
     pass
 
-####### LID_Class_Cond section
-elif args.detector == 'LID_Class_Cond':
+####### Trust section
+elif args.detector == 'Trust':
     pass
 
 ####### ODD section https://github.com/jayaram-r/adversarial-detection

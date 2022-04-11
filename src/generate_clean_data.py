@@ -36,23 +36,25 @@ from datasets import smallimagenet
 from gen_clean_data.helper_generate_clean_data import (
     check_args_generate_clean_data
 )
+
 from gen_clean_data.generate_data_labels import (
     generate_data_labels
 )
 
 
 if __name__ == '__main__':
-    parser = argparse.ArgumentParser()
+    
+    parser = argparse.ArgumentParser("Generate Clean Data")
     parser.add_argument("--run_nr",         default=1,    type=int, help="Which run should be taken?")
 
     parser.add_argument("--net",            default='cif10',        help=settings.HELP_NET)
     parser.add_argument("--img_size",       default=32,   type=int, help=settings.HELP_IMG_SIZE)
     parser.add_argument("--num_classes",    default=10,   type=int, help=settings.HELP_NUM_CLASSES)
     parser.add_argument("--batch_size",     default=1   , type=int, help=settings.HELP_BATCH_SIZE)
-    parser.add_argument("--wanted_samples",    default=4000, type=int, help=settings.HELP_WANTED_SAMPLES)
-    parser.add_argument("--shuffle_off",     action='store_false',  help="Switch shuffle data off")
+    parser.add_argument("--wanted_samples", default=4000, type=int, help=settings.HELP_WANTED_SAMPLES)
+    parser.add_argument("--shuffle_off",    action='store_false',  help="Switch shuffle data off")         # shuffle is switched on by default
 
-    parser.add_argument('--net_normalization', action='store_false', help=settings.HELP_NET_NORMALIZATION)
+    parser.add_argument('--net_normalization', action='store_false', help=settings.HELP_NET_NORMALIZATION) # net normalization is switched on by default
     
     args = parser.parse_args()
     args = check_args_generate_clean_data(args)
@@ -71,7 +73,7 @@ if __name__ == '__main__':
 
     logger.log('INFO: Load dataset...')
 
-    test_loader   = load_test_set(args, shuffle=args.shuffle_off, preprocessing=None) # Data Normalizations; No Net Normaliztion
+    test_loader   = load_test_set(args, shuffle=args.shuffle_off, preprocessing=None) # Net Normaliztion
     clean_dataset = generate_data_labels(logger, args, model, test_loader, args.wanted_samples, output_path_dir, option=2)
     
     torch.save(clean_dataset, output_path_dir + os.sep + 'clean_data', pickle_protocol=4)

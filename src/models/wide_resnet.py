@@ -1,6 +1,7 @@
 """
 Source:
 https://openreview.net/forum?id=jFMzBeLyTc0 
+https://github.com/kai-wen-yang/CD-VAE
 """
 
 import torch

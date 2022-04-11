@@ -8,6 +8,11 @@ import numpy as np
 import pickle
 import torch
 import sys, os
+import pdb
+
+from sklearn.preprocessing import MinMaxScaler, StandardScaler
+from sklearn import svm
+import argparse
 
 from conf import settings
 from utils import (
@@ -18,10 +23,6 @@ from utils import (
     save_args_to_file,
     create_save_dir_path,
 )
-
-from sklearn.preprocessing import MinMaxScaler, StandardScaler
-from sklearn import svm
-import argparse
 
 from detection.helper_detection import show_results, split_data, save_load_clf
 from attack.helper_attacks import check_args_attack
@@ -65,16 +66,38 @@ log_header(logger, args, output_path_dir, sys) # './data/extracted_characteristi
 # load characteristics
 logger.log('INFO: Loading characteristics...')
 
-
 # input data
 extracted_characteristics_path = create_dir_extracted_characteristics(args, root='./data/extracted_characteristics/', wait_input=False)
 characteristics_path, characteristics_advs_path = create_save_dir_path(extracted_characteristics_path, args, filename='characteristics')
 
-logger.log("characteristics_path:      " + str(characteristics_path) )
-logger.log("characteristics_advs_path: " + str(characteristics_advs_path) )
+# pfs = ''
+# if args.detector == 'VAEInputPFS':
+#     pfs = '_PFS'
 
-characteristics =     torch.load(characteristics_path)[:args.wanted_samples]
+# if args.attack == 'fgsm':
+#     characteristics_path      = '/home/lorenzp/adversialml/src/submodules/CD-VAE/detection/data/cd-vae-1/resnet_cifar10/fft_clean_data_resnet_cifar10_FGSM{}.pth'.format(pfs)
+#     # characteristics_advs_path = '/home/lorenzp/adversialml/src/submodules/CD-VAE/detection/data/cd-vae-1/resnet_cifar10/fft_clean_data_resnet_cifar10_FGSM.pth'
+#     characteristics_advs_path = '/home/lorenzp/adversialml/src/submodules/CD-VAE/detection/data/cd-vae-1/resnet_cifar10/fft_adv_data_resnet_cifar10_FGSM{}.pth'.format(pfs)
+# elif args.attack == 'cw':
+#     characteristics_path      = '/home/lorenzp/adversialml/src/submodules/CD-VAE/detection/data/cd-vae-1/resnet_cifar10/fft_clean_data_resnet_cifar10_CW{}.pth'.format(pfs)
+#     characteristics_advs_path = '/home/lorenzp/adversialml/src/submodules/CD-VAE/detection/data/cd-vae-1/resnet_cifar10/fft_adv_data_resnet_cifar10_CW{}.pth'.format(pfs)
+# elif args.attack == 'bim':
+#     characteristics_path      = '/home/lorenzp/adversialml/src/submodules/CD-VAE/detection/data/cd-vae-1/resnet_cifar10/fft_clean_data_resnet_cifar10_BIM{}.pth'.format(pfs)
+#     characteristics_advs_path = '/home/lorenzp/adversialml/src/submodules/CD-VAE/detection/data/cd-vae-1/resnet_cifar10/fft_adv_data_resnet_cifar10_BIM{}.pth'.format(pfs)
+# elif args.attack == 'pgd':
+#     characteristics_path      = '/home/lorenzp/adversialml/src/submodules/CD-VAE/detection/data/cd-vae-1/resnet_cifar10/fft_clean_data_resnet_cifar10_PGD{}.pth'.format(pfs)
+#     characteristics_advs_path = '/home/lorenzp/adversialml/src/submodules/CD-VAE/detection/data/cd-vae-1/resnet_cifar10/fft_adv_data_resnet_cifar10_PGD{}.pth'.format(pfs)
+
+logger.log("characteristics_path:      " + str(characteristics_path) )
+# logger.log("characteristics_advs_path: " + str(characteristics_path) )
+
+characteristics     = torch.load(characteristics_path)[:args.wanted_samples]
 characteristics_adv = torch.load(characteristics_advs_path)[:args.wanted_samples]
+
+# pdb.set_trace()
+
+characteristics     = np.asarray(characteristics)
+characteristics_adv = np.asarray(characteristics_adv)
 
 shape = np.shape(characteristics)
 logger.log("shape: " + str(shape))
@@ -83,12 +106,19 @@ if shape[0] < args.wanted_samples:
     logger.log("CAUTION: The actual number is smaller as the wanted samples!")
 
 
-X_train, y_train, X_test, y_test = split_data(args, logger, characteristics, characteristics_adv, k=shape[0], test_size=0.2, random_state=42)
+# import pdb; pdb.set_trace()
+# tmp1 = characteristics[:1000]
+# tmp2 = characteristics[2000:3000]
+# characteristics = np.concatenate((tmp1, tmp2), axis=0)
+
+
+X_train, y_train, X_test, y_test = split_data(args, logger, characteristics, characteristics_adv, k=2000, test_size=0.2, random_state=42)
+# X_train, y_train, X_test, y_test = split_data(args, logger, characteristics, characteristics_adv[:2000], k=shape[0], test_size=0.2, random_state=42)
+
 
 # scaler  = MinMaxScaler().fit(X_train)
 # X_train = scaler.transform(X_train)
 # X_test  = scaler.transform(X_test)
-
 
 if args.pca_features > 0:
     logger.log('Apply PCA decomposition. Reducing number of features from {} to {}'.format(X_train.shape[1], args.pca_features))

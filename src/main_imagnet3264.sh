@@ -8,7 +8,7 @@ function log_msg {
 
 # DATASETS=(cif10 cif10vgg cif100 cif100vgg imagenet imagenet32 imagenet64 imagenet128 celebaHQ32 celebaHQ64 celebaHQ128)
 DATASETS="imagenet32"
-RUNS="2 3"
+RUNS="1"
 # RUNS="8"
 
 # ATTACKS="cw"
@@ -24,16 +24,16 @@ EPSILONS="8./255."
 CLF="LR RF"
 # CLF="LR"
 
-IMAGENET32CLASSES="25 50 100 250 1000"
+IMAGENET32CLASSES="10 25 50 100 250"
 # NRSAMPLES="300 500 1000 1200 1500 2000" # only at detectadversarialslayer
 # WANTEDSAMPLES="24000"
 # ALLSAMPLES="24000"
 # NRSAMPLES="24000" # detect
 
 
-WANTEDSAMPLES="2000"
-ALLSAMPLES="4000"
-NRSAMPLES="2000" # detect
+WANTEDSAMPLES="4000"
+ALLSAMPLES="6000"
+NRSAMPLES="4000" # detect
 
 DATASETSLAYERNR="imagenet32"
 ATTACKSLAYERNR="df"
@@ -51,10 +51,11 @@ genereratecleandata ()
     log_msg "Generate Clean Data for Foolbox Attacks and Autoattack!"
     for run in $RUNS; do
         for net in $DATASETS; do
-            if [ "$net" == imagenet32 ]; then
-                python -u generate_clean_data.py --net "$net" --num_classes 1000   --img_size 32  --run_nr "$run" --wanted_samples "$ALLSAMPLES"
-            fi 
-
+            for numclass in $IMAGENET32CLASSES; do
+                if [ "$net" == imagenet32 ]; then
+                    python -u generate_clean_data.py --net "$net" --num_classes "$numclass"   --img_size 32  --run_nr "$run" --wanted_samples "$ALLSAMPLES"
+                fi 
+            done
             if [ "$net" == imagenet64 ]; then
                 python -u generate_clean_data.py --net "$net" --num_classes 1000   --img_size 64  --run_nr "$run" --wanted_samples "$ALLSAMPLES"
             fi 
@@ -70,9 +71,11 @@ attacks ()
         for net in $DATASETS; do
             for att in $ATTACKS; do
                 for eps in $EPSILONS; do
-                    if [ "$net" == imagenet32 ]; then
-                        python -u attacks.py --net "$net" --num_classes 1000 --attack "$att" --img_size 32 --batch_size 500  --eps "$eps"  --run_nr "$run"   --wanted_samples "$WANTEDSAMPLES" --all_samples "$ALLSAMPLES"
-                    fi 
+                    for numclass in $IMAGENET32CLASSES; do
+                        if [ "$net" == imagenet32 ]; then
+                            python -u attacks.py --net "$net" --num_classes "$numclass" --attack "$att" --img_size 32 --batch_size 500  --eps "$eps"  --run_nr "$run"   --wanted_samples "$WANTEDSAMPLES" --all_samples "$ALLSAMPLES"
+                        fi 
+                    done
 
                     if [ "$net" == imagenet64 ]; then
                         python -u attacks.py --net "$net" --num_classes 1000 --attack "$att" --img_size 64 --batch_size 500  --run_nr "$run"   --wanted_samples "$WANTEDSAMPLES" --all_samples "$ALLSAMPLES"
@@ -92,15 +95,13 @@ extractcharacteristics ()
             for att in $ATTACKS; do  
                 for eps in $EPSILONS; do
                     for det in $DETECTORS; do
-                        if [ "$net" == imagenet32 ]; then
-                            python -u extract_characteristics.py --net "$net" --attack "$att" --detector "$det" --num_classes 1000  --img_size 32  --run_nr "$run"  --wanted_samples "$WANTEDSAMPLES"   --take_inputimage_off
-                        fi
-                        if [ "$net" == imagenet64 ]; then
-                            if  [ "$att" == std ]; then
-                                    python -u extract_characteristics.py --net "$net" --attack "$att" --detector "$det" --num_classes 1000  --img_size 64  --eps "$eps"  --wanted_samples "$WANTEDSAMPLES"  --run_nr "$run" --take_inputimage_off
-                            else
-                                python -u extract_characteristics.py --net "$net" --attack "$att" --detector "$det" --num_classes 1000  --img_size 64   --run_nr "$run"  --wanted_samples "$WANTEDSAMPLES"  --take_inputimage_off
+                        for numclass in $IMAGENET32CLASSES; do
+                            if [ "$net" == imagenet32 ]; then
+                                python -u extract_characteristics.py --net "$net" --attack "$att" --detector "$det" --num_classes "$numclass"  --img_size 32  --run_nr "$run"  --wanted_samples "$WANTEDSAMPLES"   --take_inputimage_off
                             fi
+                        done
+                        if [ "$net" == imagenet64 ]; then
+                            python -u extract_characteristics.py --net "$net" --attack "$att" --detector "$det" --num_classes 1000  --img_size 64   --run_nr "$run"  --wanted_samples "$WANTEDSAMPLES"  --take_inputimage_off    
                         fi
                     done
                 done
@@ -120,10 +121,21 @@ detectadversarials ()
                     for det in $DETECTORS; do
                         for nrsamples in $NRSAMPLES; do
                             for classifier in $CLF; do
-                                if  [ "$att" == std ]; then
-                                    python -u detect_adversarials.py --net "$net" --attack "$att" --detector "$det" --wanted_samples "$nrsamples" --clf "$classifier" --num_classes 1000 --eps "$eps"  --run_nr "$run"  
-                                else
-                                    python -u detect_adversarials.py --net "$net" --attack "$att" --detector "$det" --wanted_samples "$nrsamples" --clf "$classifier" --num_classes 1000   --run_nr "$run"  
+                                for numclass in $IMAGENET32CLASSES; do
+                                    if [ "$net" == imagenet32 ]; then
+                                        if  [ "$att" == std ]; then
+                                            python -u detect_adversarials.py --net "$net" --attack "$att" --detector "$det" --wanted_samples "$nrsamples" --clf "$classifier" --num_classes "$numclass" --eps "$eps"  --run_nr "$run"  
+                                        else
+                                            python -u detect_adversarials.py --net "$net" --attack "$att" --detector "$det" --wanted_samples "$nrsamples" --clf "$classifier" --num_classes "$numclass"   --run_nr "$run"  
+                                        fi
+                                    fi
+                                done
+                                if [ "$net" == imagenet64 ]; then
+                                    if  [ "$att" == std ]; then
+                                        python -u detect_adversarials.py --net "$net" --attack "$att" --detector "$det" --wanted_samples "$nrsamples" --clf "$classifier" --num_classes 1000 --eps "$eps"  --run_nr "$run"  
+                                    else
+                                        python -u detect_adversarials.py --net "$net" --attack "$att" --detector "$det" --wanted_samples "$nrsamples" --clf "$classifier" --num_classes 1000   --run_nr "$run"  
+                                    fi
                                 fi
                             done
                         done
@@ -188,8 +200,8 @@ detectadversarialslayer ()
 
 
 # genereratecleandata
-attacks
-extractcharacteristics
+# attacks
+# extractcharacteristics
 detectadversarials
 
 # extractcharacteristicslayer

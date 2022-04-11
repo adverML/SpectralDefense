@@ -17,12 +17,7 @@ def calculate_fourier_spectrum(im, typ='MFS'):
     im = im.cpu()
     im = im.data.numpy()
 
-    # im = im[:,:100,:,:]
-    # im = im[:,:100,:5,:5]
-
     fft = np.fft.fft2(im)
-
-    # im = im[:,:100,:5,:5]
 
     if typ == 'MFS':
         fourier_spectrum = np.abs(fft)
@@ -34,7 +29,6 @@ def calculate_fourier_spectrum(im, typ='MFS'):
     # fourier_spectrum = np.mean(fourier_spectrum, axis=1)        
     
     return fourier_spectrum
-
 
 
 def calculate_fourier_spectrum_analysis(im, fr, to, typ='MFS'):

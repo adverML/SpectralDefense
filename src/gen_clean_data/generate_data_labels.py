@@ -6,10 +6,7 @@ from utils import (
     get_debug_info
 )
 
-
-
 import torch
-
 
 def generate_data_labels(logger, args, model, loader, wanted_samples, output_path_dir, option=2):
 

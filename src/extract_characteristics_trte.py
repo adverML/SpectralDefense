@@ -58,7 +58,7 @@ def extract_features(logger, args, model, input_path_dir, output_path_dir, wante
     number_images = len(images)
     logger.log("INFO: eps " + str(args.eps) + " INFO: nr_img " + str(number_images) + " INFO: Wanted Samples: " + str(wanted_samples) )
 
-    if args.detector == 'LayerMFS' or args.detector == 'LayerPFS' or args.detector == 'LID'  or args.detector == 'Mahalanobis':
+    if args.detector == 'LayerMFS' or args.detector == 'LayerPFS' or args.detector == 'LID' or args.detector == 'LIDNOISE' or args.detector == 'Mahalanobis':
         get_layer_feature_maps, layers, model, activation = get_whitebox_features(args, logger, model)
     elif args.detector == 'DkNN':
         layers = dfknn_layer(args, model)
@@ -85,6 +85,11 @@ def extract_features(logger, args, model, input_path_dir, output_path_dir, wante
         from defenses.Lid import lid
         characteristics, characteristics_adv = lid(args, model, images, images_advs, layers, get_layer_feature_maps, activation)
 
+    ####### LIDNOISE 
+    elif args.detector == 'LIDNOISE':
+        from defenses.Lid import lidnoise
+        characteristics, characteristics_adv = lidnoise(args, model, images, images_advs, layers, get_layer_feature_maps, activation)
+
     ####### Mahalanobis section
     elif args.detector == 'Mahalanobis':
         from defenses.DeepMahalanobis import deep_mahalanobis
@@ -97,10 +102,6 @@ def extract_features(logger, args, model, input_path_dir, output_path_dir, wante
         
     ####### Trust section
     elif args.detector == 'Trust':
-        pass
-
-    ####### LID_Class_Cond section
-    elif args.detector == 'LID_Class_Cond':
         pass
 
     ####### ODD section https://github.com/jayaram-r/adversarial-detection
