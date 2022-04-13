@@ -41,6 +41,7 @@ parser.add_argument("--num_classes",    default='10',   type=int, help=settings.
 parser.add_argument("--clf",            default='LR',             help="Logistic Regression (LR) or Random Forest (RF) or Isolation Forest (IF)")
 parser.add_argument("--trees",          default='300',  type=int, help=settings.HELP_NUM_CLASSES)
 parser.add_argument("--num_iter",       default='100',  type=int, help="LR: Number iteration")
+parser.add_argument("--kernel",         default='rbf',  type=str, help="SVC: rbf, poly, linear, sigmoid, precomputed")
 parser.add_argument("--pca_features",   default='0',    type=int, help="Number of PCA features to train")
 
 
@@ -133,7 +134,6 @@ if args.pca_features > 0:
     # # X_train = torch.from_numpy(X_train)
     # from submodules.PyTorch.TorchPCA import PCA
     # y = PCA.Decomposition(X_train.cuda(), k=1)
-
     # import pdb; pdb.set_trace()
     
 
@@ -149,6 +149,13 @@ elif args.clf == 'RF':
 elif args.clf == 'IF':
     from detection.IsolationForest import IF
     clf, y_hat, y_hat_pr = IF(args, logger, X_train, y_train, X_test, y_test)
+elif args.clf == 'SVC':
+    from detection.SVC import SVC
+    clf, y_hat, y_hat_pr = SVC(args, logger, X_train, y_train, X_test, y_test)
+elif args.clf == 'cuSVC':
+    from detection.SVC import cuSVC
+    clf, y_hat, y_hat_pr = cuSVC(args, logger, X_train, y_train, X_test, y_test)
+
 
 clf = save_load_clf(args, clf, output_path_dir)
 
