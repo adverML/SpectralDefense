@@ -116,18 +116,19 @@ ISSAMPLEMEANCALCULATED = False # True # Mahalannobis; set true if sample mean an
 TRTE = False
 
 ATTACKS_LIST = ['gauss', 'fgsm', 'bim', 'pgd', 'std', 'df', 'cw']
-# ATTACKS_LIST = ['gauss', 'bim', 'std', 'df']
+# ATTACKS_LIST = ['gauss', 'bim', 'std', 'df'] 
 # ATTACKS_LIST = ['apgd-ce', 'apgd-t', 'fab-t', 'square']
 # ATTACKS_LIST = [ 'gauss' ]
 
 # DETECTOR_LIST_LAYERS = ['InputMFS', 'LayerMFS', 'LID', 'Mahalanobis']
-DETECTOR_LIST_LAYERS = ['LayerPFS', 'LayerMFS']
-# DETECTOR_LIST_LAYERS = ['InputMFS', 'LayerMFS']
+# DETECTOR_LIST_LAYERS = ['InputPFS', 'LayerPFS']
+DETECTOR_LIST_LAYERS = ['InputMFS', 'LayerMFS']
 
 # DETECTOR_LIST = [ 'LID', 'Mahalanobis' ]
 DETECTOR_LIST = [ 'InputMFS', 'LayerMFS' ]
 # DETECTOR_LIST = ['InputPFS', 'InputMFS', 'LayerPFS', 'LayerMFS', 'LID', 'Mahalanobis']
 # DETECTOR_LIST = ['InputMFS', 'LayerMFS', 'LID', 'Mahalanobis']
+# DETECTOR_LIST = ['InputPFS', 'LayerPFS']
 # DETECTOR_LIST = ['LayerMFS']
 # DETECTOR_LIST = ['DkNN']
 # DETECTOR_LIST = [ 'InputMFS' ]

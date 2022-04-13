@@ -357,9 +357,9 @@ if __name__ == "__main__":
     OUT_PATH = "analysis/variance/run_"
     # OUT_PATH = "analysis/variance/run_gauss_"
     CSV_FILE_PATH = []
-    # NR = [1,2,3]
+    NR = [1,2,3]
     # NR = [8]
-    NR = [1]
+    # NR = [1]
 
 
     for nr in NR:
