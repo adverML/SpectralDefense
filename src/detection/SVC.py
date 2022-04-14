@@ -32,13 +32,13 @@ def calc_params(args):
 
 
 def SVC(args, logger, X_train, y_train, X_test, y_test):
-    from sklearn.svm import SVC as SVV_cpu
+    from sklearn.svm import SVC as SVC_cpu
     # https://scikit-learn.org/stable/modules/generated/sklearn.svm.SVC.html
     
     X_train, X_test = calc_scaler(X_train, X_test, typ='minmax')
     C, gamma = calc_params(args)
 
-    clf = SVV_cpu(probability=True, C=C, gamma=gamma, kernel=args.kernel, max_iter=-1)
+    clf = SVC_cpu(probability=True, C=C, gamma=gamma, kernel=args.kernel, max_iter=-1)
     # clf = SVM(kernel=args.kernel, max_iter=args.num_iter)
 
     logger.log(clf)
@@ -60,6 +60,8 @@ def cuSVC(args, logger, X_train, y_train, X_test, y_test):
     C, gamma = calc_params(args)
     
     clf = SVC_gpu(probability=True, C=C, gamma=gamma, kernel=args.kernel, max_iter=-1)
+
+    # import pdb; pdb.set_trace()
 
     logger.log(clf)
     clf.fit(X_train, y_train)
