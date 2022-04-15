@@ -24,7 +24,7 @@ MAX_CLASSES_CIF100   = 100
 MAX_CLASSES_CELEBAHQ = 4
 
 # Help Parameters Info
-HELP_ATTACK = "the attack method you want to use in order to create adversarial examples. Either fgsm, bim, pgd, df, cw or std (for AutoAttack: apgd-ce, apgd-t, fab-t and square.)"
+HELP_ATTACK = "the attack method you want to use in order to create adversarial examples. Either fgsm, bim, pgd, df, cw, std (for AutoAttack: apgd-ce, apgd-t, fab-t and square.), or aa+"
 HELP_NET = "the dataset the net was trained on, either mnist or cif10 or cif10vgg or cif100 or imagenet, imagenet32, imagenet64, imagenet128, celebaHQ32, celebaHQ64, celebaHQ128"
 HELP_NUM_CLASSES = "default: 1000; {10, 25, 50, 100, 250} only for imagenet32; 1000 classes for imagenet"
 HELP_WANTED_SAMPLES = "nr of samples to process"
@@ -115,9 +115,14 @@ ISSAMPLEMEANCALCULATED = False # True # Mahalannobis; set true if sample mean an
 
 TRTE = False
 TRAINERR = False
+# SELECTED_COL = ['asr', 'auc', 'fnr' , 'asrd']
+SELECTED_COL = ['asr', 'auc', 'f1', 'acc','pre','tpr', 'fnr', 'asrd']
 
-ATTACKS_LIST = ['gauss', 'fgsm', 'bim', 'pgd', 'std', 'df', 'cw']
-# ATTACKS_LIST = ['gauss', 'bim', 'std', 'df'] 
+# ATTACKS_LIST = ['gauss', 'fgsm', 'bim', 'pgd', 'std', 'df', 'cw']
+
+ATTACKS_LIST = ['fgsm', 'bim', 'pgd', 'cw'] 
+# ATTACKS_LIST = ['gauss', 'fgsm', 'bim', 'std', 'df'] 
+
 # ATTACKS_LIST = ['apgd-ce', 'apgd-t', 'fab-t', 'square']
 # ATTACKS_LIST = [ 'gauss' ]
 
@@ -133,13 +138,15 @@ DETECTOR_LIST_LAYERS = ['InputMFS', 'LayerMFS']
 # DETECTOR_LIST = ['LayerMFS']
 # DETECTOR_LIST = ['DkNN']
 # DETECTOR_LIST = [ 'InputMFS' ]
-DETECTOR_LIST = ['LID']
+# DETECTOR_LIST = ['LID']
+DETECTOR_LIST = ['HPF']
+
 # DETECTOR_LIST = ['LID', 'LIDNOISE']
 
 # DETECTOR_LIST = ['LID', 'Mahalanobis']
 
-# CLF = ['LR']
+CLF = ['LR']
 # CLF = ['RF']
-CLF = ['LR', 'RF']
+# CLF = ['LR', 'RF']
 
 SAVE_CLASSIFIER = True

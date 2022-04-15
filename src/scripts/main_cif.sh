@@ -18,10 +18,10 @@ DATASETS="cif10 cif100"
 
 # DATASETS="imagenet64 celebaHQ64 imagenet128 celebaHQ128"
 # RUNS="1 2 3"
-RUNS="8"
+# RUNS="8"
+RUNS="1"
 
-
-ATTACKS="gauss"
+# ATTACKS="gauss"
 # ATTACKS="l2pgd linfdf"
 # ATTACKS="linfdf l2pgd"
 # ATTACKS="linfdf"
@@ -30,6 +30,8 @@ ATTACKS="gauss"
 # ATTACKS="apgd-ce apgd-t fab-t square"
 # ATTACKS="gauss"
 # ATTACKS="gauss fgsm bim std df"
+ATTACKS="fgsm bim pgd cw"
+
 # ATTACKS="gauss df cw"
 # ATTACKS="fgsm"
 # ATTACKS="pgd cw"
@@ -53,8 +55,8 @@ DETECTORS="HPF"
 # EPSILONS="8./255. 4./255. 2./255. 1./255. 0.5/255."
 EPSILONS="8./255."
 
-# CLF="LR"
-CLF="LR RF"
+CLF="LR"
+# CLF="LR RF"
 # CLF="SVC"
 # CLF="cuSVC"
 
@@ -341,7 +343,7 @@ detectadversarialslayer ()
 # printn
 # genereratecleandata
 # attacks
-extractcharacteristics
+# extractcharacteristics
 detectadversarials
 
 # #-----------------------------------------------------------------------------------------------------------------------------------

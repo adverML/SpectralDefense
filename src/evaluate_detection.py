@@ -283,6 +283,9 @@ def extract_information(root='./data', net=['cif10'], dest='./data/detection', n
 
         # import pdb; pdb.set_trace()
         df = pd.DataFrame(final, columns=['auc','acc','pre','tpr', 'f1', 'fnr', 'asr', 'asrd'], index=index_selected)
+        
+        df = df[settings.SELECTED_COL]
+        
         df.to_csv(output_path, sep=',')
 
     return output_path
@@ -356,15 +359,16 @@ if __name__ == "__main__":
 
     OUT_PATH = "analysis/variance/run_"
     # OUT_PATH = "analysis/variance/run_gauss_"
-    APP = '_LID'
+    # APP = '_LID'
+    APP = '_HPF'
     CSV_FILE_PATH = []
-    NR = [1,2,3]
+    # NR = [1,2,3]
     # NR = [8]
-    # NR = [1]
+    NR = [1]
 
 
     for nr in NR:
-        # CSV_FILE_PATH.append( extract_information(root='./data', net=['cif10'],         dest='./data/detection',  nr=nr, csv_filename='cif10{}.csv'.format(APP), layers=False) )
+        CSV_FILE_PATH.append( extract_information(root='./data', net=['cif10'],         dest='./data/detection',  nr=nr, csv_filename='cif10{}.csv'.format(APP), layers=False) )
         # CSV_FILE_PATH.append( extract_information(root='./data', net=['cif100'],        dest='./data/detection',  nr=nr, csv_filename='cif100{}.csv'.format(APP), layers=False) )
         # CSV_FILE_PATH.append( extract_information(root='./data', net=['cif10vgg'],      dest='./data/detection',  nr=nr, csv_filename='cif10vgg{}.csv'.format(APP), layers=False) )
         # CSV_FILE_PATH.append( extract_information(root='./data', net=['cif100vgg'],     dest='./data/detection',  nr=nr, csv_filename='cif100vgg{}.csv'.format(APP), layers=False) )
@@ -381,7 +385,7 @@ if __name__ == "__main__":
         # CSV_FILE_PATH.append( extract_information(root='./data', net=['celebaHQ128'], dest='./data/detection', nr=nr, csv_filename='celebaHQ128{}.csv'.format(APP), layers=False) )
 
         # CSV_FILE_PATH.append( extract_information(root='./data', net=['cif10_rb'],    dest='./data/detection',   nr=nr, csv_filename='cif10_rb{}.csv'.format(APP), layers=False) )
-        CSV_FILE_PATH.append( extract_information(root='./data', net=['imagenet'],    dest='./data/detection',   nr=nr, csv_filename='imagenet{}.csv'.format(APP), layers=False) )
+        # CSV_FILE_PATH.append( extract_information(root='./data', net=['imagenet'],    dest='./data/detection',   nr=nr, csv_filename='imagenet{}.csv'.format(APP), layers=False) )
 
         copy_var(CSV_FILE_PATH, OUT_PATH, nr)
 

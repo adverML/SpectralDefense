@@ -63,10 +63,14 @@ if __name__ == '__main__':
     args = parser.parse_args()
     args = check_args_attack(args)
     
-    if args.attack == 'apgd-ce' or args.attack == 'apgd-t' or args.attack == 'fab-t' or args.attack == 'square':
+    if args.attack == 'aa+':
+        args.version = 'plus'
+        
+    if args.version == 'standard' and (args.attack == 'apgd-ce' or args.attack == 'apgd-t' or args.attack == 'fab-t' or args.attack == 'square'):
         args.individual = True
         args.version = 'custom'
-        
+
+    
     # output data
     output_path_dir = create_dir_attacks(args, root='./data/attacks/')
 

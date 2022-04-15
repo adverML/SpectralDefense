@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 
+import torch
 import numpy as np
 import cv2
 from scipy import ndimage
@@ -23,13 +24,9 @@ kernel = kernel/(np.sum(kernel) if np.sum(kernel)!=0 else 1)
 def calc_highpass(images):
     hp = []       
     for i in range(len(images)):
-        image = images[i]
-        
-        # import pdb; pdb.set_trace()
-        
-        hp_image  = cv2.filter2D(image.cpu().numpy(),-1,kernel)
-        
-        
+        image = images[i] * 255.
+        hp_image  = cv2.filter2D(image.cpu().numpy(), -1, kernel)  / 255.
+    
         hp.append(hp_image.flatten())
     return hp
     
@@ -43,3 +40,75 @@ def high_pass_filter(args, images, images_advs):
     characteristics_adv   = np.asarray(hpfs_advs, dtype=np.float32)
     
     return characteristics, characteristics_adv
+
+
+def test():
+    # img_pth = "/home/lorenzp/adversialml/src/data/attacks/run_8/cif10/wrn_28_10_10/gauss/images"
+    img_pth = "/home/lorenzp/adversialml/src/analysis/highpass/sample.png"
+    out_pth = "/home/lorenzp/adversialml/src/analysis/highpass/result_test.jpg"
+    # image = plt.imread(img_pth) * 255.
+    
+    image  = cv2.imread(img_pth)
+    image  = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)  / 255.
+        
+    print(image.shape)
+    hp_image = cv2.filter2D(image,-1,kernel)
+    
+    import pdb; pdb.set_trace()
+    
+    # plt.imsave(, hp_image)
+    cv2.imwrite(out_pth, hp_image)
+
+
+def test2():
+    img_pth = "/home/lorenzp/adversialml/src/data/attacks/run_8/cif10/wrn_28_10_10/gauss/images"
+    in_pth = "/home/lorenzp/adversialml/src/analysis/highpass/cif10_in.png"
+    out_pth = "/home/lorenzp/adversialml/src/analysis/highpass/cif10_out.jpg"
+    
+    # image = plt.imread(img_pth) * 255.
+    
+    image = torch.load(img_pth)[0].cpu().numpy()
+    import pdb; pdb.set_trace()
+    
+    image = image.transpose((1,2,0)) * 255.
+    # plt.imsave(in_pth, image)
+    cv2.imwrite(in_pth, image)
+    
+    # image  = cv2.imread(img_pth)
+    # image  = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)  / 255.
+    
+    print(image.shape)
+    hp_image = cv2.filter2D(image,-1,kernel)
+    
+    
+    
+    # plt.imsave(, hp_image)
+    cv2.imwrite(out_pth, hp_image)
+
+
+
+def test3():
+    img_pth = "/home/lorenzp/adversialml/src/data/attacks/run_8/cif10/wrn_28_10_10/gauss/images"
+    in_pth = "/home/lorenzp/adversialml/src/analysis/highpass/cif10_in_255.png"
+    out_pth = "/home/lorenzp/adversialml/src/analysis/highpass/cif10_out_255.png"
+    
+    # image = plt.imread(img_pth) * 255.
+    image = torch.load(img_pth)[0].cpu().numpy()
+    # import pdb; pdb.set_trace()
+    
+    image = image.transpose((1,2,0))
+    print("image: ", image.shape)
+    plt.imsave(in_pth, image*255.)
+    
+    print(image.shape)
+    hp_image = cv2.filter2D(image,-1,kernel)
+    plt.imsave(out_pth, hp_image*255.)
+
+
+if __name__ == "__main__":
+    # test()
+    # test2()
+    test3()
+    pass
+    
+    
