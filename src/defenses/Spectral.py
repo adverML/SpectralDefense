@@ -81,6 +81,7 @@ def blackbox_mfs_analysis(args, images, images_advs):
     mfs_advs = calculate_spectra_analysis(images_advs, args.fr, args.to)
     characteristics       = np.asarray(mfs, dtype=np.float32)
     characteristics_adv   = np.asarray(mfs_advs, dtype=np.float32)
+    
     return characteristics, characteristics_adv
 
 

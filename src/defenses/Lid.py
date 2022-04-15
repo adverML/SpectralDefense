@@ -249,7 +249,7 @@ def lidnoise(args, model, images, images_advs, layers, get_layer_feature_maps, a
             X_adv_act = get_layer_feature_maps(activation, layers)
         else:
             X_act       = get_layer_feature_maps(batch.cuda(), layers)
-            X_noise_act = get_layer_feature_maps(X_noise_act.cuda(), layers)
+            X_noise_act = get_layer_feature_maps(batch_noise.cuda(), layers)
             X_adv_act   = get_layer_feature_maps(batch_adv.cuda(), layers)
         
         for i in range(lid_dim):

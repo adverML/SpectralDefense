@@ -197,6 +197,12 @@ elif args.detector == 'DkNN':
 elif args.detector == 'CDVAE':
     pass
 
+
+####### HP Filter
+elif args.detector == 'HPF':
+    import defenses.HPF as HPF
+    characteristics, characteristics_adv = HPF.high_pass_filter(args, images, images_advs)
+
 ####### Trust section
 elif args.detector == 'Trust':
     pass

@@ -114,6 +114,7 @@ ISSAMPLEMEANCALCULATED = False # True # Mahalannobis; set true if sample mean an
 # Detect Adversarials
 
 TRTE = False
+TRAINERR = False
 
 ATTACKS_LIST = ['gauss', 'fgsm', 'bim', 'pgd', 'std', 'df', 'cw']
 # ATTACKS_LIST = ['gauss', 'bim', 'std', 'df'] 
@@ -125,14 +126,15 @@ ATTACKS_LIST = ['gauss', 'fgsm', 'bim', 'pgd', 'std', 'df', 'cw']
 DETECTOR_LIST_LAYERS = ['InputMFS', 'LayerMFS']
 
 # DETECTOR_LIST = [ 'LID', 'Mahalanobis' ]
-DETECTOR_LIST = [ 'InputMFS', 'LayerMFS' ]
+# DETECTOR_LIST = [ 'InputMFS', 'LayerMFS' ]
 # DETECTOR_LIST = ['InputPFS', 'InputMFS', 'LayerPFS', 'LayerMFS', 'LID', 'Mahalanobis']
 # DETECTOR_LIST = ['InputMFS', 'LayerMFS', 'LID', 'Mahalanobis']
 # DETECTOR_LIST = ['InputPFS', 'LayerPFS']
 # DETECTOR_LIST = ['LayerMFS']
 # DETECTOR_LIST = ['DkNN']
 # DETECTOR_LIST = [ 'InputMFS' ]
-# DETECTOR_LIST = ['LID']
+DETECTOR_LIST = ['LID']
+# DETECTOR_LIST = ['LID', 'LIDNOISE']
 
 # DETECTOR_LIST = ['LID', 'Mahalanobis']
 
