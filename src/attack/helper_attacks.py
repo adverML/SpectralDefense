@@ -276,7 +276,7 @@ def create_advs(logger, args, model, output_path_dir, clean_data_path, wanted_sa
     logger.log("INFO: images {}".format(len(images)))
     logger.log("INFO: images_advs {}".format(len(images_advs)))
 
-    if args.attack == 'std' or args.individual:
+    if args.attack == 'std' or args.attack == 'aa+' or args.individual:
         logger.log('INFO: {} attack success rate: {}'.format(indicator[:2], success_rate) )
     else:
         logger.log('INFO: {} attack success rate: {}'.format(indicator[:2], success_counter / counter ) )

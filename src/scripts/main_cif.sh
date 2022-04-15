@@ -6,7 +6,7 @@ function log_msg {
 
 # DATASETS=(cif10 cif10vgg cif100 cif100vgg imagenet imagenet32 imagenet64 imagenet128 celebaHQ32 celebaHQ64 celebaHQ128)
 # DATASETS="cif10 cif10vgg  cif100 cif100vgg cif10_rb"
-DATASETS="cif10 cif100"
+DATASETS="cif10"
 # DATASETS="cif100vgg"
 # DATASETS="cif10rn34 cif100rn34"
 # DATASETS="cif10rn34sota"
@@ -19,7 +19,7 @@ DATASETS="cif10 cif100"
 # DATASETS="imagenet64 celebaHQ64 imagenet128 celebaHQ128"
 # RUNS="1 2 3"
 # RUNS="8"
-RUNS="1"
+RUNS="1 2 3"
 
 # ATTACKS="gauss"
 # ATTACKS="l2pgd linfdf"
@@ -30,7 +30,8 @@ RUNS="1"
 # ATTACKS="apgd-ce apgd-t fab-t square"
 # ATTACKS="gauss"
 # ATTACKS="gauss fgsm bim std df"
-ATTACKS="fgsm bim pgd cw"
+# ATTACKS="fgsm bim pgd cw"
+ATTACKS="aa+"
 
 # ATTACKS="gauss df cw"
 # ATTACKS="fgsm"
@@ -39,14 +40,14 @@ ATTACKS="fgsm bim pgd cw"
 # ATTACKS="apgd-ce"
 
 # DETECTORS="InputMFS"
-# DETECTORS="InputMFS LayerMFS"
+DETECTORS="InputMFS LayerMFS"
 # DETECTORS="InputPFS LayerMFS"
 
 # DETECTORS="InputMFS LayerMFS LID Mahalanobis"
 # DETECTORS="LayerMFS"
 # DETECTORS="InputPFS LayerPFS InputMFS LayerMFS LID Mahalanobis"
 # DETECTORS="LID"
-DETECTORS="HPF"
+# DETECTORS="HPF"
 # DETECTORS="LID LIDNOISE"
 
 # DETECTORS="InputPFS LayerPFS"
@@ -55,8 +56,8 @@ DETECTORS="HPF"
 # EPSILONS="8./255. 4./255. 2./255. 1./255. 0.5/255."
 EPSILONS="8./255."
 
-CLF="LR"
-# CLF="LR RF"
+# CLF="LR"
+CLF="LR RF"
 # CLF="SVC"
 # CLF="cuSVC"
 
@@ -66,8 +67,8 @@ CLF="LR"
 IMAGENET32CLASSES="25 50 100 250 1000"
 # NRSAMPLES="300 500 1000 1200 1500 2000" # only at detectadversarialslayer
 
-WANTEDSAMPLES="4000"
-ALLSAMPLES="4500"
+WANTEDSAMPLES="2500"
+ALLSAMPLES="2500"
 # NRSAMPLES="2000" # detect
 NRSAMPLES="1500" # detect
 
@@ -342,8 +343,8 @@ detectadversarialslayer ()
 
 # printn
 # genereratecleandata
-# attacks
-# extractcharacteristics
+attacks
+extractcharacteristics
 detectadversarials
 
 # #-----------------------------------------------------------------------------------------------------------------------------------

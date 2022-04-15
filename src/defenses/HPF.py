@@ -1,5 +1,9 @@
 #!/usr/bin/env python3
 
+# https://www.askpython.com/python-modules/opencv-filter2d
+# http://www.psychocodes.in/image-sharpening-by-high-pass-filter-using-python-and-opencv.html
+# https://stackoverflow.com/questions/6094957/high-pass-filter-for-image-processing-in-python-by-using-scipy-numpy
+
 import torch
 import numpy as np
 import cv2
@@ -15,6 +19,7 @@ from PIL.ImageFilter import (
     )
 
 
+# kind of sharbpening filter
 kernel = np.array([[0.0, -1.0, 0.0], 
                    [-1.0, 4.0, -1.0],
                    [0.0, -1.0, 0.0]])
