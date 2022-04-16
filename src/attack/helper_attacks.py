@@ -26,20 +26,23 @@ from utils import (
     get_debug_info
 )
 
+AA_std  = ['std', 'apgd-ce', 'apgd-t', 'fab-t' ,'square']
+AA_plus = ['aa+', 'apgd-ce+', 'apgd-dlr+', 'fab+', 'square+', 'apgd-t+', 'fab-t+']
+
 def adapt_batchsize(args, device_name):
     get_debug_info(msg="device_name: " + device_name)
     batch_size = 128 
     
-    if device_name == 'titan v' and (args.net == 'imagenet128' or args.net == 'celebaHQ128'):
+    if device_name == 'titan v' and (args.net in ['imagenet128',  'celebaHQ128']):
         batch_size = 24
         
-    if device_name == 'nvidia a100' and (args.net == 'imagenet' or args.net == 'imagenet_hierarchy' or args.net == 'restricted_imagenet' or args.net == 'imagenet128' or args.net == 'celebaHQ128'):
+    if device_name == 'nvidia a100' and (args.net in ['imagenet', 'imagenet_hierarchy', 'restricted_imagenet', 'imagenet128', 'celebaHQ128']):
         batch_size = 48
 
-    if device_name == 'titan v' and (args.attack == "apgd-ce" or args.attack == "apgd-t" or args.attack == "fab-t" or args.attack == "square"):
+    if device_name == 'titan v' and (args.attack in (AA_std + AA_plus) ):
         batch_size = 256
 
-    if device_name == 'titan v' and (( args.attack == "cw" or args.attack == "df") and (args.net == 'imagenet64' or args.net == 'celebaHQ64')):
+    if device_name == 'titan v' and (( args.attack in ["cw" , "df"] ) and (args.net in ['imagenet64', 'celebaHQ64'])):
         batch_size = 48
     elif args.net == 'celebaHQ256':
         batch_size = 24
@@ -51,24 +54,41 @@ def adapt_batchsize(args, device_name):
 
 def check_net_normalization(args):
     if args.net_normalization:
-        if not args.attack == 'std' and not args.attack == 'apgd-ce' and not args.attack == 'apgd-t' and not args.attack == 'fab-t' and not args.attack == 'square':
+        if not args.attack in (AA_std + AA_plus):
             get_debug_info("Warning: Net normalization must be switched off!  Net normalization is switched off now!")
             args.net_normalization = False
             
     return args
 
 
-def check_args_attack(args, net_normalization=True, num_classes=True, img_size=True):
+def check_version(args):
+    if args.attack in AA_plus:
+        args.version = 'plus'
+        if args.attack in AA_plus[1:]:
+            args.individual = True
+            # args.version = 'custom'
+        
+    if args.version == 'standard' and (args.attack in  AA_std[1:]):
+        args.individual = True
+        # args.version = 'custom'
+        
+    return args
+
+
+def check_args_attack(args, version=True, net_normalization=True, num_classes=True, img_size=True):
     
+    if version:
+        args = check_version(args)
+
     if net_normalization:
         args = check_net_normalization(args)
     
     if num_classes:
-        if (args.net == 'cif10' or args.net == 'cif10vgg' or  args.net == 'cif10rb' or  args.net == 'cif10rn34' or args.net == 'cif10rn34sota')  and not args.num_classes == 10:
+        if (args.net  in ['cif10', 'cif10vgg', 'cif10rb', 'cif10rn34', 'cif10rn34sota'])  and not args.num_classes == 10:
             args.num_classes = 10
-        elif (args.net == 'cif100' or args.net == 'cif100vgg' or  args.net == 'cif100rn34')  and not args.num_classes == 100:
+        elif (args.net in ['cif100', 'cif100vgg', 'cif100rn34'])  and not args.num_classes == 100:
             args.num_classes = 100
-        elif (args.net == 'imagenet' or args.net == 'imagenet_hierarchy' or args.net == 'restricted_imagenet' or args.net == 'imagenet32' or args.net == 'imagenet64' or args.net == 'imagenet128')  and not args.num_classes == 1000:
+        elif (args.net in ['imagenet', 'imagenet_hierarchy', 'restricted_imagenet' , 'imagenet32', 'imagenet64', 'imagenet128'])  and not args.num_classes == 1000:
             
             if args.net == 'imagenet32' and not args.num_classes == 1000:
                 imagnet32_class_set = set([10, 25, 50, 75, 100, 250])
@@ -79,15 +99,15 @@ def check_args_attack(args, net_normalization=True, num_classes=True, img_size=T
             else:
                 args.num_classes = 1000
             
-        elif (args.net == 'celebaHQ32' or args.net == 'celebaHQ64' or args.net == 'celebaHQ128')  and not args.num_classes == 4:
+        elif (args.net  in ['celebaHQ32', 'celebaHQ64', 'celebaHQ128'])  and not args.num_classes == 4:
             args.num_classes = 4
 
     if img_size:
-        if (args.net == 'cif10' or args.net == 'cif10vgg' or args.net == 'cif100' or args.net == 'cif100vgg' or args.net == 'cif10rb' or args.net == 'imagenet32' or args.net == 'celebaHQ32' or args.net == 'cif10rn34sota')  and not args.img_size == 32:
+        if (args.net in ['cif10' , 'cif10vgg' , 'cif100' , 'cif100vgg' , 'cif10rb' , 'imagenet32' , 'celebaHQ32' , 'cif10rn34sota'])  and not args.img_size == 32:
             args.img_size = 32
-        if (args.net == 'imagenet64' or args.net == 'celebaHQ64' )  and not args.img_size == 64:
+        if (args.net in [ 'imagenet64',  'celebaHQ64'])  and not args.img_size == 64:
             args.img_size =  64
-        if (args.net == 'imagenet128' or args.net == 'celebaHQ128' )  and not args.img_size == 128:
+        if (args.net  in ['imagenet128', 'celebaHQ128'] )  and not args.img_size == 128:
             args.img_size = 128
 
     return args
@@ -122,7 +142,7 @@ def create_advs(logger, args, model, output_path_dir, clean_data_path, wanted_sa
 
     data_loader = torch.utils.data.DataLoader(dataset, batch_size=args.batch_size, shuffle=args.shuffle_on)
 
-    if args.attack == 'std' or args.attack == 'apgd-ce' or args.attack == 'apgd-t' or args.attack == 'fab-t' or args.attack == 'square':
+    if args.attack  in (AA_std + AA_plus):
         logger.log('INFO: Load data...')
         # dataset = load_test_set(args,  shuffle=args.shuffle_on)
 
@@ -131,7 +151,7 @@ def create_advs(logger, args, model, output_path_dir, clean_data_path, wanted_sa
         
         adversary = AutoAttack_mod(model, norm=args.norm, eps=epsilon_to_float(args.eps), log_path=output_path_dir + os.sep + 'log.txt', version=args.version)
         if args.individual:
-            adversary.attacks_to_run = [ args.attack ]
+            adversary.attacks_to_run = [ args.attack.replace('+', '') ]
 
         # run attack and save images
         with torch.no_grad():
@@ -148,8 +168,9 @@ def create_advs(logger, args, model, output_path_dir, clean_data_path, wanted_sa
                     x_adv, y_adv, max_nr = adversary.run_standard_evaluation(x_test, y_test, bs=args.batch_size, return_labels=True)
                 else: 
                     logger.log("INFO: mode: individual; not std")
-                    adv_complete, max_nr = adversary.run_standard_evaluation_individual(x_test, y_test, bs=args.batch_size, return_labels=True)
-                    x_adv, y_adv = adv_complete[args.attack]
+                    # import pdb; pdb.set_trace()
+                    adv_complete = adversary.run_standard_evaluation_individual(x_test, y_test, bs=args.batch_size, return_labels=True)
+                    x_adv, y_adv, max_nr = adv_complete[args.attack.replace('+', '')]
 
                 tmp_images_advs = []
                 for it, img in enumerate(x_adv):
@@ -172,7 +193,7 @@ def create_advs(logger, args, model, output_path_dir, clean_data_path, wanted_sa
                     get_debug_info( " success: {:2f}".format(success_rate) )
                     break
 
-    elif args.attack == 'fgsm' or args.attack == 'bim' or args.attack == 'pgd' or args.attack == 'l2pgd' or args.attack == 'df' or args.attack == 'linfdf' or args.attack == 'cw': 
+    elif args.attack in ['fgsm', 'bim', 'pgd', 'l2pgd', 'df', 'linfdf', 'cw']: 
 
         logger.log("INFO: len(dataset): {}".format(len(dataset)))
 
@@ -222,7 +243,7 @@ def create_advs(logger, args, model, output_path_dir, clean_data_path, wanted_sa
 
             adv, adv_clip, success = attack(fmodel, image, criterion=foolbox.criteria.Misclassification(label), epsilons=epsilons)
 
-            if not (args.attack == 'cw' or args.attack == 'df' or args.attack == 'linfdf'):
+            if not (args.attack in ['cw', 'df', 'linfdf']):
                 adv_clip = adv_clip[0] # list to tensor
                 success = success[0]
                 adv = adv[0]
@@ -249,7 +270,7 @@ def create_advs(logger, args, model, output_path_dir, clean_data_path, wanted_sa
                 break
 
 
-    elif args.attack == 'gauss':  # baseline accuracy
+    elif args.attack in ['gauss']:  # baseline accuracy
         from attack.noise_baseline import noisy
         
         logger.log("INFO: len(testset): {}".format(len(data_loader)))
@@ -276,7 +297,7 @@ def create_advs(logger, args, model, output_path_dir, clean_data_path, wanted_sa
     logger.log("INFO: images {}".format(len(images)))
     logger.log("INFO: images_advs {}".format(len(images_advs)))
 
-    if args.attack == 'std' or args.attack == 'aa+' or args.individual:
+    if args.attack in ['aa+', 'std']  or args.individual:
         logger.log('INFO: {} attack success rate: {}'.format(indicator[:2], success_rate) )
     else:
         logger.log('INFO: {} attack success rate: {}'.format(indicator[:2], success_counter / counter ) )

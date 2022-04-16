@@ -62,15 +62,8 @@ if __name__ == '__main__':
 
     args = parser.parse_args()
     args = check_args_attack(args)
-    
-    if args.attack == 'aa+':
-        args.version = 'plus'
-        
-    if args.version == 'standard' and (args.attack == 'apgd-ce' or args.attack == 'apgd-t' or args.attack == 'fab-t' or args.attack == 'square'):
-        args.individual = True
-        args.version = 'custom'
 
-    
+
     # output data
     output_path_dir = create_dir_attacks(args, root='./data/attacks/')
 
@@ -96,7 +89,6 @@ if __name__ == '__main__':
     clean_data_path = create_dir_clean_data(args, root='./data/clean_data/')
     logger.log('INFO: clean data path: ' + clean_data_path)
     
-
     images, labels, images_advs, labels_advs = create_advs(logger, args, model, output_path_dir, clean_data_path, args.wanted_samples, preprocessing, option=2)
 
     # create save dir 

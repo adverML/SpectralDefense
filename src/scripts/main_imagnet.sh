@@ -9,8 +9,8 @@ DATASETS="imagenet"
 # DATASETS="imagenet_hierarchy"
 # DATASETS="restricted_imagenet"
 
-# RUNS="1"
-RUNS="1 2 3"
+RUNS="1"
+# RUNS="1 2 3"
 # RUNS="8"
 # RUNS="7"
 # RUNS="10"
@@ -18,17 +18,20 @@ RUNS="1 2 3"
 
 # ATTACKS="fgsm bim pgd"
 # ATTACKS="gauss"
-ATTACKS="gauss fgsm bim pgd std df cw"
+# ATTACKS="gauss fgsm bim pgd std df cw"
+# ATTACKS="aa+"
+# ATTACKS="apgd-ce+ apgd-dlr+ fab+ square+ apgd-t+ fab-t+"
+ATTACKS="apgd-ce+"
 
 
 # ATTACKS="fgsm bim std pgd df cw"
 # ATTACKS="apgd-ce apgd-t fab-t square"
 # DETECTORS="InputMFS LayerMFS LID Mahalanobis"
-# DETECTORS="InputMFS LayerMFS"
+DETECTORS="InputMFS LayerMFS"
 # DETECTORS="InputMFS LayerMFS"
 # DETECTORS="InputPFS LayerPFS InputMFS LayerMFS LID Mahalanobis"
 
-DETECTORS="LID LIDNOISE"
+# DETECTORS="LID LIDNOISE"
 
 
 # EPSILONS="8./255. 4./255. 2./255. 1./255. 0.5/255."
@@ -172,9 +175,9 @@ detectadversarialslayer ()
 }
 
 # genereratecleandata
-# attacks
-extractcharacteristics
-detectadversarials
+attacks
+# extractcharacteristics
+# detectadversarials
 
 # extractcharacteristicslayer
 # detectadversarialslayer
