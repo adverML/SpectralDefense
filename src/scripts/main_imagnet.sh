@@ -20,8 +20,8 @@ RUNS="1"
 # ATTACKS="gauss"
 # ATTACKS="gauss fgsm bim pgd std df cw"
 # ATTACKS="aa+"
-# ATTACKS="apgd-ce+ apgd-dlr+ fab+ square+ apgd-t+ fab-t+"
-ATTACKS="apgd-ce+"
+ATTACKS="apgd-dlr+ fab+ square+ apgd-t+ fab-t+"
+# ATTACKS="apgd-ce+"
 
 
 # ATTACKS="fgsm bim std pgd df cw"
@@ -55,7 +55,7 @@ DETECTORSLAYERNR="LayerMFS LayerPFS"
 # DETECTORSLAYERNR="LayerMFS LayerPFS"
 
 # NRSAMPLES="300 500 1000 1200 1500 2000"
-ALLSAMPLES="2000"
+ALLSAMPLES="4000"
 WANTEDSAMPLES="2000"
 WANTEDSAMPLES_TR="18000"
 WANTEDSAMPLES_TE="18000"
@@ -176,8 +176,8 @@ detectadversarialslayer ()
 
 # genereratecleandata
 attacks
-# extractcharacteristics
-# detectadversarials
+extractcharacteristics
+detectadversarials
 
 # extractcharacteristicslayer
 # detectadversarialslayer
