@@ -33,7 +33,7 @@ RUNS="1"
 # ATTACKS="gauss fgsm bim std df"
 # ATTACKS="fgsm bim pgd cw"
 # ATTACKS="aa+"
-ATTACKS="apgd-dlr+ fab+ square+ apgd-t+ fab-t+"
+ATTACKS="apgd-ce+ apgd-dlr+ fab+ square+ apgd-t+ fab-t+"
 
 # ATTACKS="gauss df cw"
 # ATTACKS="fgsm"
