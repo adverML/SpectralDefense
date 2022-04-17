@@ -139,7 +139,7 @@ def create_advs(logger, args, model, output_path_dir, clean_data_path, wanted_sa
 
     clean_path = 'clean_' + indicator + 'data' 
     
-    dataset = torch.load(os.path.join(clean_data_path, clean_path))[:wanted_samples]
+    dataset = torch.load(os.path.join(clean_data_path, clean_path))[:args.all_samples]
     get_debug_info( "actual len/wanted " + str(len(dataset)) + "/" + str(wanted_samples) )
 
     data_loader = torch.utils.data.DataLoader(dataset, batch_size=args.batch_size, shuffle=args.shuffle_on)
