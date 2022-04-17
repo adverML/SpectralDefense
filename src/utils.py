@@ -726,21 +726,27 @@ def get_normalization(args):
         mean = [0.1307, 0.1307, 0.1307]
         std  = [0.3081, 0.3081, 0.3081]
     elif args.net == 'cif10'  or args.net == 'cif10vgg'  or args.net == 'cif10rn34' or args.net == 'cif10rn34sota' or \
-        args.net == 'cif100' or args.net == 'cif10_rb':
+        args.net == 'cif10_rb':
         mean = [0.4914, 0.4822, 0.4465] 
         std  = [0.2023, 0.1994, 0.2010]
     elif args.net == 'cif10_m':
         mean = [0.4914, 0.4822, 0.4465]  
         std  = [0.2470, 0.2435, 0.2616]
-    elif args.net == 'cif100vgg':
+    elif args.net in ['cif100', 'cif100vgg']:
         mean = [0.5071, 0.4867, 0.4408]
         std  = [0.2675, 0.2565, 0.2761]
     elif args.net == 'cif100rn34':
         mean = [0.5070751592371323, 0.48654887331495095, 0.4409178433670343]
         std =  [0.2673342858792401, 0.2564384629170883, 0.27615047132568404]
-    elif args.net == 'imagenet32' or args.net == 'imagenet64' or args.net == 'imagenet128':
-        mean = [0.4810, 0.4574, 0.4078]
-        std  = [0.2146, 0.2104, 0.2138]
+    elif args.net == 'imagenet32':
+        mean = [0.48018914, 0.45609474, 0.4056382]
+        std  = [0.20503707, 0.200965  , 0.20204392]
+    elif args.net == 'imagenet64':
+        mean = [0.48134172, 0.45765844, 0.40931204]
+        std  = [0.2162447 , 0.21196254, 0.21299529]
+    elif args.net == 'imagenet128':
+        mean = [0.48085427, 0.45725283, 0.4064262 ]
+        std  = [0.222161  , 0.21794449, 0.21910368]
     elif args.net == 'imagenet' or args.net == 'imagenet_hierarchy' or args.net == 'restricted_imagenet' :        
         mean = [0.485, 0.456, 0.406] # https://pytorch.org/vision/stable/models.html#wide-resnet
         std  = [0.229, 0.224, 0.225]
@@ -858,11 +864,10 @@ def load_model(args):
 
 
     elif args.net == 'cif10':
-        model = WideResNet(num_classes=settings.MAX_CLASSES_CIF10, block=WideBasic, depth=depth, widen_factor=widen_factor, preprocessing=net_normalization)
-
+        from models.wide_residual_distr import WideResNet, WideBasic
+        model = WideResNet(num_classes=settings.MAX_CLASSES_CIF10, block=WideBasic, depth=depth, widen_factor=widen_factor, dropout=0.3, preprocessing=net_normalization)
         ckpt = torch.load(settings.CIF10_CKPT)
-        new_state_dict = create_new_state_dict(ckpt)
-        model.load_state_dict(new_state_dict)
+        model.load_state_dict(ckpt['model_state_dict'],  strict=True)
 
 
     elif args.net == 'cif10_m':
@@ -932,11 +937,15 @@ def load_model(args):
         
 
     elif args.net == 'cif100':
-        model = WideResNet(num_classes=settings.MAX_CLASSES_CIF100, block=WideBasic, depth=depth, widen_factor=widen_factor, preprocessing=net_normalization)
-        ckpt = torch.load(settings.CIF100_CKPT)
-        new_state_dict = create_new_state_dict(ckpt, keyword='state_dict')
-        model.load_state_dict(new_state_dict)
+        # model = WideResNet(num_classes=settings.MAX_CLASSES_CIF100, block=WideBasic, depth=depth, widen_factor=widen_factor, preprocessing=net_normalization)
+        # ckpt = torch.load(settings.CIF100_CKPT)
+        # new_state_dict = create_new_state_dict(ckpt, keyword='state_dict')
+        # model.load_state_dict(new_state_dict)
 
+        from models.wide_residual_distr import WideResNet, WideBasic
+        model = WideResNet(num_classes=settings.MAX_CLASSES_CIF100, block=WideBasic, depth=depth, widen_factor=widen_factor, dropout=0.3, preprocessing=net_normalization)
+        ckpt = torch.load(settings.CIF100_CKPT)
+        model.load_state_dict(ckpt['model_state_dict'],  strict=True)
 
     elif args.net == 'imagenet' or args.net == 'imagenet_hierarchy':
         model = wide_resnet50_2(pretrained=True, preprocessing=net_normalization)

@@ -22,6 +22,6 @@ def check_args_generate_clean_data(args):
         get_debug_info("Warning: Shuffle data for ImageNet and variants must be switched off!")
         args.shuffle_off = True
 
-    args = check_args_attack(args, net_normalization=False, num_classes=True, img_size=True)
+    args = check_args_attack(args, version=False, net_normalization=False, num_classes=True, img_size=True)
     
     return args

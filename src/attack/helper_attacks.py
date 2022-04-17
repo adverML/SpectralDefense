@@ -7,9 +7,11 @@ import os, sys
 import pdb
 import numpy as np
 import matplotlib.pyplot as plt
+from tqdm import tqdm
 import foolbox
 from foolbox import PyTorchModel, accuracy, samples
 import foolbox.attacks as fa
+
 
 from utils import (
     Logger,
@@ -33,20 +35,20 @@ def adapt_batchsize(args, device_name):
     get_debug_info(msg="device_name: " + device_name)
     batch_size = 128 
     
-    if device_name == 'titan v' and (args.net in ['imagenet128',  'celebaHQ128']):
+    if device_name == 'nvidia titan v' and (args.net in ['imagenet128',  'celebaHQ128']):
         batch_size = 24
         
     if device_name == 'nvidia a100' and (args.net in ['imagenet', 'imagenet_hierarchy', 'restricted_imagenet', 'imagenet128', 'celebaHQ128']):
         batch_size = 48
 
-    if device_name == 'titan v' and (args.attack in (AA_std + AA_plus) ):
+    if device_name == 'nvidia titan v' and (args.attack in (AA_std + AA_plus) ):
         batch_size = 256
 
-    if device_name == 'titan v' and (( args.attack in ["cw" , "df"] ) and (args.net in ['imagenet64', 'celebaHQ64'])):
+    if device_name == 'nvidia titan v' and (( args.attack in ["cw" , "df"] ) and (args.net in ['imagenet64', 'celebaHQ64'])):
         batch_size = 48
     elif args.net == 'celebaHQ256':
         batch_size = 24
-    elif device_name == 'titan v' and args.net == 'imagenet':
+    elif device_name == 'nvidia titan v' and args.net == 'imagenet':
         batch_size = 32
     
     return batch_size
@@ -155,7 +157,8 @@ def create_advs(logger, args, model, output_path_dir, clean_data_path, wanted_sa
 
         # run attack and save images
         with torch.no_grad():
-            for x_test, y_test in data_loader:
+            for it, (x_test, x_test) in enumerate(tqdm(data_loader, total=args.wanted_samples)):
+            # for x_test, x_test in data_loader:
                 x_test = torch.squeeze(x_test).cpu()
                 y_test = torch.squeeze(y_test).cpu()
 
@@ -229,7 +232,7 @@ def create_advs(logger, args, model, output_path_dir, clean_data_path, wanted_sa
         logger.log('eps: {}'.format(epsilons))
 
 
-        for image, label in data_loader:
+        for it, (image, label) in enumerate(tqdm(data_loader, total=args.wanted_samples)):
             
             image = torch.squeeze(image)
             label = torch.squeeze(label)
@@ -275,7 +278,7 @@ def create_advs(logger, args, model, output_path_dir, clean_data_path, wanted_sa
         
         logger.log("INFO: len(testset): {}".format(len(data_loader)))
 
-        for image, label in data_loader:
+        for it, (image, label) in enumerate(tqdm(data_loader, total=args.wanted_samples)):
             for itx, img in enumerate(image):
                 
                 img_np = img.cpu().numpy().squeeze().transpose([1,2,0])

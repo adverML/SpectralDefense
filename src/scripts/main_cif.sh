@@ -18,10 +18,10 @@ DATASETS="cif10"
 
 # DATASETS="imagenet64 celebaHQ64 imagenet128 celebaHQ128"
 # RUNS="1 2 3"
-# RUNS="8"
-RUNS="1 2 3"
+RUNS="8"
+# RUNS="1 2 3"
 
-# ATTACKS="gauss"
+ATTACKS="df"
 # ATTACKS="l2pgd linfdf"
 # ATTACKS="linfdf l2pgd"
 # ATTACKS="linfdf"
@@ -31,7 +31,7 @@ RUNS="1 2 3"
 # ATTACKS="gauss"
 # ATTACKS="gauss fgsm bim std df"
 # ATTACKS="fgsm bim pgd cw"
-ATTACKS="aa+"
+# ATTACKS="aa+"
 
 # ATTACKS="gauss df cw"
 # ATTACKS="fgsm"
@@ -67,7 +67,7 @@ CLF="LR RF"
 IMAGENET32CLASSES="25 50 100 250 1000"
 # NRSAMPLES="300 500 1000 1200 1500 2000" # only at detectadversarialslayer
 
-WANTEDSAMPLES="2500"
+WANTEDSAMPLES="2000"
 ALLSAMPLES="2500"
 # NRSAMPLES="2000" # detect
 NRSAMPLES="1500" # detect
@@ -75,7 +75,7 @@ NRSAMPLES="1500" # detect
 DATASETSLAYERNR="cif10"
 ATTACKSLAYERNR="df"
 
-LAYERNR="0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24"
+# LAYERNR="0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24"
 LAYERNR="0 1 2 3 4 5 6 7 8 9 10 11 12 13 14"
 DETECTORSLAYERNR="LayerMFS LayerPFS"
 PCA_FEATURES="0"
@@ -338,14 +338,15 @@ detectadversarialslayer ()
     done
 }
 
-# extractcharacteristicslayer
-# detectadversarialslayer
 
 # printn
 # genereratecleandata
 attacks
-extractcharacteristics
-detectadversarials
+# extractcharacteristics
+# detectadversarials
+
+extractcharacteristicslayer
+detectadversarialslayer
 
 # #-----------------------------------------------------------------------------------------------------------------------------------
 log_msg "finished"
