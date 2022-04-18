@@ -40,7 +40,7 @@ ATTACKS="gauss fgsm bim pgd std df cw"
 # ATTACKS="apgd-ce"
 
 # DETECTORS="InputMFS"
-DETECTORS="InputMFS LayerMFS"
+# DETECTORS="InputMFS LayerMFS"
 # DETECTORS="LayerMFS"
 
 # DETECTORS="InputPFS LayerMFS"
@@ -48,7 +48,7 @@ DETECTORS="InputMFS LayerMFS"
 # DETECTORS="InputMFS LayerMFS LID Mahalanobis"
 # DETECTORS="LayerMFS"
 # DETECTORS="InputPFS LayerPFS InputMFS LayerMFS LID Mahalanobis"
-# DETECTORS="LID"
+DETECTORS="LID Mahalanobis"
 # DETECTORS="HPF"
 # DETECTORS="LID LIDNOISE"
 
@@ -342,8 +342,8 @@ detectadversarialslayer ()
 
 
 # printn
-genereratecleandata
-attacks
+# genereratecleandata
+# attacks
 extractcharacteristics
 detectadversarials
 

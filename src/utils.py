@@ -1109,7 +1109,12 @@ def load_test_set(args, preprocessing=None, num_workers=4, download=True, IS_TRA
 
     elif args.net == 'imagenet' or args.net == 'imagenet_hierarchy' or args.net == 'restricted_imagenet':
         
-        path = settings.IMAGENET_PATH
+        if args.net == 'imagenet':
+            path = settings.IMAGENET_PATH
+        elif args.net == 'imagenet_hierarchy':
+            path = settings.RESTRICTED_IMAGENET_PATH
+        elif args.net == 'restricted_imagenet':
+            path = settings.IMAGENET_HIERARCHY_PATH
                 
         # source
         transform_list = [transforms.Scale(256), transforms.CenterCrop(224), transforms.ToTensor()] + normalization
@@ -1125,9 +1130,9 @@ def load_test_set(args, preprocessing=None, num_workers=4, download=True, IS_TRA
         print("transform_list", transform_list)
         transform = transforms.Compose(transform_list)
 
-        dataset_dir_path = os.path.join(path, 'val') if not IS_TRAIN else os.path.join(settings.IMAGENET_PATH, 'train')
+        dataset_dir_path = os.path.join(path, 'val') if not IS_TRAIN else os.path.join(path, 'train')
         get_debug_info(msg="dir path: " + dataset_dir_path)
-        # import pdb; pdb.set_trace()
+
         data_loader = torch.utils.data.DataLoader(datasets.ImageFolder(dataset_dir_path, transform), batch_size=args.batch_size, shuffle=shuffle, 
                             num_workers=num_workers, pin_memory=True)
 
@@ -1143,7 +1148,7 @@ def load_test_set(args, preprocessing=None, num_workers=4, download=True, IS_TRA
                             resolution=args.img_size, classes=settings.MAX_CLASSES_IMAGENET, preprocessing=preprocessing, shuffle=shuffle)
         elif args.img_size == 128: 
             # dataset_dir = os.path.join(settings.IMAGENET128_PATH, 'val/box') if IS_TRAIN else  os.path.join(settings.IMAGENET128_PATH, 'train/box')
-            dataset_dir_path = os.path.join(settings.IMAGENET128_PATH, 'val_data/box') if IS_TRAIN else  os.path.join(settings.IMAGENET128_PATH, 'train_data/box')
+            dataset_dir_path = os.path.join(settings.IMAGENET128_PATH, 'train_data/box') if IS_TRAIN else  os.path.join(settings.IMAGENET128_PATH, 'val_data/box')
             # normalize = transforms.Normalize(mean=[0.4810, 0.4574, 0.4078], std=[0.2146, 0.2104, 0.2138])
             transform_list = [transforms.ToTensor()] + normalization
             transform = transforms.Compose(transform_list)
