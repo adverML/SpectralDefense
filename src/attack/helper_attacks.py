@@ -158,8 +158,8 @@ def create_advs(logger, args, model, output_path_dir, clean_data_path, wanted_sa
 
         # run attack and save images
         with torch.no_grad():
-            for it, (x_test, x_test) in enumerate(tqdm(data_loader, total=tqdm_total)):
-            # for x_test, x_test in data_loader:
+            for it, (x_test, y_test) in enumerate(tqdm(data_loader, total=tqdm_total)):
+                # for x_test, x_test in data_loader:
                 x_test = torch.squeeze(x_test).cpu()
                 y_test = torch.squeeze(y_test).cpu()
 

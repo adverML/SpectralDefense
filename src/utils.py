@@ -747,30 +747,27 @@ def get_normalization(args):
     elif args.net == 'imagenet128':
         mean = [0.48085427, 0.45725283, 0.4064262 ]
         std  = [0.222161  , 0.21794449, 0.21910368]
-    elif args.net == 'imagenet' or args.net == 'imagenet_hierarchy' or args.net == 'restricted_imagenet' :        
+    elif args.net in ['imagenet', 'imagenet_hierarchy', 'restricted_imagenet']:        
         mean = [0.485, 0.456, 0.406] # https://pytorch.org/vision/stable/models.html#wide-resnet
         std  = [0.229, 0.224, 0.225]
     elif args.net == 'celebaHQ32' or args.net == 'celebaHQ64' or args.net == 'celebaHQ128' or args.net == 'celebaHQ256':
-            if args.img_size == 32:
-                mean = [0.36015135049819946, 0.21252931654453278, 0.11682419478893280]
-                std  = [0.24773411452770233, 0.20017878711223602, 0.17963241040706635]
-                # mean = [0.3602,0.2125,0.1168]
-                # std  = [0.2477,0.2002,0.1796]
-            elif args.img_size == 64:
-                mean = [0.36108517646789550, 0.2132178544998169,  0.11681009083986282]
-                std  = [0.24751928448677063, 0.19908452033996582, 0.17821228504180908]
-            elif args.img_size == 128:
-                mean = [0.36175119876861570, 0.21352902054786682, 0.11670646071434021]
-                std  = [0.24808333814144135, 0.19945485889911652, 0.17840421199798584]
-            elif args.img_size == 256:
-                mean = [0.36185416579246520, 0.21353766322135925, 0.11669121682643890]
-                std  = [0.24811546504497528, 0.19950547814369202, 0.17830605804920197]
-            elif args.img_size == 512:
-                mean = [0.36201700568199160, 0.21373045444488525, 0.11688751727342606]
-                std  = [0.24830812215805054, 0.19977152347564697, 0.17850320041179657]
-            elif args.img_size == 1024:
-                mean = [0.36192145943641660, 0.21378295123577118, 0.11703434586524963]
-                std =  [0.24930983781814575, 0.20103301107883453, 0.17989256978034973]
+        mean = [0.36015135049819946, 0.21252931654453278, 0.11682419478893280]
+        std  = [0.24773411452770233, 0.20017878711223602, 0.17963241040706635]
+    elif args.net == 'celebaHQ64':
+        mean = [0.36108517646789550, 0.2132178544998169,  0.11681009083986282]
+        std  = [0.24751928448677063, 0.19908452033996582, 0.17821228504180908]
+    elif args.net == 'celebaHQ128':
+        mean = [0.36175119876861570, 0.21352902054786682, 0.11670646071434021]
+        std  = [0.24808333814144135, 0.19945485889911652, 0.17840421199798584]
+    elif args.net == 'celebaHQ256':
+        mean = [0.36185416579246520, 0.21353766322135925, 0.11669121682643890]
+        std  = [0.24811546504497528, 0.19950547814369202, 0.17830605804920197]
+    elif args.net == 'celebaHQ512':
+        mean = [0.36201700568199160, 0.21373045444488525, 0.11688751727342606]
+        std  = [0.24830812215805054, 0.19977152347564697, 0.17850320041179657]
+    elif args.net == 'celebaHQ1024':
+        mean = [0.36192145943641660, 0.21378295123577118, 0.11703434586524963]
+        std =  [0.24930983781814575, 0.20103301107883453, 0.17989256978034973]
     else:
         get_debug_info(msg="Err: normalization not found!")
 
@@ -900,7 +897,6 @@ def load_model(args):
                 model.load_state_dict(torch.load(model_path))
             else:
                 raise InputError("Saved model checkpoint '{}' not found.".format(model_path))
-
             return model
 
         model = ResNet34_SOTA( preprocessing=net_normalization, num_classes=settings.MAX_CLASSES_CIF10 ).to('cuda')
@@ -908,7 +904,6 @@ def load_model(args):
 
 
     elif args.net == 'cif100vgg':
-
         depth = 16
         widen_factor = 0
         model = vgg16_bn( preprocessing=net_normalization ) 
@@ -1067,7 +1062,6 @@ def create_save_dir_path(save_dir, args, filename='images'):
     return save_dir_img, save_dir_adv
 
 
-
 def load_train_set(args, preprocessing=None, clean_data=False, shuffle=True):
     return load_test_set(args, preprocessing=preprocessing, IS_TRAIN=True, clean_data=clean_data, shuffle=shuffle)
 
@@ -1113,13 +1107,14 @@ def load_test_set(args, preprocessing=None, num_workers=4, download=True, IS_TRA
         
         data_loader = torch.utils.data.DataLoader(dataset, batch_size=args.batch_size, shuffle=shuffle, num_workers=num_workers, pin_memory=True)
 
-
     elif args.net == 'imagenet' or args.net == 'imagenet_hierarchy' or args.net == 'restricted_imagenet':
         
         path = settings.IMAGENET_PATH
                 
         # source
-        transform_list = [transforms.Resize(256), transforms.CenterCrop(224), transforms.ToTensor()] + normalization
+        transform_list = [transforms.Scale(256), transforms.CenterCrop(224), transforms.ToTensor()] + normalization
+        # transform_list = [transforms.Resize(256), transforms.CenterCrop(224), transforms.ToTensor()] + normalization
+        
         # if IS_TRAIN:
         #     transform_list = [transforms.RandomResizedCrop(224), transforms.RandomHorizontalFlip(), transforms.ToTensor()] + normalization
         # else:

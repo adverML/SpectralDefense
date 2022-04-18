@@ -100,14 +100,6 @@ def get_clean_accuracy(paths):
                 eps = '1_100'
             elif '1_1000' in path:
                 eps = '1_1000'
-        elif 'fab-t' in path:
-            attack_method = 'fab-t'
-        elif 'square' in path:
-            attack_method = 'square'
-        elif 'df' in path:
-            attack_method = 'df'
-        elif 'cw' in path:
-            attack_method = 'cw'
         elif 'aa+' in path:
             attack_method = 'aa+' 
         elif 'fab-t+' in path:
@@ -116,6 +108,14 @@ def get_clean_accuracy(paths):
             attack_method = 'fab+'
         elif 'square+' in path:
             attack_method = 'square+'
+        elif 'fab-t' in path:
+            attack_method = 'fab-t'
+        elif 'square' in path:
+            attack_method = 'square'
+        elif 'df' in path:
+            attack_method = 'df'
+        elif 'cw' in path:
+            attack_method = 'cw'
         else:
             raise NotImplementedError("Attack Method not implemented! {}".format(path))
         
@@ -129,6 +129,7 @@ def get_clean_accuracy(paths):
         asr_list = []
         for line in lines_attack:
 
+            # import pdb; pdb.set_trace()
             if line.__contains__(search_text):
                 
                 asr = float(line.strip().split(' ')[-1])
@@ -148,8 +149,12 @@ def sort_paths_by_layer(paths):
     return sorted_paths
 
 
-def extract_information(root='./data', net=['cif10'], dest='./data/detection', nr=1, csv_filename='eval.csv', layers=True, ATTACKS='attacks', DETECTION='detection'):
+def extract_information(root='./data', net=['cif10'], dest='./data/detection', nr=1, csv_filename='eval.csv', layers=True, ATTACKS='attacks', DETECTION='detection', architecture=''):
     print( ' Extract information! ' )
+    
+    if not architecture == '':
+        architecture = '/' + architecture
+        
 
     # output_path = ''
     final = []
@@ -160,8 +165,10 @@ def extract_information(root='./data', net=['cif10'], dest='./data/detection', n
         else:
             in_dir_attacks = os.path.join( root, ATTACKS,   'run_' + str(nr), net_path )
             in_dir_detects = os.path.join( root, DETECTION, 'run_' + str(nr), net_path )
+            
+        # import pdb; pdb.set_trace()
 
-        clean_acc = get_clean_accuracy( glob.glob( in_dir_attacks + "/**/log.txt", recursive=True ) )
+        clean_acc = get_clean_accuracy( glob.glob( in_dir_attacks + architecture + "/**/log.txt", recursive=True ) )
         print("clean accuracy: ", clean_acc)
 
         if layers:
@@ -177,40 +184,33 @@ def extract_information(root='./data', net=['cif10'], dest='./data/detection', n
                     if DETECTION == 'detection':
                         if layers:
                             if att == 'std':
-                                search_path = in_dir_detects + "/**/" + att + "/**/" + det + "/layer_*/" + classifier + "/log.txt"
+                                search_path = in_dir_detects + architecture + "/**/" + att + "/**/" + det + "/layer_*/" + classifier + "/log.txt"
                             else:
-                                search_path = in_dir_detects + "/**/" + att + "/" + det + "/layer_*/" + classifier + "/log.txt"
+                                search_path = in_dir_detects + architecture + "/**/" + att + "/" + det + "/layer_*/" + classifier + "/log.txt"
                             
-                            # import pdb; pdb.set_trace()
                             lr_paths = sort_paths_by_layer( glob.glob( search_path, recursive=True) ) 
                         else:
-                            if att == 'std':
-                                # import pdb; pdb.set_trace()
-                                # search_path = in_dir_detects + "/**/" + att + "/**/" + det + "/" + classifier + "/log.txt"
-
-                                search_path = in_dir_detects + "/**/" + att + "/8_255/**/" + det + "/" + classifier + "/log.txt"
-                                # import pdb; pdb.set_trace()
-                            else:
-                                # import pdb; pdb.set_trace()
-                                search_path = in_dir_detects + "/**/" + att + "/" + det + "/" + classifier + "/log.txt"
-                            
                             # import pdb; pdb.set_trace()
+                            if att == 'std':
+                                search_path = in_dir_detects + architecture + "/**/" + att + "/8_255/**/" + det + "/" + classifier + "/log.txt"
+                            else:
+                                search_path = in_dir_detects + architecture + "/**/" + att + "/" + det + "/" + classifier + "/log.txt"
+                            
                             lr_paths = glob.glob( search_path, recursive=True)
 
                     elif DETECTION == 'attack_transfer':
                             if att == 'std':
-                                search_path = in_dir_detects + "/**/" + att + "/**/" + det + "/" + classifier + "/**" + "/log.txt"
-                                # import pdb; pdb.set_trace()
+                                search_path = in_dir_detects + architecture + "/**/" + att + "/**/" + det + "/" + classifier + "/**" + "/log.txt"
                             else:
-                                search_path = in_dir_detects + "/**/" + att + "/" + det + "/" + classifier + "/**" + "/log.txt"
+                                search_path = in_dir_detects + architecture + "/**/" + att + "/" + det + "/" + classifier + "/**" + "/log.txt"
 
                             lr_paths = glob.glob( search_path, recursive=True)
 
                     elif DETECTION == 'data_transfer':
                             if att == 'std':
-                                search_path = in_dir_detects + "/**/" + att + "/**/" + det + "/" + classifier + "/**" + "/log.txt"
+                                search_path = in_dir_detects + architecture + "/**/" + att + "/**/" + det + "/" + classifier + "/**" + "/log.txt"
                             else:
-                                search_path = in_dir_detects + "/**/" + att + "/" + det + "/" + classifier + "/**" + "/log.txt"
+                                search_path = in_dir_detects + architecture + "/**/" + att + "/" + det + "/" + classifier + "/**" + "/log.txt"
 
                             lr_paths = glob.glob( search_path, recursive=True)
                     else:
@@ -370,6 +370,11 @@ if __name__ == "__main__":
     # APP = '_LID'
     # APP = '_HPF'
     APP = ''
+    # architecture='wrn_28_10_25'
+    # architecture='wrn_28_10_50'
+    # architecture='wrn_28_10_75'
+    # architecture='wrn_28_10_100'
+    architecture='wrn_28_10_250'
     # LAYERS=True
     LAYERS=False
     appendix = "df_cw.csv"
@@ -381,7 +386,7 @@ if __name__ == "__main__":
 
 
     for nr in NR:
-        CSV_FILE_PATH.append( extract_information(root='./data', net=['cif10'],         dest='./data/detection',  nr=nr, csv_filename='cif10{}.csv'.format(APP), layers=LAYERS) )
+        # CSV_FILE_PATH.append( extract_information(root='./data', net=['cif10'],         dest='./data/detection',  nr=nr, csv_filename='cif10{}.csv'.format(APP), layers=LAYERS) )
         # CSV_FILE_PATH.append( extract_information(root='./data', net=['cif100'],        dest='./data/detection',  nr=nr, csv_filename='cif100{}.csv'.format(APP), layers=LAYERS) )
         # CSV_FILE_PATH.append( extract_information(root='./data', net=['cif10vgg'],      dest='./data/detection',  nr=nr, csv_filename='cif10vgg{}.csv'.format(APP), layers=LAYERS) )
         # CSV_FILE_PATH.append( extract_information(root='./data', net=['cif100vgg'],     dest='./data/detection',  nr=nr, csv_filename='cif100vgg{}.csv'.format(APP), layers=LAYERS) )
@@ -389,7 +394,7 @@ if __name__ == "__main__":
         # CSV_FILE_PATH.append( extract_information(root='./data', net=['cif10rn34'],   dest='./data/detection', nr=nr, csv_filename='cif10rn34{}.csv'.format(APP), layers=LAYERS) )
         # CSV_FILE_PATH.append( extract_information(root='./data', net=['cif100rn34'],  dest='./data/detection', nr=nr, csv_filename='cif100rn34{}.csv'.format(APP), layers=LAYERS) )
 
-        # CSV_FILE_PATH.append( extract_information(root='./data', net=['imagenet32'],  dest='./data/detection', nr=nr, csv_filename='imagenet32{}.csv'.format(APP), layers=LAYERS) )
+        # CSV_FILE_PATH.append( extract_information(root='./data', net=['imagenet32'],  dest='./data/detection', nr=nr, csv_filename='imagenet32{}.csv'.format(APP), layers=LAYERS, architecture='') )
         # CSV_FILE_PATH.append( extract_information(root='./data', net=['imagenet64'],  dest='./data/detection', nr=nr, csv_filename='imagenet64{}.csv'.format(APP), layers=LAYERS) )
         # CSV_FILE_PATH.append( extract_information(root='./data', net=['imagenet128'], dest='./data/detection',nr=nr, csv_filename='imagenet128{}.csv'.format(APP), layers=LAYERS) )
 
@@ -399,6 +404,15 @@ if __name__ == "__main__":
 
         # CSV_FILE_PATH.append( extract_information(root='./data', net=['cif10_rb'],    dest='./data/detection',   nr=nr, csv_filename='cif10_rb{}.csv'.format(APP), layers=LAYERS) )
         # CSV_FILE_PATH.append( extract_information(root='./data', net=['imagenet'],    dest='./data/detection',   nr=nr, csv_filename='imagenet{}.csv'.format(APP), layers=LAYERS) )
+        
+        # architecture='wrn_28_10_25'
+        # CSV_FILE_PATH.append( extract_information(root='./data', net=['imagenet32'],  dest='./data/detection', nr=nr, csv_filename='imagenet32{}.csv'.format(architecture), layers=LAYERS, architecture=architecture) )
+        architecture='wrn_28_10_50'
+        CSV_FILE_PATH.append( extract_information(root='./data', net=['imagenet32'],  dest='./data/detection', nr=nr, csv_filename='imagenet32{}.csv'.format(architecture), layers=LAYERS, architecture=architecture) )
+        # architecture='wrn_28_10_100'
+        # CSV_FILE_PATH.append( extract_information(root='./data', net=['imagenet32'],  dest='./data/detection', nr=nr, csv_filename='imagenet32{}.csv'.format(architecture), layers=LAYERS, architecture=architecture) )
+        # architecture='wrn_28_10_250'
+        # CSV_FILE_PATH.append( extract_information(root='./data', net=['imagenet32'],  dest='./data/detection', nr=nr, csv_filename='imagenet32{}.csv'.format(architecture), layers=LAYERS, architecture=architecture) )
 
         copy_var(CSV_FILE_PATH, OUT_PATH, nr)
 

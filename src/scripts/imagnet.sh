@@ -20,12 +20,14 @@ RUNS="1"
 # ATTACKS="gauss"
 # ATTACKS="gauss fgsm bim pgd std df cw"
 # ATTACKS="aa+"
-ATTACKS="apgd-dlr+ fab+ square+ apgd-t+ fab-t+"
+
+# ATTACKS="apgd-dlr+ fab+ square+ apgd-t+ fab-t+"
 # ATTACKS="apgd-ce+"
-
-
 # ATTACKS="fgsm bim std pgd df cw"
 # ATTACKS="apgd-ce apgd-t fab-t square"
+ATTACKS="fab-t"
+
+
 # DETECTORS="InputMFS LayerMFS LID Mahalanobis"
 DETECTORS="InputMFS LayerMFS"
 # DETECTORS="InputMFS LayerMFS"
@@ -55,7 +57,7 @@ DETECTORSLAYERNR="LayerMFS LayerPFS"
 # DETECTORSLAYERNR="LayerMFS LayerPFS"
 
 # NRSAMPLES="300 500 1000 1200 1500 2000"
-ALLSAMPLES="4000"
+ALLSAMPLES="3000"
 WANTEDSAMPLES="2000"
 WANTEDSAMPLES_TR="18000"
 WANTEDSAMPLES_TE="18000"
