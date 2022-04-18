@@ -122,7 +122,11 @@ SELECTED_COL = ['asr', 'auc', 'f1', 'acc','pre','tpr', 'fnr', 'asrd']
 
 # ATTACKS_LIST = ['gauss', 'fgsm', 'bim', 'pgd', 'std', 'df', 'cw']
 
-ATTACKS_LIST = ['fgsm', 'bim', 'pgd', 'cw'] 
+# ATTACKS_LIST = ['fgsm', 'bim', 'pgd', 'cw'] 
+# ATTACKS_LIST = ['df'] 
+ATTACKS_LIST = ['cw'] 
+
+
 # ATTACKS_LIST = ['gauss', 'fgsm', 'bim', 'std', 'df'] 
 
 # ATTACKS_LIST = ['apgd-ce', 'apgd-t', 'fab-t', 'square']
@@ -130,25 +134,27 @@ ATTACKS_LIST = ['fgsm', 'bim', 'pgd', 'cw']
 
 # DETECTOR_LIST_LAYERS = ['InputMFS', 'LayerMFS', 'LID', 'Mahalanobis']
 # DETECTOR_LIST_LAYERS = ['InputPFS', 'LayerPFS']
-DETECTOR_LIST_LAYERS = ['InputMFS', 'LayerMFS']
+# DETECTOR_LIST_LAYERS = ['InputMFS', 'LayerMFS']
+DETECTOR_LIST_LAYERS = ['LayerMFS', 'LayerPFS']
+
 
 # DETECTOR_LIST = [ 'LID', 'Mahalanobis' ]
 # DETECTOR_LIST = [ 'InputMFS', 'LayerMFS' ]
 # DETECTOR_LIST = ['InputPFS', 'InputMFS', 'LayerPFS', 'LayerMFS', 'LID', 'Mahalanobis']
 # DETECTOR_LIST = ['InputMFS', 'LayerMFS', 'LID', 'Mahalanobis']
-# DETECTOR_LIST = ['InputPFS', 'LayerPFS']
-# DETECTOR_LIST = ['LayerMFS']
+# DETECTOR_LIST = ['LayerMFS', 'LayerPFS']
+DETECTOR_LIST = ['LayerMFS']
 # DETECTOR_LIST = ['DkNN']
 # DETECTOR_LIST = [ 'InputMFS' ]
 # DETECTOR_LIST = ['LID']
-DETECTOR_LIST = ['HPF']
+# DETECTOR_LIST = ['HPF']
 
 # DETECTOR_LIST = ['LID', 'LIDNOISE']
 
 # DETECTOR_LIST = ['LID', 'Mahalanobis']
 
-CLF = ['LR']
+# CLF = ['LR']
 # CLF = ['RF']
-# CLF = ['LR', 'RF']
+CLF = ['LR', 'RF']
 
 SAVE_CLASSIFIER = True

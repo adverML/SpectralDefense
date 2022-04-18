@@ -66,6 +66,7 @@ parser.add_argument("--num_classes",    default='10',   type=int, help=settings.
 parser.add_argument("--shuffle_on",        action='store_true',   help="Switch shuffle data on")
 parser.add_argument('--net_normalization', action='store_true',   help=settings.HELP_NET_NORMALIZATION)
 
+parser.add_argument('--version',    type=str, default='standard')
 # parser.add_argument("--eps",       default='-1',       help=settings.HELP_AA_EPSILONS) # to activate the best layers
 parser.add_argument("--eps",       default='8./255.',       help=settings.HELP_AA_EPSILONS)
 # parser.add_argument("--eps",       default='4./255.',       help=settings.HELP_AA_EPSILONS)
@@ -79,7 +80,7 @@ parser.add_argument("--fr", default='8',  type=int, help="InputMFS frequency ana
 parser.add_argument("--to", default='24', type=int, help="InputMFS frequency analysis")
 
 args = parser.parse_args()
-args = check_args_attack(args)
+args = check_args_attack(args, version=True)
 # max frequency
 # if args.max_freq_on or ((args.net == 'cif100' or args.net == 'cif100vgg' or args.net == 'cif100rn34') and (args.attack=='cw' or args.attack=='df')):
 #     args.max_freq_on = True

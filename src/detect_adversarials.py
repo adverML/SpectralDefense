@@ -44,7 +44,7 @@ parser.add_argument("--num_iter",       default='100',  type=int, help="LR: Numb
 parser.add_argument("--kernel",         default='rbf',  type=str, help="SVC: rbf, poly, linear, sigmoid, precomputed")
 parser.add_argument("--pca_features",   default='0',    type=int, help="Number of PCA features to train")
 
-
+parser.add_argument('--version',    type=str, default='standard')
 # parser.add_argument("--eps",   default='-1',     help="epsilon: 4/255, 3/255, 2/255, 1/255, 0.5/255")
 parser.add_argument("--eps",    default='8./255.',     help=settings.HELP_AA_EPSILONS)
 # parser.add_argument("--eps",    default='4./255.',   help="epsilon: 4/255, 3/255, 2/255, 1/255, 0.5/255")
@@ -55,7 +55,7 @@ parser.add_argument("--eps",    default='8./255.',     help=settings.HELP_AA_EPS
 
 args = parser.parse_args()
 # check args
-args = check_args_attack(args, net_normalization=False, img_size=False)
+args = check_args_attack(args, version=True, net_normalization=False, img_size=False)
 
 
 # output data

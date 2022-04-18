@@ -108,6 +108,14 @@ def get_clean_accuracy(paths):
             attack_method = 'df'
         elif 'cw' in path:
             attack_method = 'cw'
+        elif 'aa+' in path:
+            attack_method = 'aa+' 
+        elif 'fab-t+' in path:
+            attack_method = 'fab-t+'
+        elif 'fab+' in path:
+            attack_method = 'fab+'
+        elif 'square+' in path:
+            attack_method = 'square+'
         else:
             raise NotImplementedError("Attack Method not implemented! {}".format(path))
         
@@ -360,32 +368,37 @@ if __name__ == "__main__":
     OUT_PATH = "analysis/variance/run_"
     # OUT_PATH = "analysis/variance/run_gauss_"
     # APP = '_LID'
-    APP = '_HPF'
+    # APP = '_HPF'
+    APP = ''
+    # LAYERS=True
+    LAYERS=False
+    appendix = "df_cw.csv"
     CSV_FILE_PATH = []
     # NR = [1,2,3]
     # NR = [8]
+    # NR = [3]
     NR = [1]
 
 
     for nr in NR:
-        CSV_FILE_PATH.append( extract_information(root='./data', net=['cif10'],         dest='./data/detection',  nr=nr, csv_filename='cif10{}.csv'.format(APP), layers=False) )
-        # CSV_FILE_PATH.append( extract_information(root='./data', net=['cif100'],        dest='./data/detection',  nr=nr, csv_filename='cif100{}.csv'.format(APP), layers=False) )
-        # CSV_FILE_PATH.append( extract_information(root='./data', net=['cif10vgg'],      dest='./data/detection',  nr=nr, csv_filename='cif10vgg{}.csv'.format(APP), layers=False) )
-        # CSV_FILE_PATH.append( extract_information(root='./data', net=['cif100vgg'],     dest='./data/detection',  nr=nr, csv_filename='cif100vgg{}.csv'.format(APP), layers=False) )
+        CSV_FILE_PATH.append( extract_information(root='./data', net=['cif10'],         dest='./data/detection',  nr=nr, csv_filename='cif10{}.csv'.format(APP), layers=LAYERS) )
+        # CSV_FILE_PATH.append( extract_information(root='./data', net=['cif100'],        dest='./data/detection',  nr=nr, csv_filename='cif100{}.csv'.format(APP), layers=LAYERS) )
+        # CSV_FILE_PATH.append( extract_information(root='./data', net=['cif10vgg'],      dest='./data/detection',  nr=nr, csv_filename='cif10vgg{}.csv'.format(APP), layers=LAYERS) )
+        # CSV_FILE_PATH.append( extract_information(root='./data', net=['cif100vgg'],     dest='./data/detection',  nr=nr, csv_filename='cif100vgg{}.csv'.format(APP), layers=LAYERS) )
 
-        # CSV_FILE_PATH.append( extract_information(root='./data', net=['cif10rn34'],   dest='./data/detection', nr=nr, csv_filename='cif10rn34{}.csv'.format(APP), layers=False) )
-        # CSV_FILE_PATH.append( extract_information(root='./data', net=['cif100rn34'],  dest='./data/detection', nr=nr, csv_filename='cif100rn34{}.csv'.format(APP), layers=False) )
+        # CSV_FILE_PATH.append( extract_information(root='./data', net=['cif10rn34'],   dest='./data/detection', nr=nr, csv_filename='cif10rn34{}.csv'.format(APP), layers=LAYERS) )
+        # CSV_FILE_PATH.append( extract_information(root='./data', net=['cif100rn34'],  dest='./data/detection', nr=nr, csv_filename='cif100rn34{}.csv'.format(APP), layers=LAYERS) )
 
-        # CSV_FILE_PATH.append( extract_information(root='./data', net=['imagenet32'],  dest='./data/detection', nr=nr, csv_filename='imagenet32{}.csv'.format(APP), layers=False) )
-        # CSV_FILE_PATH.append( extract_information(root='./data', net=['imagenet64'],  dest='./data/detection', nr=nr, csv_filename='imagenet64{}.csv'.format(APP), layers=False) )
-        # CSV_FILE_PATH.append( extract_information(root='./data', net=['imagenet128'], dest='./data/detection',nr=nr, csv_filename='imagenet128{}.csv'.format(APP), layers=False) )
+        # CSV_FILE_PATH.append( extract_information(root='./data', net=['imagenet32'],  dest='./data/detection', nr=nr, csv_filename='imagenet32{}.csv'.format(APP), layers=LAYERS) )
+        # CSV_FILE_PATH.append( extract_information(root='./data', net=['imagenet64'],  dest='./data/detection', nr=nr, csv_filename='imagenet64{}.csv'.format(APP), layers=LAYERS) )
+        # CSV_FILE_PATH.append( extract_information(root='./data', net=['imagenet128'], dest='./data/detection',nr=nr, csv_filename='imagenet128{}.csv'.format(APP), layers=LAYERS) )
 
-        # CSV_FILE_PATH.append( extract_information(root='./data', net=['celebaHQ32'],  dest='./data/detection', nr=nr, csv_filename='celebaHQ32{}.csv'.format(APP), layers=False) )
-        # CSV_FILE_PATH.append( extract_information(root='./data', net=['celebaHQ64'],  dest='./data/detection', nr=nr, csv_filename='celebaHQ64{}.csv'.format(APP), layers=False) )
-        # CSV_FILE_PATH.append( extract_information(root='./data', net=['celebaHQ128'], dest='./data/detection', nr=nr, csv_filename='celebaHQ128{}.csv'.format(APP), layers=False) )
+        # CSV_FILE_PATH.append( extract_information(root='./data', net=['celebaHQ32'],  dest='./data/detection', nr=nr, csv_filename='celebaHQ32{}.csv'.format(APP), layers=LAYERS) )
+        # CSV_FILE_PATH.append( extract_information(root='./data', net=['celebaHQ64'],  dest='./data/detection', nr=nr, csv_filename='celebaHQ64{}.csv'.format(APP), layers=LAYERS) )
+        # CSV_FILE_PATH.append( extract_information(root='./data', net=['celebaHQ128'], dest='./data/detection', nr=nr, csv_filename='celebaHQ128{}.csv'.format(APP), layers=LAYERS) )
 
-        # CSV_FILE_PATH.append( extract_information(root='./data', net=['cif10_rb'],    dest='./data/detection',   nr=nr, csv_filename='cif10_rb{}.csv'.format(APP), layers=False) )
-        # CSV_FILE_PATH.append( extract_information(root='./data', net=['imagenet'],    dest='./data/detection',   nr=nr, csv_filename='imagenet{}.csv'.format(APP), layers=False) )
+        # CSV_FILE_PATH.append( extract_information(root='./data', net=['cif10_rb'],    dest='./data/detection',   nr=nr, csv_filename='cif10_rb{}.csv'.format(APP), layers=LAYERS) )
+        # CSV_FILE_PATH.append( extract_information(root='./data', net=['imagenet'],    dest='./data/detection',   nr=nr, csv_filename='imagenet{}.csv'.format(APP), layers=LAYERS) )
 
         copy_var(CSV_FILE_PATH, OUT_PATH, nr)
 
@@ -503,8 +516,7 @@ if __name__ == "__main__":
 
 # run 1
 
-appendix = "df_cw.csv"
-NR = [3]
+
 
 # extract_information(root='./data', net=['cif10vgg'],  dest='./data/detection',  run_nr=NR, csv_filename=appendix ,  layers=False)
 # extract_information(root='./data', net=['cif100vgg'], dest='./data/detection',  run_nr=NR, csv_filename=appendix ,  layers=False)

@@ -141,9 +141,10 @@ def create_advs(logger, args, model, output_path_dir, clean_data_path, wanted_sa
     
     dataset = torch.load(os.path.join(clean_data_path, clean_path))[:args.all_samples]
     get_debug_info( "actual len/wanted " + str(len(dataset)) + "/" + str(wanted_samples) )
+    tqdm_total = round(wanted_samples / args.batch_size)
 
     data_loader = torch.utils.data.DataLoader(dataset, batch_size=args.batch_size, shuffle=args.shuffle_on)
-
+    
     if args.attack  in (AA_std + AA_plus):
         logger.log('INFO: Load data...')
         # dataset = load_test_set(args,  shuffle=args.shuffle_on)
@@ -157,7 +158,7 @@ def create_advs(logger, args, model, output_path_dir, clean_data_path, wanted_sa
 
         # run attack and save images
         with torch.no_grad():
-            for it, (x_test, x_test) in enumerate(tqdm(data_loader, total=args.wanted_samples)):
+            for it, (x_test, x_test) in enumerate(tqdm(data_loader, total=tqdm_total)):
             # for x_test, x_test in data_loader:
                 x_test = torch.squeeze(x_test).cpu()
                 y_test = torch.squeeze(y_test).cpu()
@@ -232,7 +233,7 @@ def create_advs(logger, args, model, output_path_dir, clean_data_path, wanted_sa
         logger.log('eps: {}'.format(epsilons))
 
 
-        for it, (image, label) in enumerate(tqdm(data_loader, total=args.wanted_samples)):
+        for it, (image, label) in enumerate(tqdm(data_loader, total=tqdm_total)):
             
             image = torch.squeeze(image)
             label = torch.squeeze(label)
@@ -278,7 +279,7 @@ def create_advs(logger, args, model, output_path_dir, clean_data_path, wanted_sa
         
         logger.log("INFO: len(testset): {}".format(len(data_loader)))
 
-        for it, (image, label) in enumerate(tqdm(data_loader, total=args.wanted_samples)):
+        for it, (image, label) in enumerate(tqdm(data_loader, total=tqdm_total)):
             for itx, img in enumerate(image):
                 
                 img_np = img.cpu().numpy().squeeze().transpose([1,2,0])

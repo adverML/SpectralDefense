@@ -17,11 +17,9 @@ DATASETS="cif10"
 # DATASETS="cif10vgg"
 
 # DATASETS="imagenet64 celebaHQ64 imagenet128 celebaHQ128"
-# RUNS="1 2 3"
 RUNS="8"
-# RUNS="1 2 3"
 
-ATTACKS="df"
+# ATTACKS="df"
 # ATTACKS="l2pgd linfdf"
 # ATTACKS="linfdf l2pgd"
 # ATTACKS="linfdf"
@@ -29,7 +27,7 @@ ATTACKS="df"
 # ATTACKS="gauss fgsm bim pgd std df cw"
 # ATTACKS="apgd-ce apgd-t fab-t square"
 # ATTACKS="gauss"
-# ATTACKS="gauss fgsm bim std df"
+ATTACKS="df"
 # ATTACKS="fgsm bim pgd cw"
 # ATTACKS="aa+"
 
@@ -40,11 +38,11 @@ ATTACKS="df"
 # ATTACKS="apgd-ce"
 
 # DETECTORS="InputMFS"
-DETECTORS="InputMFS LayerMFS"
+# DETECTORS="InputMFS LayerMFS"
 # DETECTORS="InputPFS LayerMFS"
 
 # DETECTORS="InputMFS LayerMFS LID Mahalanobis"
-# DETECTORS="LayerMFS"
+DETECTORS="LayerPFS LayerMFS"
 # DETECTORS="InputPFS LayerPFS InputMFS LayerMFS LID Mahalanobis"
 # DETECTORS="LID"
 # DETECTORS="HPF"
@@ -76,7 +74,8 @@ DATASETSLAYERNR="cif10"
 ATTACKSLAYERNR="df"
 
 # LAYERNR="0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24"
-LAYERNR="0 1 2 3 4 5 6 7 8 9 10 11 12 13 14"
+# LAYERNR="0 1 2 3 4 5 6 7 8 9 10 11 12 13 14"
+LAYERNR="0 1 2 3 4 5 6 7 8 9 10 11 12"
 DETECTORSLAYERNR="LayerMFS LayerPFS"
 PCA_FEATURES="0"
 
@@ -341,7 +340,7 @@ detectadversarialslayer ()
 
 # printn
 # genereratecleandata
-attacks
+# attacks
 # extractcharacteristics
 # detectadversarials
 
