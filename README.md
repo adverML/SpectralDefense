@@ -27,8 +27,6 @@ This repository is an expansion of [SpectralAdversarialDefense](https://github.c
  * automatic .csv creation from all results.
 
 
-
-
 ## Overview
 
 ![overview](overview_readme.png)

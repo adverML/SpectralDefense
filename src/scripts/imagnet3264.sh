@@ -13,18 +13,19 @@ RUNS="1"
 
 # ATTACKS="cw"
 # ATTACKS="df cw"
-ATTACKS="fgsm df"
+ATTACKS="std df"
 
 # DETECTORS="InputPFS LayerPFS LID Mahalanobis"
 # DETECTORS="InputPFS LayerPFS InputMFS LayerMFS LID Mahalanobis"
-DETECTORS="InputMFS LayerMFS"
+DETECTORS="InputMFS LayerMFS LID Mahalanobis"
 # EPSILONS="8./255. 4./255. 2./255. 1./255. 0.5/255."
 EPSILONS="8./255."
 
 CLF="LR RF"
 # CLF="LR"
 
-IMAGENET32CLASSES="10 25 50 100 250"
+IMAGENET32CLASSES="50 100 250"
+# IMAGENET32CLASSES="50 75 100 250"
 # NRSAMPLES="300 500 1000 1200 1500 2000" # only at detectadversarialslayer
 # WANTEDSAMPLES="24000"
 # ALLSAMPLES="24000"
@@ -171,7 +172,6 @@ extractcharacteristicslayer ()
 }
 
 
-
 detectadversarialslayer ()
 {
     log_msg "Detect Adversarials Layer By Layer!"
@@ -200,8 +200,8 @@ detectadversarialslayer ()
 
 
 # genereratecleandata
-# attacks
-# extractcharacteristics
+attacks
+extractcharacteristics
 detectadversarials
 
 # extractcharacteristicslayer
@@ -213,5 +213,5 @@ exit 0
 
 
 
-python -u detect_adversarials.py --net imagenet32 --num_classes 1000  --wanted_samples 1500 --clf LR --detector InputMFS --attack df
+# python -u detect_adversarials.py --net imagenet32 --num_classes 1000  --wanted_samples 1500 --clf LR --detector InputMFS --attack df
 

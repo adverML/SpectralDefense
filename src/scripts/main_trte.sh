@@ -16,8 +16,10 @@ function log_msg {
 # DATASETS="cif100"
 # DATASETS="imagenet"
 # DATASETS="cif100"
+DATASETS="cif10"
 
-DATASETS="restricted_imagenet"
+
+# DATASETS="restricted_imagenet"
 
 # DATASETS="imagenet64 celebaHQ64 imagenet128 celebaHQ128"
 # RUNS="1 2 3"
@@ -29,9 +31,8 @@ RUNS="8"
 # ATTACKS="gauss"
 ATTACKS="std df"
 
+DETECTORS="LayerMFS"
 
-
-DETECTORS="InputMFS LayerMFS"
 # DETECTORS="InputMFS LayerMFS LID Mahalanobis"
 # DETECTORS="LayerMFS"
 # DETECTORS="InputPFS LayerPFS InputMFS LayerMFS LID Mahalanobis"
@@ -40,7 +41,7 @@ DETECTORS="InputMFS LayerMFS"
 EPSILONS="8./255."
 
 # CLF="LR RF"
-CLF="LR"
+CLF="LR RF"
 
 IMAGENET32CLASSES="25 50 100 250 1000"
 # NRSAMPLES="300 500 1000 1200 1500 2000" # only at detectadversarialslayer
@@ -59,7 +60,7 @@ NRSAMPLES="0"
 # WANTEDSAMPLES_TR="5000"
 
 # cif10 100
-WANTEDSAMPLES_TR="30000"
+WANTEDSAMPLES_TR="44000"
 WANTEDSAMPLES_TE="8600"
 # WANTEDSAMPLES_TR="44000"
 # WANTEDSAMPLES_TE="0"

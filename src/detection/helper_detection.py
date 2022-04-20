@@ -21,13 +21,13 @@ def show_results(args, logger, y_test, y_hat, y_hat_pr):
     ad_rate = 0
     for i in range(len(y_hat)):
         if y_hat[i] == 0:
-            benign_guesses +=1
-            if y_test[i]==0:
-                benign_rate +=1
+            benign_guesses += 1
+            if y_test[i] == 0:
+                benign_rate += 1
         else:
-            ad_guesses +=1
-            if y_test[i]==1:
-                ad_rate +=1
+            ad_guesses += 1
+            if y_test[i] == 1:
+                ad_rate += 1
 
         if y_test[i] == 1:
             if y_hat[i] == 0:
@@ -45,8 +45,10 @@ def show_results(args, logger, y_test, y_hat, y_hat_pr):
     prec = precision 
     rec = TPR 
 
-
-    auc = round(100*roc_auc_score(y_test, y_hat_pr), 2)
+    if args.clf == 'IF': 
+        auc = -1
+    else: 
+        auc = round(100*roc_auc_score(y_test, y_hat_pr), 2)
     acc = round(100*acc, 2)
     pre = round(100*precision, 1)
     tpr = round(100*TP, 2)
@@ -79,22 +81,26 @@ def split_data(args, logger, characteristics, characteristics_adv, k, test_size=
     shape_adv = np.shape(characteristics_adv)[0]
     shape_char = np.shape(characteristics)[0]
     
-    adv_X_train_val, adv_X_test, adv_y_train_val, adv_y_test = train_test_split(characteristics_adv, np.ones(shape_adv), test_size=test_size, random_state=random_state)
-    b_X_train_val, b_X_test, b_y_train_val, b_y_test         = train_test_split(characteristics, np.zeros(shape_char), test_size=test_size, random_state=random_state)
-    adv_X_train, adv_X_val, adv_y_train, adv_y_val           = train_test_split(adv_X_train_val, adv_y_train_val, test_size=test_size, random_state=random_state)
-    b_X_train, b_X_val, b_y_train, b_y_val                   = train_test_split(b_X_train_val, b_y_train_val, test_size=test_size, random_state=random_state)
+    adv_X_train_val, adv_X_test, adv_y_train_val, adv_y_test = train_test_split(characteristics_adv, np.ones(shape_adv),   test_size=test_size, random_state=random_state)
+    b_X_train_val, b_X_test, b_y_train_val, b_y_test         = train_test_split(characteristics,     np.zeros(shape_char), test_size=test_size, random_state=random_state)
+    adv_X_train, adv_X_val, adv_y_train, adv_y_val           = train_test_split(adv_X_train_val,     adv_y_train_val,      test_size=test_size, random_state=random_state)
+    b_X_train, b_X_val, b_y_train, b_y_val                   = train_test_split(b_X_train_val,       b_y_train_val,        test_size=test_size, random_state=random_state)
 
     X_train = np.concatenate(( b_X_train, adv_X_train) )
     y_train = np.concatenate(( b_y_train, adv_y_train) )
 
-    if args.mode == 'test':
-        X_test = np.concatenate( (b_X_test, adv_X_test) )
-        y_test = np.concatenate( (b_y_test, adv_y_test) )
-    elif args.mode == 'validation':
-        X_test = np.concatenate( (b_X_val, adv_X_val) )
-        y_test = np.concatenate( (b_y_val, adv_y_val) )
-    else:
-        logger.log('Not a valid mode')
+
+    X_test = np.concatenate( (b_X_test, adv_X_test, b_X_val, adv_X_val) )
+    y_test = np.concatenate( (b_y_test, adv_y_test, b_y_val, adv_y_val) )
+
+    # if args.mode == 'test':
+    #     X_test = np.concatenate( (b_X_test, adv_X_test) )
+    #     y_test = np.concatenate( (b_y_test, adv_y_test) )
+    # elif args.mode == 'validation':
+    #     X_test = np.concatenate( (b_X_val, adv_X_val) )
+    #     y_test = np.concatenate( (b_y_val, adv_y_val) )
+    # else:
+    #     logger.log('Not a valid mode')
 
     logger.log("b_X_train" + str(b_X_train.shape) )
     logger.log("adv_X_train" + str(adv_X_train.shape) )

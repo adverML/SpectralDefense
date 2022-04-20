@@ -71,23 +71,28 @@ logger.log('INFO: Loading characteristics...')
 extracted_characteristics_path = create_dir_extracted_characteristics(args, root='./data/extracted_characteristics/', wait_input=False)
 characteristics_path, characteristics_advs_path = create_save_dir_path(extracted_characteristics_path, args, filename='characteristics')
 
-# pfs = ''
-# if args.detector == 'VAEInputPFS':
-#     pfs = '_PFS'
 
-# if args.attack == 'fgsm':
-#     characteristics_path      = '/home/lorenzp/adversialml/src/submodules/CD-VAE/detection/data/cd-vae-1/resnet_cifar10/fft_clean_data_resnet_cifar10_FGSM{}.pth'.format(pfs)
-#     # characteristics_advs_path = '/home/lorenzp/adversialml/src/submodules/CD-VAE/detection/data/cd-vae-1/resnet_cifar10/fft_clean_data_resnet_cifar10_FGSM.pth'
-#     characteristics_advs_path = '/home/lorenzp/adversialml/src/submodules/CD-VAE/detection/data/cd-vae-1/resnet_cifar10/fft_adv_data_resnet_cifar10_FGSM{}.pth'.format(pfs)
-# elif args.attack == 'cw':
-#     characteristics_path      = '/home/lorenzp/adversialml/src/submodules/CD-VAE/detection/data/cd-vae-1/resnet_cifar10/fft_clean_data_resnet_cifar10_CW{}.pth'.format(pfs)
-#     characteristics_advs_path = '/home/lorenzp/adversialml/src/submodules/CD-VAE/detection/data/cd-vae-1/resnet_cifar10/fft_adv_data_resnet_cifar10_CW{}.pth'.format(pfs)
-# elif args.attack == 'bim':
-#     characteristics_path      = '/home/lorenzp/adversialml/src/submodules/CD-VAE/detection/data/cd-vae-1/resnet_cifar10/fft_clean_data_resnet_cifar10_BIM{}.pth'.format(pfs)
-#     characteristics_advs_path = '/home/lorenzp/adversialml/src/submodules/CD-VAE/detection/data/cd-vae-1/resnet_cifar10/fft_adv_data_resnet_cifar10_BIM{}.pth'.format(pfs)
-# elif args.attack == 'pgd':
-#     characteristics_path      = '/home/lorenzp/adversialml/src/submodules/CD-VAE/detection/data/cd-vae-1/resnet_cifar10/fft_clean_data_resnet_cifar10_PGD{}.pth'.format(pfs)
-#     characteristics_advs_path = '/home/lorenzp/adversialml/src/submodules/CD-VAE/detection/data/cd-vae-1/resnet_cifar10/fft_adv_data_resnet_cifar10_PGD{}.pth'.format(pfs)
+
+if  args.detector in  ['VAEInputPFS', 'VAEInputMFS']:
+    pfs = ''
+    if args.detector == 'VAEInputPFS':
+        pfs = '_PFS'
+
+    if args.attack == 'fgsm':
+        characteristics_path      = '/home/lorenzp/adversialml/src/submodules/CD-VAE/detection/data/cd-vae-1/resnet_cifar10/fft_clean_data_resnet_cifar10_FGSM{}.pth'.format(pfs)
+        # characteristics_advs_path = '/home/lorenzp/adversialml/src/submodules/CD-VAE/detection/data/cd-vae-1/resnet_cifar10/fft_clean_data_resnet_cifar10_FGSM.pth'
+        characteristics_advs_path = '/home/lorenzp/adversialml/src/submodules/CD-VAE/detection/data/cd-vae-1/resnet_cifar10/fft_adv_data_resnet_cifar10_FGSM{}.pth'.format(pfs)
+    elif args.attack == 'cw':
+        characteristics_path      = '/home/lorenzp/adversialml/src/submodules/CD-VAE/detection/data/cd-vae-1/resnet_cifar10/fft_clean_data_resnet_cifar10_CW{}.pth'.format(pfs)
+        characteristics_advs_path = '/home/lorenzp/adversialml/src/submodules/CD-VAE/detection/data/cd-vae-1/resnet_cifar10/fft_adv_data_resnet_cifar10_CW{}.pth'.format(pfs)
+    elif args.attack == 'bim':
+        characteristics_path      = '/home/lorenzp/adversialml/src/submodules/CD-VAE/detection/data/cd-vae-1/resnet_cifar10/fft_clean_data_resnet_cifar10_BIM{}.pth'.format(pfs)
+        characteristics_advs_path = '/home/lorenzp/adversialml/src/submodules/CD-VAE/detection/data/cd-vae-1/resnet_cifar10/fft_adv_data_resnet_cifar10_BIM{}.pth'.format(pfs)
+    elif args.attack == 'pgd':
+        characteristics_path      = '/home/lorenzp/adversialml/src/submodules/CD-VAE/detection/data/cd-vae-1/resnet_cifar10/fft_clean_data_resnet_cifar10_PGD{}.pth'.format(pfs)
+        characteristics_advs_path = '/home/lorenzp/adversialml/src/submodules/CD-VAE/detection/data/cd-vae-1/resnet_cifar10/fft_adv_data_resnet_cifar10_PGD{}.pth'.format(pfs)
+        
+        print("characteristics_path: ", len(characteristics_path))
 
 logger.log("characteristics_path:      " + str(characteristics_path) )
 # logger.log("characteristics_advs_path: " + str(characteristics_path) )
@@ -113,7 +118,7 @@ if shape[0] < args.wanted_samples:
 # characteristics = np.concatenate((tmp1, tmp2), axis=0)
 
 
-X_train, y_train, X_test, y_test = split_data(args, logger, characteristics, characteristics_adv, k=2000, test_size=0.2, random_state=42)
+X_train, y_train, X_test, y_test = split_data(args, logger, characteristics, characteristics_adv, k=2000, test_size=0.1, random_state=42)
 # X_train, y_train, X_test, y_test = split_data(args, logger, characteristics, characteristics_adv[:2000], k=shape[0], test_size=0.2, random_state=42)
 
 

@@ -739,16 +739,23 @@ def get_normalization(args):
         mean = [0.5070751592371323, 0.48654887331495095, 0.4409178433670343]
         std =  [0.2673342858792401, 0.2564384629170883, 0.27615047132568404]
     elif args.net == 'imagenet32':
-        mean = [0.48018914, 0.45609474, 0.4056382]
-        std  = [0.20503707, 0.200965  , 0.20204392]
+        mean = [0.485, 0.456, 0.406] 
+        std  = [0.229, 0.224, 0.225]
+        # mean = [0.48018914, 0.45609474, 0.4056382]
+        # std  = [0.20503707, 0.200965  , 0.20204392]
     elif args.net == 'imagenet64':
-        mean = [0.48134172, 0.45765844, 0.40931204]
-        std  = [0.2162447 , 0.21196254, 0.21299529]
+        mean = [0.485, 0.456, 0.406] 
+        std  = [0.229, 0.224, 0.225]
+        # mean = [0.48134172, 0.45765844, 0.40931204]
+        # std  = [0.2162447 , 0.21196254, 0.21299529]
     elif args.net == 'imagenet128':
-        mean = [0.48085427, 0.45725283, 0.4064262 ]
-        std  = [0.222161  , 0.21794449, 0.21910368]
-    elif args.net in ['imagenet', 'imagenet_hierarchy', 'restricted_imagenet']:        
-        mean = [0.485, 0.456, 0.406] # https://pytorch.org/vision/stable/models.html#wide-resnet
+        mean = [0.485, 0.456, 0.406] 
+        std  = [0.229, 0.224, 0.225]
+        # mean = [0.48085427, 0.45725283, 0.4064262 ]
+        # std  = [0.222161  , 0.21794449, 0.21910368]
+    elif args.net in ['imagenet', 'imagenet_hierarchy', 'restricted_imagenet']:    
+        # https://pytorch.org/vision/stable/models.html#wide-resnet    
+        mean = [0.485, 0.456, 0.406] 
         std  = [0.229, 0.224, 0.225]
     elif args.net == 'celebaHQ32' or args.net == 'celebaHQ64' or args.net == 'celebaHQ128' or args.net == 'celebaHQ256':
         mean = [0.36015135049819946, 0.21252931654453278, 0.11682419478893280]
@@ -861,8 +868,10 @@ def load_model(args):
 
 
     elif args.net == 'cif10':
-        from models.wide_residual_distr import WideResNet, WideBasic
-        model = WideResNet(num_classes=settings.MAX_CLASSES_CIF10, block=WideBasic, depth=depth, widen_factor=widen_factor, dropout=0.3, preprocessing=net_normalization)
+        from models.wide_residual_distr import WideResNet as WideResNet96
+        from models.wide_residual_distr import WideBasic as WideBasic96
+
+        model = WideResNet96(num_classes=settings.MAX_CLASSES_CIF10, block=WideBasic96, depth=depth, widen_factor=widen_factor, dropout=0.3, preprocessing=net_normalization)
         ckpt = torch.load(settings.CIF10_CKPT)
         model.load_state_dict(ckpt['model_state_dict'],  strict=True)
 
@@ -932,13 +941,10 @@ def load_model(args):
         
 
     elif args.net == 'cif100':
-        # model = WideResNet(num_classes=settings.MAX_CLASSES_CIF100, block=WideBasic, depth=depth, widen_factor=widen_factor, preprocessing=net_normalization)
-        # ckpt = torch.load(settings.CIF100_CKPT)
-        # new_state_dict = create_new_state_dict(ckpt, keyword='state_dict')
-        # model.load_state_dict(new_state_dict)
+        from models.wide_residual_distr import WideResNet as WideResNet96
+        from models.wide_residual_distr import WideBasic as WideBasic96
 
-        from models.wide_residual_distr import WideResNet, WideBasic
-        model = WideResNet(num_classes=settings.MAX_CLASSES_CIF100, block=WideBasic, depth=depth, widen_factor=widen_factor, dropout=0.3, preprocessing=net_normalization)
+        model = WideResNet96(num_classes=settings.MAX_CLASSES_CIF100, block=WideBasic96, depth=depth, widen_factor=widen_factor, dropout=0.3, preprocessing=net_normalization)
         ckpt = torch.load(settings.CIF100_CKPT)
         model.load_state_dict(ckpt['model_state_dict'],  strict=True)
 
@@ -1116,9 +1122,9 @@ def load_test_set(args, preprocessing=None, num_workers=4, download=True, IS_TRA
         elif args.net == 'restricted_imagenet':
             path = settings.IMAGENET_HIERARCHY_PATH
                 
-        # source
-        transform_list = [transforms.Scale(256), transforms.CenterCrop(224), transforms.ToTensor()] + normalization
-        # transform_list = [transforms.Resize(256), transforms.CenterCrop(224), transforms.ToTensor()] + normalization
+        # source https://pytorch.org/hub/pytorch_vision_wide_resnet/
+        # transform_list = [transforms.Scale(256), transforms.CenterCrop(224), transforms.ToTensor()] + normalization
+        transform_list = [transforms.Resize(256), transforms.CenterCrop(224), transforms.ToTensor()] + normalization
         
         # if IS_TRAIN:
         #     transform_list = [transforms.RandomResizedCrop(224), transforms.RandomHorizontalFlip(), transforms.ToTensor()] + normalization

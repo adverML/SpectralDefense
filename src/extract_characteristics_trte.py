@@ -135,6 +135,7 @@ if __name__ == '__main__':
     parser.add_argument("--shuffle_on",     action='store_true',      help="Switch shuffle data on")
     parser.add_argument('--net_normalization', action='store_true',   help=settings.HELP_NET_NORMALIZATION)
 
+    parser.add_argument('--version',    type=str, default='standard')
     # parser.add_argument("--eps",       default='-1',       help=settings.HELP_AA_EPSILONS) # to activate the best layers
     parser.add_argument("--eps",       default='8./255.',       help=settings.HELP_AA_EPSILONS)
     # parser.add_argument("--eps",       default='4./255.',       help=settings.HELP_AA_EPSILONS)

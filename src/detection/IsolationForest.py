@@ -21,21 +21,42 @@ def IF(args, logger, X_train, y_train, X_test, y_test):
     clf = IsolationForest(n_estimators=n_estimators, max_samples=max_samples, contamination=contamination, n_jobs=-1, random_state=21, warm_start=warm_start, verbose=0) 
     logger.log(clf)
 
-    clf.fit(X_train, y_train)
+    # clf.fit(X_train, y_train)
+    
+    X_train = X_train[y_train==1]
+    clf.fit(X_train)
+    
     # test_score = clf.score(X_test, y_test)
     # print("test score: ", test_score)
-
-    y_hat = clf.predict(X_test, y_test)
+    y_hat = clf.predict(X_test)
+    
     dec_f = clf.decision_function(X_test)
     score = clf.score_samples(X_test)
 
+    count_adv = (y_test == 0).sum()
+    count_nor = (y_test == 1).sum()
     
+    
+    # fp, fn, tp, tn
+    
+    # for  it, val in enumerate(y_test.shape):
+        
+        
+        
+        
+    #     print("it")
+    
+
     outlier_index = np.where(y_hat==-1)
+    
+    y_hat[outlier_index] = 0
+    
+    
     # y_hat_pr = clf.predict_proba(X_test)[:, 1]
 
-    print('outlier_index', outlier_index)
+    # print('outlier_index', outlier_index)
 
-    pdb.set_trace()
+    # pdb.set_trace()
 
     y_hat_pr = y_hat.copy()
     y_hat_pr = y_hat[outlier_index]

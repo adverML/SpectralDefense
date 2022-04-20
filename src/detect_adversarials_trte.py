@@ -45,6 +45,7 @@ parser.add_argument("--clf",            default='LR',             help="Logistic
 parser.add_argument("--trees",          default='300',  type=int, help=settings.HELP_NUM_CLASSES)
 parser.add_argument("--num_iter",       default='100',  type=int, help="LR: Number iteration")
 
+parser.add_argument('--version',    type=str, default='standard')
 # parser.add_argument("--eps",       default='-1',       help="epsilon: 4/255, 3/255, 2/255, 1/255, 0.5/255")
 parser.add_argument("--eps",       default='8./255.',            help=settings.HELP_AA_EPSILONS)
 # parser.add_argument("--eps",       default='4./255.',       help="epsilon: 4/255, 3/255, 2/255, 1/255, 0.5/255")
