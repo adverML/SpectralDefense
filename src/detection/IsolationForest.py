@@ -35,30 +35,13 @@ def IF(args, logger, X_train, y_train, X_test, y_test):
 
     count_adv = (y_test == 0).sum()
     count_nor = (y_test == 1).sum()
-    
-    
-    # fp, fn, tp, tn
-    
-    # for  it, val in enumerate(y_test.shape):
-        
-        
-        
-        
-    #     print("it")
-    
 
     outlier_index = np.where(y_hat==-1)
     
     y_hat[outlier_index] = 0
-    
-    
-    # y_hat_pr = clf.predict_proba(X_test)[:, 1]
-
-    # print('outlier_index', outlier_index)
-
-    # pdb.set_trace()
 
     y_hat_pr = y_hat.copy()
-    y_hat_pr = y_hat[outlier_index]
+    
+    # y_hat_pr = y_hat[outlier_index]
 
-    return clf, y_hat, y_hat
+    return clf, y_hat, y_hat_pr
