@@ -117,6 +117,11 @@ model = model.eval()
 
 
 # with torch.no_grad():
+#     for i, m in enumerate(filter(lambda m: type(m) == torch.nn.relu and m.kernel_size == (3, 3), model.modules())):
+        
+#         import pdb; pdb.set_trace()
+
+# with torch.no_grad():
 #     for i, m in enumerate(filter(lambda m: type(m) == torch.nn.Conv2d and m.kernel_size == (3, 3), model.modules())):
 #         weight = m.weight.detach().cpu().numpy().copy()
 #         shape = weight.shape

@@ -7,7 +7,7 @@ function log_msg {
 # DATASETS=(cif10 cif10vgg cif100 cif100vgg imagenet imagenet32 imagenet64 imagenet128 celebaHQ32 celebaHQ64 celebaHQ128)
 # DATASETS="cif10 cif10vgg  cif100 cif100vgg cif10_rb"
 # DATASETS="cif10 cif100"
-DATASETS="cif10vgg cif100vgg"
+DATASETS="cif10vgg"
 # DATASETS="cif10vgg"
 # DATASETS="cif10rn34 cif100rn34"
 # DATASETS="cif10rn34sota"
@@ -18,7 +18,7 @@ DATASETS="cif10vgg cif100vgg"
 # DATASETS="cif10vgg"
 
 # DATASETS="imagenet64 celebaHQ64 imagenet128 celebaHQ128"
-RUNS="1 2 3"
+RUNS="1"
 
 # ATTACKS="gauss"
 # ATTACKS="l2pgd linfdf"
@@ -29,7 +29,7 @@ RUNS="1 2 3"
 # ATTACKS="apgd-ce apgd-t fab-t square"
 # ATTACKS="gauss"
 # ATTACKS="gauss fgsm bim std df"
-ATTACKS="gauss df cw"
+ATTACKS="gauss fgsm bim pgd std "
 # ATTACKS="fgsm"
 # ATTACKS="pgd cw"
 
@@ -39,9 +39,9 @@ ATTACKS="gauss df cw"
 # DETECTORS="InputMFS LayerMFS"
 
 # DETECTORS="InputMFS LayerMFS LID Mahalanobis"
-# DETECTORS="LayerMFS"
+DETECTORS="LayerMFS"
 # DETECTORS="InputPFS LayerPFS InputMFS LayerMFS LID Mahalanobis"
-DETECTORS="LID LIDNOISE"
+# DETECTORS="LID LIDNOISE"
 
 # DETECTORS="DkNN"
 # EPSILONS="8./255. 4./255. 2./255. 1./255. 0.5/255."
@@ -54,10 +54,10 @@ CLF="LR RF"
 IMAGENET32CLASSES="25 50 100 250 1000"
 # NRSAMPLES="300 500 1000 1200 1500 2000" # only at detectadversarialslayer
 
-WANTEDSAMPLES="4000"
+WANTEDSAMPLES="2000"
 ALLSAMPLES="4500"
-NRSAMPLES="4000" # detect
-# NRSAMPLES="1500" # detect
+# NRSAMPLES="4000" # detect
+NRSAMPLES="1500" # detect
 
 DATASETSLAYERNR="cif10"
 ATTACKSLAYERNR="df"

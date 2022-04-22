@@ -25,7 +25,7 @@ RUNS="8"
 # ATTACKS="linfdf"
 
 # ATTACKS="gauss fgsm bim pgd std df cw"
-ATTACKS="cw"
+ATTACKS="fgsm"
 
 # ATTACKS="fgsm bim pgd cw"
 # ATTACKS="aa+"
@@ -49,14 +49,14 @@ ATTACKS="cw"
 # DETECTORS="HPF"
 # DETECTORS="LID LIDNOISE"
 
-DETECTORS="LayerPFS LayerMFS"
+DETECTORS="LayerPFS"
 
 # DETECTORS="DkNN"
 # EPSILONS="8./255. 4./255. 2./255. 1./255. 0.5/255."
 EPSILONS="8./255."
 
 # CLF="LR"
-CLF="RF LR"
+CLF="RF"
 # CLF="SVC"
 # CLF="cuSVC"
 
@@ -72,15 +72,19 @@ ALLSAMPLES="2500"
 NRSAMPLES="1500" # detect
 
 DATASETSLAYERNR="cif10"
-ATTACKSLAYERNR="gauss fgsm bim pgd std df cw"
-# ATTACKSLAYERNR="pgd std df cw"
+# ATTACKSLAYERNR="gauss fgsm bim pgd std df cw"
+ATTACKSLAYERNR="fgsm"
 
 # ATTACKSLAYERNR="cw"
 
 
 # LAYERNR="0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24"
-LAYERNR="0 1 2 3 4 5 6 7 8 9 10 11 12"
-DETECTORSLAYERNR="LayerMFS LayerPFS"
+# LAYERNR="0 1 2 3 4 5 6 7 8 9 10 11 12"
+LAYERNR="10"
+
+# DETECTORSLAYERNR="LayerMFS LayerPFS"
+DETECTORSLAYERNR="LayerPFS"
+
 PCA_FEATURES="0"
 
 #-----------------------------------------------------------------------------------------------------------------------------------
@@ -348,7 +352,7 @@ detectadversarialslayer ()
 # extractcharacteristics
 # detectadversarials
 
-# extractcharacteristicslayer
+extractcharacteristicslayer
 detectadversarialslayer
 
 # #-----------------------------------------------------------------------------------------------------------------------------------

@@ -9,8 +9,8 @@ DATASETS="imagenet"
 # DATASETS="imagenet_hierarchy"
 # DATASETS="restricted_imagenet"
 
+# RUNS="1"
 RUNS="1"
-# RUNS="1 2 3"
 # RUNS="8"
 # RUNS="7"
 # RUNS="10"
@@ -25,7 +25,7 @@ RUNS="1"
 # ATTACKS="apgd-ce+"
 # ATTACKS="fgsm bim std pgd df cw"
 ATTACKS="apgd-ce apgd-t fab-t square"
-# ATTACKS="fab-t"
+# ATTACKS="apgd-ce apgd-t"
 
 
 DETECTORS="InputMFS LayerMFS LID Mahalanobis"
@@ -44,7 +44,7 @@ CLF="LR RF"
 # CLF="IF"
 
 DATASETSLAYERNR="imagenet"
-ATTACKSLAYERNR="std df"
+ATTACKSLAYERNR="bim"
 # ATTACKSLAYERNR="bim df"
 
 # ATTACKSLAYERNR="fgsm bim pgd std df cw"
@@ -53,7 +53,7 @@ LAYERNR="0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16"
 
 # LAYERNR="3 5 6 7 8 9 10 11"
 
-DETECTORSLAYERNR="LayerMFS LayerPFS"
+DETECTORSLAYERNR="LayerMFS"
 # DETECTORSLAYERNR="LayerMFS LayerPFS"
 
 # NRSAMPLES="300 500 1000 1200 1500 2000"
@@ -177,12 +177,12 @@ detectadversarialslayer ()
 }
 
 # genereratecleandata
-attacks
-extractcharacteristics
-detectadversarials
+# attacks
+# extractcharacteristics
+# detectadversarials
 
-# extractcharacteristicslayer
-# detectadversarialslayer
+extractcharacteristicslayer
+detectadversarialslayer
 
 # #------------------------------------------------------------------------------------------------------------
 log_msg "finished"

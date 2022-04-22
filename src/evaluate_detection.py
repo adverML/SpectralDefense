@@ -367,15 +367,17 @@ if __name__ == "__main__":
     # OUT_PATH = "analysis/variance/run_gauss_"
     # APP = '_LID'
     # APP = '_HPF'
+    # APP = 'layers'
     APP = ''
+    
+    # APP = 'df_cw'
     # LAYERS=True
     LAYERS=False
-    appendix = "df_cw.csv"
     CSV_FILE_PATH = []
-    # NR = [1,2,3]
+    NR = [1,2,3]
     # NR = [8]
     # NR = [3]
-    NR = [1]
+    # NR = [1]
 
 
     for nr in NR:
@@ -387,7 +389,7 @@ if __name__ == "__main__":
         # CSV_FILE_PATH.append( extract_information(root='./data', net=['cif10rn34'],   dest='./data/detection', nr=nr, csv_filename='cif10rn34{}.csv'.format(APP), layers=LAYERS) )
         # CSV_FILE_PATH.append( extract_information(root='./data', net=['cif100rn34'],  dest='./data/detection', nr=nr, csv_filename='cif100rn34{}.csv'.format(APP), layers=LAYERS) )
 
-        # CSV_FILE_PATH.append( extract_information(root='./data', net=['imagenet32'],  dest='./data/detection', nr=nr, csv_filename='imagenet32{}.csv'.format(APP), layers=LAYERS, architecture='') )
+        # CSV_FILE_PATH.append( extract_information(root='./data', net=['imagenet32'],  dest='./data/detection', nr=nr, csv_filename='imagenet32{}.csv'.format(APP), layers=LAYERS, architecture='wrn_28_10') )
         # CSV_FILE_PATH.append( extract_information(root='./data', net=['imagenet64'],  dest='./data/detection', nr=nr, csv_filename='imagenet64{}.csv'.format(APP), layers=LAYERS) )
         # CSV_FILE_PATH.append( extract_information(root='./data', net=['imagenet128'], dest='./data/detection',nr=nr, csv_filename='imagenet128{}.csv'.format(APP), layers=LAYERS) )
 
@@ -396,18 +398,18 @@ if __name__ == "__main__":
         # CSV_FILE_PATH.append( extract_information(root='./data', net=['celebaHQ128'], dest='./data/detection', nr=nr, csv_filename='celebaHQ128{}.csv'.format(APP), layers=LAYERS) )
 
         # CSV_FILE_PATH.append( extract_information(root='./data', net=['cif10_rb'],    dest='./data/detection',   nr=nr, csv_filename='cif10_rb{}.csv'.format(APP), layers=LAYERS) )
-        # CSV_FILE_PATH.append( extract_information(root='./data', net=['imagenet'],    dest='./data/detection',   nr=nr, csv_filename='imagenet{}.csv'.format(APP), layers=LAYERS) )
+        CSV_FILE_PATH.append( extract_information(root='./data', net=['imagenet'],    dest='./data/detection',   nr=nr, csv_filename='imagenet{}.csv'.format(APP), layers=LAYERS) )
         
         # architecture='wrn_28_10_25'
         # CSV_FILE_PATH.append( extract_information(root='./data', net=['imagenet32'],  dest='./data/detection', nr=nr, csv_filename='imagenet32{}.csv'.format(architecture), layers=LAYERS, architecture=architecture) )
-        architecture='wrn_28_10_50'
-        CSV_FILE_PATH.append( extract_information(root='./data', net=['imagenet32'],  dest='./data/detection', nr=nr, csv_filename='imagenet32{}.csv'.format(architecture), layers=LAYERS, architecture=architecture) )
-        architecture='wrn_28_10_75'
-        CSV_FILE_PATH.append( extract_information(root='./data', net=['imagenet32'],  dest='./data/detection', nr=nr, csv_filename='imagenet32{}.csv'.format(architecture), layers=LAYERS, architecture=architecture) )
-        architecture='wrn_28_10_100'
-        CSV_FILE_PATH.append( extract_information(root='./data', net=['imagenet32'],  dest='./data/detection', nr=nr, csv_filename='imagenet32{}.csv'.format(architecture), layers=LAYERS, architecture=architecture) )
-        architecture='wrn_28_10_250'
-        CSV_FILE_PATH.append( extract_information(root='./data', net=['imagenet32'],  dest='./data/detection', nr=nr, csv_filename='imagenet32{}.csv'.format(architecture), layers=LAYERS, architecture=architecture) )
+        # architecture='wrn_28_10_50'
+        # CSV_FILE_PATH.append( extract_information(root='./data', net=['imagenet32'],  dest='./data/detection', nr=nr, csv_filename='imagenet32{}.csv'.format(architecture), layers=LAYERS, architecture=architecture) )
+        # architecture='wrn_28_10_75'
+        # CSV_FILE_PATH.append( extract_information(root='./data', net=['imagenet32'],  dest='./data/detection', nr=nr, csv_filename='imagenet32{}.csv'.format(architecture), layers=LAYERS, architecture=architecture) )
+        # architecture='wrn_28_10_100'
+        # CSV_FILE_PATH.append( extract_information(root='./data', net=['imagenet32'],  dest='./data/detection', nr=nr, csv_filename='imagenet32{}.csv'.format(architecture), layers=LAYERS, architecture=architecture) )
+        # architecture='wrn_28_10_250'
+        # CSV_FILE_PATH.append( extract_information(root='./data', net=['imagenet32'],  dest='./data/detection', nr=nr, csv_filename='imagenet32{}.csv'.format(architecture), layers=LAYERS, architecture=architecture) )
 
         copy_var(CSV_FILE_PATH, OUT_PATH, nr)
 
@@ -522,10 +524,7 @@ if __name__ == "__main__":
 
 
 
-
 # run 1
-
-
 
 # extract_information(root='./data', net=['cif10vgg'],  dest='./data/detection',  run_nr=NR, csv_filename=appendix ,  layers=False)
 # extract_information(root='./data', net=['cif100vgg'], dest='./data/detection',  run_nr=NR, csv_filename=appendix ,  layers=False)

@@ -24,7 +24,9 @@ RUNS="1"
 # ATTACKS="apgd-dlr+ fab+ square+ apgd-t+ fab-t+"
 # ATTACKS="apgd-ce+"
 # ATTACKS="fgsm bim std pgd df cw"
-ATTACKS="apgd-ce apgd-t fab-t square"
+ATTACKS="fgsm std" #pgd  cw
+
+# ATTACKS="apgd-ce apgd-t fab-t square"
 # ATTACKS="fab-t"
 
 
@@ -44,8 +46,8 @@ CLF="LR RF"
 # CLF="IF"
 
 DATASETSLAYERNR="imagenet"
-ATTACKSLAYERNR="apgd-ce apgd-t fab-t square"
-# ATTACKSLAYERNR="square"
+ATTACKSLAYERNR="fgsm std"
+# ATTACKSLAYERNR="fab-t"
 
 # ATTACKSLAYERNR="fgsm bim pgd std df cw"
 LAYERNR="0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16"
@@ -59,7 +61,7 @@ DETECTORSLAYERNR="LayerMFS LayerPFS"
 
 # NRSAMPLES="300 500 1000 1200 1500 2000"
 ALLSAMPLES="3000"
-WANTEDSAMPLES="2000"
+WANTEDSAMPLES="1800"
 WANTEDSAMPLES_TR="18000"
 WANTEDSAMPLES_TE="18000"
 
@@ -143,9 +145,9 @@ extractcharacteristicslayer ()
                     for nr in $LAYERNR; do 
                         log_msg "Layer Nr. $nr; attack $att; detectors $det"
                         if [ "$run" == 7 ]; then
-                            python -u extract_characteristics.py --net "$net" --attack "$att" --detector "$det" --num_classes 1000 --nr "$nr" --run_nr "$run" #--take_inputimage_off
+                            python -u extract_characteristics.py --net "$net" --attack "$att" --detector "$det" --num_classes 1000 --nr "$nr" --run_nr "$run" --wanted_samples $WANTEDSAMPLES #--take_inputimage_off 
                         else
-                            python -u extract_characteristics.py --net "$net" --attack "$att" --detector "$det" --num_classes 1000 --nr "$nr" --run_nr "$run" --take_inputimage_off
+                            python -u extract_characteristics.py --net "$net" --attack "$att" --detector "$det" --num_classes 1000 --nr "$nr" --run_nr "$run" --wanted_samples $WANTEDSAMPLES --take_inputimage_off
                         fi
                     done
                 done
@@ -182,7 +184,7 @@ detectadversarialslayer ()
 # extractcharacteristics
 # detectadversarials
 
-# extractcharacteristicslayer
+extractcharacteristicslayer
 detectadversarialslayer
 
 # #------------------------------------------------------------------------------------------------------------

@@ -18,18 +18,18 @@ RUNS="1"
 
 # ATTACKS="fgsm bim pgd"
 # ATTACKS="gauss"
-# ATTACKS="gauss fgsm bim pgd std df cw"
+ATTACKS="fgsm bim pgd std"
 # ATTACKS="aa+"
 
 # ATTACKS="apgd-dlr+ fab+ square+ apgd-t+ fab-t+"
 # ATTACKS="apgd-ce+"
 # ATTACKS="fgsm bim std pgd df cw"
 # ATTACKS="apgd-ce apgd-t fab-t square"
-ATTACKS="fab-t"
+# ATTACKS="fab-t"
 
 
 # DETECTORS="InputMFS LayerMFS LID Mahalanobis"
-DETECTORS="InputMFS LayerMFS"
+DETECTORS="LayerMFS"
 # DETECTORS="InputMFS LayerMFS"
 # DETECTORS="InputPFS LayerPFS InputMFS LayerMFS LID Mahalanobis"
 
@@ -62,7 +62,7 @@ WANTEDSAMPLES="2000"
 WANTEDSAMPLES_TR="18000"
 WANTEDSAMPLES_TE="18000"
 
-NRSAMPLES="1500" # detect
+NRSAMPLES="2000" # detect
 
 #-----------------------------------------------------------------------------------------------------------------------------------
 log_msg "Networks are already trained!"
@@ -177,7 +177,7 @@ detectadversarialslayer ()
 }
 
 # genereratecleandata
-attacks
+# attacks
 extractcharacteristics
 detectadversarials
 

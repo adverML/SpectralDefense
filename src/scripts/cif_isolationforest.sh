@@ -14,8 +14,8 @@ DATASETS="cif10 cif100 cif10vgg cif100vgg"
 # DATASETS="cif10 cif10vgg cif10_rb cif10rn34 cif100 cif100vgg cif100rn34"
 
 
-# RUNS="1 2 3"
-RUNS="1"
+RUNS="1 2 3"
+# RUNS="1"
 
 
 # ATTACKS="df"
@@ -27,7 +27,7 @@ RUNS="1"
 # ATTACKS="gauss fgsm bim pgd std df cw"
 
 # ATTACKS="apgd-ce apgd-t fab-t square"
-ATTACKS="fgsm"
+ATTACKS="gauss fgsm bim pgd std"
 # ATTACKS="gauss bim std df"
 # ATTACKS="cw"
 
@@ -48,9 +48,9 @@ ATTACKS="fgsm"
 
 # DETECTORS="LID Mahalanobis"
 # DETECTORS="InputMFS LayerMFS LID Mahalanobis"
-# DETECTORS="LayerMFS"
+DETECTORS="LayerMFS"
 # DETECTORS="InputPFS LayerPFS InputMFS LayerMFS LID Mahalanobis"
-DETECTORS="LID"
+# DETECTORS="LID"
 # DETECTORS="HPF"
 # DETECTORS="LID LIDNOISE"
 
@@ -345,7 +345,7 @@ detectadversarialslayer ()
 # printn
 # genereratecleandata
 # attacks
-# extractcharacteristics
+extractcharacteristics
 detectadversarials
 
 # extractcharacteristicslayer
