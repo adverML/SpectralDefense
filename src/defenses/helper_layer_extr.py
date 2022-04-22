@@ -235,7 +235,7 @@ def get_whitebox_features(args, logger, model):
             model.conv5_x[2].residual_function[2].register_forward_hook( get_activation('conv5_2_relu') )      
 
         else:
-            if not (args.attack  in ['df', 'cw', 'fab','fab-t']:
+            if not (args.attack  in ['df', 'cw', 'fab','fab-t']):
                 
                 if not args.attack == 'fgsm':
                     # last block

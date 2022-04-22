@@ -28,7 +28,9 @@ ATTACKS="apgd-ce apgd-t fab-t square"
 # ATTACKS="apgd-ce apgd-t"
 
 
-DETECTORS="InputMFS LayerMFS LID Mahalanobis"
+DETECTORS="InputMFS LayerMFS"
+# DETECTORS="InputMFS LayerMFS LID Mahalanobis"
+
 # DETECTORS="InputMFS LayerMFS"
 # DETECTORS="InputMFS LayerMFS"
 # DETECTORS="InputPFS LayerPFS InputMFS LayerMFS LID Mahalanobis"
@@ -40,7 +42,7 @@ DETECTORS="InputMFS LayerMFS LID Mahalanobis"
 EPSILONS="8./255."
 
 # CLF="LR RF"
-CLF="LR RF"
+CLF="RF"
 # CLF="IF"
 
 DATASETSLAYERNR="imagenet"
@@ -62,7 +64,7 @@ WANTEDSAMPLES="2000"
 WANTEDSAMPLES_TR="18000"
 WANTEDSAMPLES_TE="18000"
 
-NRSAMPLES="1500" # detect
+NRSAMPLES="2000" # detect
 
 #-----------------------------------------------------------------------------------------------------------------------------------
 log_msg "Networks are already trained!"
@@ -178,11 +180,11 @@ detectadversarialslayer ()
 
 # genereratecleandata
 # attacks
-# extractcharacteristics
-# detectadversarials
+extractcharacteristics
+detectadversarials
 
-extractcharacteristicslayer
-detectadversarialslayer
+# extractcharacteristicslayer
+# detectadversarialslayer
 
 # #------------------------------------------------------------------------------------------------------------
 log_msg "finished"
