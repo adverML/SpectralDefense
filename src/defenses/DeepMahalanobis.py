@@ -140,6 +140,9 @@ def deep_mahalanobis(args, logger, model, images, images_advs, layers, get_layer
     precision   = torch.load(sample_precision_path)    
     
     if  args.net == 'mnist' or args.net == 'cif10' or args.net == 'cif10vgg' or args.net == 'imagenet32' or args.net == 'celebaHQ32':
+        if args.attack == 'gauss':
+            magnitude = 0.0004
+        
         if args.attack == 'fgsm':
             magnitude = 0.0002
         elif args.attack == 'cw':

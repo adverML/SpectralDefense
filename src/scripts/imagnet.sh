@@ -9,7 +9,7 @@ DATASETS="imagenet"
 # DATASETS="imagenet_hierarchy"
 # DATASETS="restricted_imagenet"
 
-RUNS="3"
+RUNS="1"
 # RUNS="1 2 3"
 # RUNS="8"
 # RUNS="7"
@@ -29,7 +29,7 @@ ATTACKS="gauss fgsm bim pgd std df cw"
 
 
 # DETECTORS="InputMFS LayerMFS LID Mahalanobis"
-DETECTORS="LayerMFS"
+DETECTORS="LID"
 # DETECTORS="InputMFS LayerMFS"
 # DETECTORS="InputPFS LayerPFS InputMFS LayerMFS LID Mahalanobis"
 
@@ -40,7 +40,9 @@ DETECTORS="LayerMFS"
 EPSILONS="8./255."
 
 # CLF="LR RF"
-CLF="LR RF"
+CLF="RF"
+# CLF="LR RF"
+
 # CLF="IF"
 
 DATASETSLAYERNR="imagenet"

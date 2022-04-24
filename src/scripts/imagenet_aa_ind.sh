@@ -5,7 +5,7 @@ function log_msg {
 }
 
 # DATASETS=(cif10 cif10vgg cif100 cif100vgg imagenet imagenet32 imagenet64 imagenet128 celebaHQ32 celebaHQ64 celebaHQ128)
-DATASETS="imagenet"
+DATASETS="cif10"
 # DATASETS="imagenet_hierarchy"
 # DATASETS="restricted_imagenet"
 
@@ -179,7 +179,7 @@ detectadversarialslayer ()
 }
 
 # genereratecleandata
-# attacks
+attacks
 extractcharacteristics
 detectadversarials
 
