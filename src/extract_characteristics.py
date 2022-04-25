@@ -75,6 +75,8 @@ parser.add_argument("--eps",       default='8./255.',       help=settings.HELP_A
 # parser.add_argument("--eps",       default='1./255.',       help=settings.HELP_AA_EPSILONS)
 # parser.add_argument("--eps",       default='0.5/255.',       help=settings.HELP_AA_EPSILONS)
 
+parser.add_argument("--k_lid",       default='-1',       help="k for LID")
+
 # Frequency Analysis
 parser.add_argument("--fr", default='8',  type=int, help="InputMFS frequency analysis")
 parser.add_argument("--to", default='24', type=int, help="InputMFS frequency analysis")
@@ -92,8 +94,6 @@ save_args_to_file(args, output_path_dir)
 logger = Logger(output_path_dir + os.sep + 'log.txt')
 log_header(logger, args, output_path_dir, sys) # './data/extracted_characteristics/imagenet32/wrn_28_10/std/8_255/LayerMFS'
 
-# check args
-# args = check_args(args, logger)
 
 # input data
 input_path_dir = create_dir_attacks(args, root='./data/attacks/')

@@ -1276,6 +1276,16 @@ def check_layer_nr(args):
             get_debug_info(msg="Only WhiteBox Methods possible!")
 
     return layer_nr
+
+
+def check_k(args):
+    k_lid = ''
+    
+    if args.detector == 'LID':
+        if args.k_lid > 0:
+            k_lid = 'k_' + str(args.k_lid)
+        
+    return k_lid
     
 
 def create_dir_attacks(args, root='./data/attacks/', wait_input=False):
@@ -1295,14 +1305,15 @@ def create_dir_attacks(args, root='./data/attacks/', wait_input=False):
 def create_dir_extracted_characteristics(args, root='./data/extracted_characteristics/', TRANSFER=None, wait_input=False):
     output_filename = create_output_filename(args, TRANSFER=TRANSFER)
     layer_nr = check_layer_nr(args)
-    epsilon = check_epsilon(args, TRANSFER=TRANSFER)
+    epsilon  = check_epsilon(args, TRANSFER=TRANSFER)
+    k_lid    = check_k(args)
 
     if TRANSFER == None:
-        output_path_dir = os.path.join(root, 'run_' + str(args.run_nr), args.net,      output_filename, args.attack,      epsilon, args.detector, layer_nr)
+        output_path_dir = os.path.join(root, 'run_' + str(args.run_nr), args.net,      output_filename, args.attack,      epsilon, args.detector, k_lid, layer_nr)
     elif TRANSFER == 'attack':
-        output_path_dir = os.path.join(root, 'run_' + str(args.run_nr), args.net,      output_filename, args.attack_eval, epsilon, args.detector, layer_nr)
+        output_path_dir = os.path.join(root, 'run_' + str(args.run_nr), args.net,      output_filename, args.attack_eval, epsilon, args.detector, k_lid, layer_nr)
     elif TRANSFER == 'data':
-        output_path_dir = os.path.join(root, 'run_' + str(args.run_nr), args.net_eval, output_filename, args.attack,      epsilon, args.detector, layer_nr)
+        output_path_dir = os.path.join(root, 'run_' + str(args.run_nr), args.net_eval, output_filename, args.attack,      epsilon, args.detector, k_lid, layer_nr)
     else:
         raise Exception("Wronge Transfer key word!")
 
@@ -1320,15 +1331,16 @@ def create_dir_detection(args, root='./data/detection/', TRANSFER=None, wait_inp
     output_filename = create_output_filename(args)
     layer_nr = check_layer_nr(args)
     epsilon = check_epsilon(args, TRANSFER=None)
+    k_lid    = check_k(args)
 
     if TRANSFER == None: 
-        output_path_dir = os.path.join(root, 'run_' + str(args.run_nr), args.net, output_filename, args.attack, epsilon, args.detector, layer_nr, args.clf)
+        output_path_dir = os.path.join(root, 'run_' + str(args.run_nr), args.net, output_filename, args.attack, epsilon, args.detector, k_lid, layer_nr, args.clf)
     elif TRANSFER == 'attack':
         epsilon_to = check_epsilon(args, TRANSFER='attack')
-        output_path_dir = os.path.join(root, 'run_' + str(args.run_nr), args.net, output_filename, args.attack, epsilon, args.detector, layer_nr, args.clf, args.attack_eval, epsilon_to)
+        output_path_dir = os.path.join(root, 'run_' + str(args.run_nr), args.net, output_filename, args.attack, epsilon, args.detector, k_lid, layer_nr, args.clf, args.attack_eval, epsilon_to)
     elif TRANSFER == 'data':
         epsilon = check_epsilon(args, TRANSFER=None)
-        output_path_dir = os.path.join(root, 'run_' + str(args.run_nr), args.net, output_filename, args.attack, epsilon, args.detector, layer_nr, args.clf, args.net_eval, epsilon)
+        output_path_dir = os.path.join(root, 'run_' + str(args.run_nr), args.net, output_filename, args.attack, epsilon, args.detector, k_lid, layer_nr, args.clf, args.net_eval, epsilon)
     else:
         raise Exception('Transfer not known!')
 

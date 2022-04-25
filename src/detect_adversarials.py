@@ -24,7 +24,13 @@ from utils import (
     create_save_dir_path,
 )
 
-from detection.helper_detection import show_results, split_data, save_load_clf
+from detection.helper_detection import (
+    show_results, 
+    split_data, 
+    save_load_clf, 
+    compute_time_sample
+)
+
 from attack.helper_attacks import check_args_attack
 
 #processing the arguments
@@ -145,23 +151,30 @@ if args.pca_features > 0:
 #train classifier
 logger.log('Training classifier...')
 
-if args.clf == 'LR':
-    from detection.LogisticRegression import LR
-    clf, y_hat, y_hat_pr = LR(args, logger, X_train, y_train, X_test, y_test)
-elif args.clf == 'RF':
-    from detection.RandomForest import RF
-    clf, y_hat, y_hat_pr = RF(args, logger, X_train, y_train, X_test, y_test)
-elif args.clf == 'IF':
-    from detection.IsolationForest import IF
-    clf, y_hat, y_hat_pr = IF(args, logger, X_train, y_train, X_test, y_test)
-elif args.clf == 'SVC':
-    from detection.SVC import SVC
-    clf, y_hat, y_hat_pr = SVC(args, logger, X_train, y_train, X_test, y_test)
-elif args.clf == 'cuSVC':
-    from detection.SVC import cuSVC
-    clf, y_hat, y_hat_pr = cuSVC(args, logger, X_train, y_train, X_test, y_test)
+
+if settings.SAVE_CLASSIFIER:
+    if args.clf == 'LR':
+        from detection.LogisticRegression import LR
+        clf, y_hat, y_hat_pr = LR(args, logger, X_train, y_train, X_test, y_test)
+    elif args.clf == 'RF':
+        from detection.RandomForest import RF
+        clf, y_hat, y_hat_pr = RF(args, logger, X_train, y_train, X_test, y_test)
+    elif args.clf == 'IF':
+        from detection.IsolationForest import IF
+        clf, y_hat, y_hat_pr = IF(args, logger, X_train, y_train, X_test, y_test)
+    elif args.clf == 'SVC':
+        from detection.SVC import SVC
+        clf, y_hat, y_hat_pr = SVC(args, logger, X_train, y_train, X_test, y_test)
+    elif args.clf == 'cuSVC':
+        from detection.SVC import cuSVC
+        clf, y_hat, y_hat_pr = cuSVC(args, logger, X_train, y_train, X_test, y_test)
+    
+    clf = save_load_clf(args, clf,   output_path_dir=output_path_dir)
+else: # load clf
+    clf = save_load_clf(args, clf=0, output_path_dir=output_path_dir)
 
 
-clf = save_load_clf(args, clf, output_path_dir)
+
+compute_time_sample(args, clf, X_train, y_train, X_test, y_test)
 
 show_results(args, logger, y_test, y_hat, y_hat_pr)

@@ -150,9 +150,7 @@ DETECTOR_LIST = ['LID']
 # DETECTOR_LIST = ['HPF']
 # DETECTOR_LIST = ['LayerMFS']
 
-
 # DETECTOR_LIST = ['LID', 'LIDNOISE']
-
 # DETECTOR_LIST = ['LID', 'Mahalanobis']
 
 

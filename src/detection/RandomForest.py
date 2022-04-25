@@ -5,6 +5,7 @@ from sklearn.ensemble import RandomForestClassifier
 import copy
 import pdb
 
+
 def RF(args, logger, X_train, y_train, X_test, y_test):
     
     # trees = [ 300 ]
@@ -43,8 +44,15 @@ def RF(args, logger, X_train, y_train, X_test, y_test):
                     save_clf = copy.deepcopy(clf)
     clf = copy.deepcopy(save_clf)
     logger.log(clf)
+    
+    # if settings.SAVE_CLASSIFIER:
+    #     save_load_clf(args, clf, output_path_dir)
+    # else:
+    #     clf = save_load_clf(args, clf, output_path_dir)
 
     y_hat    = clf.predict(X_test)
     y_hat_pr = clf.predict_proba(X_test)[:, 1]
+    
+    
 
     return clf, y_hat, y_hat_pr

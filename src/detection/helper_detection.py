@@ -3,13 +3,15 @@
 from conf import settings
 
 import torch
-import os
+import os, pdb
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import confusion_matrix
 from sklearn.metrics import roc_auc_score
 from sklearn.metrics import roc_curve
 
 import  numpy as np
+
+from time import time
 
 def show_results(args, logger, y_test, y_hat, y_hat_pr):
 
@@ -120,3 +122,31 @@ def save_load_clf(args, clf, output_path_dir):
         clf = torch.load(classifier_pth)
     
     return clf
+
+
+
+def compute_time_sample(args, clf, X_train, y_train, X_test, y_test):
+    
+    compute_time_sample = []
+    
+    # for x_test in X_test:
+    #     tstart = time()
+    #     import pdb; pdb.set_trace()
+    #     y_hat = clf.predict(x_test)
+    #     tend = time()
+    #     difference = tend - tstart
+    #     compute_time_sample.append(difference)
+    #     import pdb; pdb.set_trace()
+    
+    
+
+    tstart = time()
+    # import pdb; pdb.set_trace()
+    y_hat = clf.predict(X_test[:100])
+    tend = time()
+    difference = tend - tstart
+    compute_time_sample.append(difference / 100)
+    # import pdb; pdb.set_trace()
+    
+    
+    print("The prediction took {} seconds to execute".format(difference))

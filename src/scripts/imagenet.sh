@@ -17,8 +17,8 @@ RUNS="1"
 
 
 # ATTACKS="fgsm bim pgd"
-# ATTACKS="gauss"
-ATTACKS="fgsm bim pgd std"
+ATTACKS="gauss"
+# ATTACKS="fgsm bim pgd std"
 # ATTACKS="aa+"
 
 # ATTACKS="apgd-dlr+ fab+ square+ apgd-t+ fab-t+"
@@ -29,9 +29,11 @@ ATTACKS="fgsm bim pgd std"
 
 
 # DETECTORS="InputMFS LayerMFS LID Mahalanobis"
-DETECTORS="LayerMFS"
+# DETECTORS="LayerMFS"
 # DETECTORS="InputMFS LayerMFS"
 # DETECTORS="InputPFS LayerPFS InputMFS LayerMFS LID Mahalanobis"
+
+DETECTORS="LID" 
 
 # DETECTORS="LID LIDNOISE"
 
@@ -40,7 +42,8 @@ DETECTORS="LayerMFS"
 EPSILONS="8./255."
 
 # CLF="LR RF"
-CLF="LR RF"
+CLF="RF"
+# CLF="LR"
 # CLF="IF"
 
 DATASETSLAYERNR="imagenet"
@@ -178,7 +181,7 @@ detectadversarialslayer ()
 
 # genereratecleandata
 # attacks
-extractcharacteristics
+# extractcharacteristics
 detectadversarials
 
 # extractcharacteristicslayer
