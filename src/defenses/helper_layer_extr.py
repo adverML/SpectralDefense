@@ -450,35 +450,68 @@ def get_whitebox_features(args, logger, model):
                         ]
 
 
+
         if layer_nr == 0:
-            layers = ['conv2_0_relu_1', 'conv2_0_relu_4']
+            layers = ['conv2_0_relu_4']
         elif layer_nr == 1:
-            layers = ['conv2_1_relu_1', 'conv2_1_relu_4']
+            layers = ['conv2_1_relu_4']
         elif layer_nr == 2:
-            layers = ['conv2_2_relu_1', 'conv2_2_relu_4']
+            layers = ['conv2_2_relu_4']
         elif layer_nr == 3:
-            layers = ['conv2_3_relu_1', 'conv2_3_relu_4']
+            layers = ['conv2_3_relu_4']
         elif layer_nr == 4:
-            layers = ['conv3_0_relu_1', 'conv3_0_relu_4']
+            layers = ['conv3_0_relu_4']
         elif layer_nr == 5:
-            layers = ['conv3_1_relu_1', 'conv3_1_relu_4']
+            layers = ['conv3_1_relu_4']
         elif layer_nr == 6:
-            layers = ['conv3_2_relu_1', 'conv3_2_relu_4']
+            layers = ['conv3_2_relu_4']
         elif layer_nr == 7:
-            layers = ['conv3_3_relu_1', 'conv3_3_relu_4']
+            layers = ['conv3_3_relu_4']
         elif layer_nr == 8:
-            layers = ['conv4_0_relu_1', 'conv4_0_relu_4']
+            layers = ['conv4_0_relu_4']
         elif layer_nr == 9:
-            layers = ['conv4_1_relu_1', 'conv4_1_relu_4']
+            layers = ['conv4_1_relu_4']
         elif layer_nr == 10:
-            layers = ['conv4_2_relu_1', 'conv4_2_relu_4']
+            layers = ['conv4_2_relu_4']
         elif layer_nr == 11:
-            layers = ['conv4_3_relu_1', 'conv4_3_relu_4']
+            layers = ['conv4_3_relu_4']
         elif layer_nr == 12:
             layers = ['relu']
         else:
-            logger.log( "INFO: layer nr > 24" + ", args.nr " + str(args.nr) )
+            logger.log( "INFO: layer nr > 12" + ", args.nr " + str(args.nr) )
             assert True
+
+
+
+        # if layer_nr == 0:
+        #     layers = ['conv2_0_relu_1', 'conv2_0_relu_4']
+        # elif layer_nr == 1:
+        #     layers = ['conv2_1_relu_1', 'conv2_1_relu_4']
+        # elif layer_nr == 2:
+        #     layers = ['conv2_2_relu_1', 'conv2_2_relu_4']
+        # elif layer_nr == 3:
+        #     layers = ['conv2_3_relu_1', 'conv2_3_relu_4']
+        # elif layer_nr == 4:
+        #     layers = ['conv3_0_relu_1', 'conv3_0_relu_4']
+        # elif layer_nr == 5:
+        #     layers = ['conv3_1_relu_1', 'conv3_1_relu_4']
+        # elif layer_nr == 6:
+        #     layers = ['conv3_2_relu_1', 'conv3_2_relu_4']
+        # elif layer_nr == 7:
+        #     layers = ['conv3_3_relu_1', 'conv3_3_relu_4']
+        # elif layer_nr == 8:
+        #     layers = ['conv4_0_relu_1', 'conv4_0_relu_4']
+        # elif layer_nr == 9:
+        #     layers = ['conv4_1_relu_1', 'conv4_1_relu_4']
+        # elif layer_nr == 10:
+        #     layers = ['conv4_2_relu_1', 'conv4_2_relu_4']
+        # elif layer_nr == 11:
+        #     layers = ['conv4_3_relu_1', 'conv4_3_relu_4']
+        # elif layer_nr == 12:
+        #     layers = ['relu']
+        # else:
+        #     logger.log( "INFO: layer nr > 24" + ", args.nr " + str(args.nr) )
+        #     assert True
 
 
         # if layer_nr == 0:

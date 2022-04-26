@@ -1269,7 +1269,7 @@ def check_epsilon(args, TRANSFER=None):
 
 def check_layer_nr(args):
     layer_nr = ''
-    if args.detector == 'LayerPFS' or args.detector == 'LayerMFS':   
+    if  not args.detector == 'InputMFS':   
         if not args.nr == -1:
                 layer_nr = 'layer_' + str(args.nr)
         else:

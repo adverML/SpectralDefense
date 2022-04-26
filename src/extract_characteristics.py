@@ -75,7 +75,7 @@ parser.add_argument("--eps",       default='8./255.',       help=settings.HELP_A
 # parser.add_argument("--eps",       default='1./255.',       help=settings.HELP_AA_EPSILONS)
 # parser.add_argument("--eps",       default='0.5/255.',       help=settings.HELP_AA_EPSILONS)
 
-parser.add_argument("--k_lid",       default='-1',       help="k for LID")
+parser.add_argument("--k_lid",       default='-1',  type=int, help="k for LID")
 
 # Frequency Analysis
 parser.add_argument("--fr", default='8',  type=int, help="InputMFS frequency analysis")

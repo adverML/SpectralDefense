@@ -6,7 +6,10 @@ import numpy as np
 from tqdm import tqdm
 from scipy.spatial.distance import cdist
 
-from utils import normalize_images
+from utils import (
+    normalize_images,
+    get_debug_info
+)
 
 
 # Gaussian noise scale sizes that were determined so that the average
@@ -38,15 +41,23 @@ CLIP_MAX = 0.5
 np.random.seed(0)
 
 
-def lid_newest(args, model, images, images_advs, layers, get_layer_feature_maps, activation):
+def get_k(args):
     #hyperparameters
     batch_size = 100
-    if args.net == 'mnist' or args.net == 'cif10' or args.net == 'cif10vgg' or args.net == 'imagenet32' or args.net == 'celebaHQ32':
-        k = 50
-    else: # cif100 cif100vgg imagenet imagenet64
-        k = 10
-        batch_size = 64
+    if args.k_lid < 0:
+        if args.net == 'mnist' or args.net == 'cif10' or args.net == 'cif10vgg' or args.net == 'imagenet32' or args.net == 'celebaHQ32':
+            k = 50
+        else: # cif100 cif100vgg imagenet imagenet64
+            k = 10
+            batch_size = 64
+    else:
+        k = args.k_lid
+        
+    return k , batch_size
 
+def lid_newest(args, model, images, images_advs, layers, get_layer_feature_maps, activation):
+
+    k, batch_size = get_k(args)
     
     def mle_batch(data, batch, k):
         data = np.asarray(data, dtype=np.float32)
@@ -112,17 +123,13 @@ def lid_newest(args, model, images, images_advs, layers, get_layer_feature_maps,
 def lid(args, model, images, images_advs, layers, get_layer_feature_maps, activation):
 
     act_layers = layers
-    #hyperparameters
-    batch_size = 100
-    if  args.net  == 'cif10':
-        k = 20
-    else:
-        k = 10
+    k, batch_size = get_k(args)
     
     def mle_batch(data, batch, k):
         data = np.asarray(data, dtype=np.float32)
         batch = np.asarray(batch, dtype=np.float32)
         k = min(k, len(data)-1)
+        
         f = lambda v: - k / np.sum(np.log(v/v[-1]))
         a = cdist(batch, data)
         a = np.apply_along_axis(np.sort, axis=1, arr=a)[:,1:k+1]
@@ -188,12 +195,7 @@ def lid(args, model, images, images_advs, layers, get_layer_feature_maps, activa
 def lidnoise(args, model, images, images_advs, layers, get_layer_feature_maps, activation):
     
     act_layers = layers
-    #hyperparameters
-    batch_size = 100
-    if  args.net  == 'cif10':
-        k = 20
-    else:
-        k = 10
+    k, batch_size = get_k(args)
     
     def mle_batch(data, batch, k):
         data = np.asarray(data, dtype=np.float32)

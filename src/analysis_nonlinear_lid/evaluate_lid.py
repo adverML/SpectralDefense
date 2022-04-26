@@ -19,19 +19,6 @@ from conf import settings
 # import csv
 # import argparse
 
-# from utils import (
-#     check_epsilon, 
-#     check_layer_nr,
-#     create_dir_attacks, 
-#     create_dir_detection, 
-#     create_dir_extracted_characteristics,
-#     create_output_filename, 
-#     make_dir
-# )
-
-
-# import logging
-# import logging.handlers
 
 
 def check_eps(str_val):

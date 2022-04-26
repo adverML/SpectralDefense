@@ -59,6 +59,8 @@ parser.add_argument("--eps",    default='8./255.',     help=settings.HELP_AA_EPS
 # parser.add_argument("--eps",    default='1./255.',   help="epsilon: 4/255, 3/255, 2/255, 1/255, 0.5/255")
 # parser.add_argument("--eps",    default='0.5/255.',  help="epsilon: 4/255, 3/255, 2/255, 1/255, 0.5/255")
 
+parser.add_argument("--k_lid",    default='-1',  type=int,     help="k for LID")
+
 args = parser.parse_args()
 # check args
 args = check_args_attack(args, version=True, net_normalization=False, img_size=False)
