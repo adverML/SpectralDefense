@@ -143,11 +143,22 @@ def get_clean_accuracy(paths):
     return result
 
 
+
+
 def sort_paths_by_layer(paths):
     # './log_evaluation/cif/cif10/run_1/data/detection/cif10/wrn_28_10_10/fgsm/LayerPFS/layer_0/LR/log.txt'
     sorted_paths = sorted(paths, key=lambda x: int(x.split('/')[-2].split('_')[-1]))
 
     return sorted_paths
+
+
+
+def formatNumber(x, digits):
+    formatter = formatter = '{:.' + '{}'.format(digits) + 'f}'
+    x = round(x, digits)
+    return formatter.format(x)
+
+
 
 
 def extract_information(root='./data', net=['cif10'], dest='./data/detection', nr=1, csv_filename='eval.csv', layers=True, ATTACKS='attacks', DETECTION='extracted_characteristics', architecture='', k=5):
@@ -241,9 +252,9 @@ def extract_information(root='./data', net=['cif10'], dest='./data/detection', n
             meta_info['run'] =        splitted[-8].split('_')[-1]
             
 
-            print( charact[it] )
-            meta_info['score']     = charact[it][0]
-            meta_info['score_adv'] = charact_adv[it][0]
+            print(  formatNumber(charact[it][0], 2) )
+            meta_info['score']     = formatNumber(charact[it][0],     2)
+            meta_info['score_adv'] = formatNumber(charact_adv[it][0], 2)
             meta_infos[it] = meta_info
     
     df = pd.DataFrame.from_dict(meta_infos, orient='index')
@@ -343,7 +354,7 @@ if __name__ == "__main__":
 
     for nr in NR:
         architecture='wrn_28_10_10'
-        # extract_information( root=root, net=['cif10'], dest=dest, nr=nr, csv_filename='cif10{}'.format(APP), DETECTION=DETECTION, layers=LAYERS, architecture=architecture, k=5 )
+        extract_information( root=root, net=['cif10'], dest=dest, nr=nr, csv_filename='cif10{}'.format(APP), DETECTION=DETECTION, layers=LAYERS, architecture=architecture, k=5 )
         # extract_information( root=root, net=['cif10'], dest=dest, nr=nr, csv_filename='cif10{}'.format(APP), DETECTION=DETECTION, layers=LAYERS, architecture=architecture, k=10 )
         # extract_information( root=root, net=['cif10'], dest=dest, nr=nr, csv_filename='cif10{}'.format(APP), DETECTION=DETECTION, layers=LAYERS, architecture=architecture, k=20 )
         # extract_information( root=root, net=['cif10'], dest=dest, nr=nr, csv_filename='cif10{}'.format(APP), DETECTION=DETECTION, layers=LAYERS, architecture=architecture, k=50 )
