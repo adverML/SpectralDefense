@@ -241,8 +241,8 @@ def extract_information(root='./data', net=['cif10'], dest='./data/detection', n
             meta_info['run'] =        splitted[-8].split('_')[-1]
             
 
-            print( charact[it])
-            meta_info['score'] = charact[it][0]
+            print( charact[it] )
+            meta_info['score']     = charact[it][0]
             meta_info['score_adv'] = charact_adv[it][0]
             meta_infos[it] = meta_info
     
