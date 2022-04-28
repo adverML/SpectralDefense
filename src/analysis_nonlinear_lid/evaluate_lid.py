@@ -27,7 +27,8 @@ TRTE=False
 TRAINERR=False
 SELECTED_COL= ['asr', 'auc', 'f1', 'acc','pre','tpr', 'fnr', 'asrd']
 # ATTACKS_LIST = ['gauss', 'fgsm', 'bim', 'pgd', 'std', 'df', 'cw']
-ATTACKS_LIST= ['gauss', 'fgsm', 'bim', 'pgd', 'std', 'df', 'cw']
+# ATTACKS_LIST= ['gauss', 'fgsm', 'bim', 'pgd', 'std', 'df', 'cw']
+ATTACKS_LIST= ['gauss', 'fgsm', 'bim', 'pgd', 'df', 'cw']
 
 DETECTOR_LIST_LAYERS= ['LID']
 DETECTOR_LIST       = ['LID']
@@ -143,23 +144,16 @@ def get_clean_accuracy(paths):
     return result
 
 
-
-
 def sort_paths_by_layer(paths):
     # './log_evaluation/cif/cif10/run_1/data/detection/cif10/wrn_28_10_10/fgsm/LayerPFS/layer_0/LR/log.txt'
     sorted_paths = sorted(paths, key=lambda x: int(x.split('/')[-2].split('_')[-1]))
 
     return sorted_paths
 
-
-
 def formatNumber(x, digits):
     formatter = formatter = '{:.' + '{}'.format(digits) + 'f}'
     x = round(x, digits)
     return formatter.format(x)
-
-
-
 
 def extract_information(root='./data', net=['cif10'], dest='./data/detection', nr=1, csv_filename='eval.csv', layers=True, ATTACKS='attacks', DETECTION='extracted_characteristics', architecture='', k=5):
     print( ' Extract information! ' )
@@ -196,10 +190,9 @@ def extract_information(root='./data', net=['cif10'], dest='./data/detection', n
                     if DETECTION == 'extracted_characteristics':
                         if layers:
                             if att == 'std':
-                                search_path = in_dir_detects + architecture + "/**/" + att + "/**/" + det + "/k_{}/layer_*/log.txt".format(k)
+                                search_path = in_dir_detects + architecture + "/**/" + att + "/8_255/**/" + det + "/k_{}/layer_*/log.txt".format(k)
                             else:
                                 search_path = in_dir_detects + architecture + "/**/" + att + "/" + det + "/k_{}/layer_*/log.txt".format(k)
-                            
                             
                             lr_paths = sort_paths_by_layer( glob.glob( search_path, recursive=True) ) 
                         else:
@@ -235,27 +228,35 @@ def extract_information(root='./data', net=['cif10'], dest='./data/detection', n
                     
     print(paths)
     meta_infos = {}
-
+    
+    
+    iterator = 0
     for it, path in enumerate(paths):
         splitted = path.split('/')
         tmp_path = '/'.join(path.split('/')[:-1])
-        charact     = torch.load( tmp_path + os.sep + 'characteristics') 
-        charact_adv = torch.load( tmp_path + os.sep + 'characteristics_adv')
-        for iter in range(1):
+        
+        try:
+            charact     = torch.load( tmp_path + os.sep + 'characteristics') 
+            charact_adv = torch.load( tmp_path + os.sep + 'characteristics_adv')
+        except Exception as e:
+            print(e)
+            
+        for x_k in range(100):
             meta_info = {}
-            meta_info['path'] =       tmp_path
-            meta_info['layer'] =      splitted[-2].split('_')[-1]
-            meta_info['k'] =          splitted[-3].split('_')[-1]
-            meta_info['attack'] =     splitted[-5]
+            meta_info['path'] =         tmp_path
+            meta_info['layer'] =        splitted[-2].split('_')[-1]
+            meta_info['k'] =            splitted[-3].split('_')[-1]
+            meta_info['attack'] =       splitted[-5]
             meta_info['architecture'] = splitted[-6]
-            meta_info['dataset'] =    splitted[-7]
-            meta_info['run'] =        splitted[-8].split('_')[-1]
+            meta_info['dataset'] =      splitted[-7]
+            meta_info['run'] =          splitted[-8].split('_')[-1]
             
 
-            print(  formatNumber(charact[it][0], 2) )
-            meta_info['score']     = formatNumber(charact[it][0],     2)
-            meta_info['score_adv'] = formatNumber(charact_adv[it][0], 2)
-            meta_infos[it] = meta_info
+            #print(  formatNumber(charact[x_k][0], 2) )
+            meta_info['score']     = formatNumber(charact[x_k][0],     2)
+            meta_info['score_adv'] = formatNumber(charact_adv[x_k][0], 2)
+            meta_infos[iterator] = meta_info
+            iterator += 1
     
     df = pd.DataFrame.from_dict(meta_infos, orient='index')
     
@@ -354,19 +355,19 @@ if __name__ == "__main__":
 
     for nr in NR:
         architecture='wrn_28_10_10'
-        extract_information( root=root, net=['cif10'], dest=dest, nr=nr, csv_filename='cif10{}'.format(APP), DETECTION=DETECTION, layers=LAYERS, architecture=architecture, k=5 )
+        # extract_information( root=root, net=['cif10'], dest=dest, nr=nr, csv_filename='cif10{}'.format(APP), DETECTION=DETECTION, layers=LAYERS, architecture=architecture, k=5 )
         # extract_information( root=root, net=['cif10'], dest=dest, nr=nr, csv_filename='cif10{}'.format(APP), DETECTION=DETECTION, layers=LAYERS, architecture=architecture, k=10 )
         # extract_information( root=root, net=['cif10'], dest=dest, nr=nr, csv_filename='cif10{}'.format(APP), DETECTION=DETECTION, layers=LAYERS, architecture=architecture, k=20 )
         # extract_information( root=root, net=['cif10'], dest=dest, nr=nr, csv_filename='cif10{}'.format(APP), DETECTION=DETECTION, layers=LAYERS, architecture=architecture, k=50 )
         
         architecture='wrn_28_10_100'
-        extract_information( root=root, net=['cif100'], dest=dest, nr=nr, csv_filename='cif100{}'.format(APP), DETECTION=DETECTION, layers=LAYERS, architecture=architecture, k=5 )
+        # extract_information( root=root, net=['cif100'], dest=dest, nr=nr, csv_filename='cif100{}'.format(APP), DETECTION=DETECTION, layers=LAYERS, architecture=architecture, k=5 )
         # extract_information( root=root, net=['cif100'], dest=dest, nr=nr, csv_filename='cif100{}'.format(APP), DETECTION=DETECTION, layers=LAYERS, architecture=architecture, k=10 )
         # extract_information( root=root, net=['cif100'], dest=dest, nr=nr, csv_filename='cif100{}'.format(APP), DETECTION=DETECTION, layers=LAYERS, architecture=architecture, k=20 )
         # extract_information( root=root, net=['cif100'], dest=dest, nr=nr, csv_filename='cif100{}'.format(APP), DETECTION=DETECTION, layers=LAYERS, architecture=architecture, k=50 )
         
         architecture='vgg_16_0_10'
-        extract_information( root=root, net=['cif10vgg'], dest=dest, nr=nr, csv_filename='cif10vgg{}'.format(APP), DETECTION=DETECTION, layers=LAYERS, architecture=architecture, k=5 )
+        # extract_information( root=root, net=['cif10vgg'], dest=dest, nr=nr, csv_filename='cif10vgg{}'.format(APP), DETECTION=DETECTION, layers=LAYERS, architecture=architecture, k=5 )
         # extract_information( root=root, net=['cif10vgg'], dest=dest, nr=nr, csv_filename='cif10vgg{}'.format(APP), DETECTION=DETECTION, layers=LAYERS, architecture=architecture, k=10 )
         # extract_information( root=root, net=['cif10vgg'], dest=dest, nr=nr, csv_filename='cif10vgg{}'.format(APP), DETECTION=DETECTION, layers=LAYERS, architecture=architecture, k=20 )
         # extract_information( root=root, net=['cif10vgg'], dest=dest, nr=nr, csv_filename='cif10vgg{}'.format(APP), DETECTION=DETECTION, layers=LAYERS, architecture=architecture, k=50 )
@@ -377,7 +378,7 @@ if __name__ == "__main__":
         # extract_information( root=root, net=['cif100vgg'], dest=dest, nr=nr, csv_filename='cif100vgg{}'.format(APP), DETECTION=DETECTION, layers=LAYERS, architecture=architecture, k=20 )
         # extract_information( root=root, net=['cif100vgg'], dest=dest, nr=nr, csv_filename='cif100vgg{}'.format(APP), DETECTION=DETECTION, layers=LAYERS, architecture=architecture, k=50 )
         
-        architecture='imagenet_50_2'
+        architecture='wrn_50_2'
         extract_information( root=root, net=['imagenet'], dest=dest, nr=nr, csv_filename='imagenet{}'.format(APP), DETECTION=DETECTION, layers=LAYERS, architecture=architecture, k=5 )
         # extract_information( root=root, net=['imagenet'], dest=dest, nr=nr, csv_filename='imagenet{}'.format(APP), DETECTION=DETECTION, layers=LAYERS, architecture=architecture, k=10 )
         # extract_information( root=root, net=['imagenet'], dest=dest, nr=nr, csv_filename='imagenet{}'.format(APP), DETECTION=DETECTION, layers=LAYERS, architecture=architecture, k=20 )

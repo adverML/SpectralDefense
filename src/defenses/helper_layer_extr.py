@@ -683,7 +683,7 @@ def get_whitebox_features(args, logger, model):
         elif layer_nr == 11:
             layers = ['layer_3_3_relu']
         elif layer_nr == 12:
-            layers = ['layer_3_4_relu']
+            layers = ['layer_3_4_relu']   
         elif layer_nr == 13:
             layers = ['layer_3_5_relu']
         elif layer_nr == 14:

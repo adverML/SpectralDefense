@@ -51,10 +51,9 @@ ATTACKSLAYERNR="gauss fgsm bim std pgd df cw"
 # ATTACKSLAYERNR="bim df"
 
 # ATTACKSLAYERNR="fgsm bim pgd std df cw"
-LAYERNR="0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16"
-# LAYERNR="16"
+# LAYERNR="0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16"
+LAYERNR="11 12 13"
 
-# LAYERNR="3 5 6 7 8 9 10 11"
 
 DETECTORSLAYERNR="LID"
 # DETECTORSLAYERNR="LayerMFS LayerPFS"
@@ -67,7 +66,9 @@ WANTEDSAMPLES_TE="18000"
 
 NRSAMPLES="2000" # detect
 
+# LID_K="5"
 LID_K="5 10 20 50"
+
 
 #-----------------------------------------------------------------------------------------------------------------------------------
 log_msg "Networks are already trained!"

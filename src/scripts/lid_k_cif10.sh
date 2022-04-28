@@ -9,7 +9,7 @@ function log_msg {
 # DATASETS="cif10 cif10vgg  cif100 cif100vgg"
 # DATASETS="cif100vgg"
 # DATASETS="cif10rn34 cif100rn34"
-DATASETS="cif100"
+DATASETS="cif10"
 # DATASETS="cif10_rb"
 # DATASETS="cif10 cif10vgg cif10_rb cif10rn34 cif100 cif100vgg cif100rn34"
 
