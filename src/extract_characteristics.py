@@ -183,7 +183,7 @@ elif args.detector == 'ODD':
 
 else:
     logger.log('ERR: unknown detector')
-
+    
 
 # Save
 logger.log("INFO: Save extracted characteristics ...")

@@ -257,14 +257,14 @@ def extract_information(root='./data', net=['cif10'], dest='./data/detection', n
 
             print("line_split: ", line_split)
             if len(line_split) == 0:
-                line_split.append( [ -1, -1, -1, -1, -1, -1  ] )
+                # line_split.append( [ -1, -1, -1, -1, -1, -1  ] )
+                line_split.append( [ -1 for _ in range(len(settings.SELECTED_COL)-2) ] )
+                
                 index.append( index_split_list[1] )
             csv_line = line_split[-1]
             if not csv_line[-1] == -1:
                 fnr = float(csv_line[-1]) / 100.
-                # import pdb; pdb.set_trace()
                 # if asr_name[-1] == 'std_8_255':
-                # import pdb; pdb.set_trace()
                 asr = np.round(clean_acc[asr_name[-1]]*100, 2)
                 csv_line.append(asr)
                 asrd = np.round((fnr*asr), 2)
@@ -274,7 +274,6 @@ def extract_information(root='./data', net=['cif10'], dest='./data/detection', n
                         asrd = str(asrd) + '*'
                 except:
                     print("except")
-                    # import pdb; pdb.set_trace()
                 csv_line.append(asrd)
             else:
                 csv_line.append(-1)
@@ -287,8 +286,7 @@ def extract_information(root='./data', net=['cif10'], dest='./data/detection', n
         print("output_path: ", output_path)
         print("<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<")
 
-        # import pdb; pdb.set_trace()
-        df = pd.DataFrame(final, columns=['auc','acc','pre','tpr', 'f1', 'fnr', 'asr', 'asrd'], index=index_selected)
+        df = pd.DataFrame(final, columns=settings.SELECTED_COL, index=index_selected)
         
         df = df[settings.SELECTED_COL]
         
@@ -380,7 +378,7 @@ if __name__ == "__main__":
     NR = [1]
 
 
-    for nr in NR:
+    # for nr in NR:
         # CSV_FILE_PATH.append( extract_information( root='./data', net=['cif10'], dest='./data/detection', nr=nr, csv_filename='cif10{}.csv'.format(APP), layers=LAYERS ) )
         # CSV_FILE_PATH.append( extract_information(root='./data', net=['cif100'],        dest='./data/detection',  nr=nr, csv_filename='cif100{}.csv'.format(APP), layers=LAYERS) )
         # CSV_FILE_PATH.append( extract_information(root='./data', net=['cif10vgg'],      dest='./data/detection',  nr=nr, csv_filename='cif10vgg{}.csv'.format(APP), layers=LAYERS) )
@@ -398,7 +396,7 @@ if __name__ == "__main__":
         # CSV_FILE_PATH.append( extract_information(root='./data', net=['celebaHQ128'], dest='./data/detection', nr=nr, csv_filename='celebaHQ128{}.csv'.format(APP), layers=LAYERS) )
 
         # CSV_FILE_PATH.append( extract_information(root='./data', net=['cif10_rb'],    dest='./data/detection',   nr=nr, csv_filename='cif10_rb{}.csv'.format(APP), layers=LAYERS) )
-        CSV_FILE_PATH.append( extract_information(root='./data', net=['imagenet'],    dest='./data/detection',   nr=nr, csv_filename='imagenet{}.csv'.format(APP), layers=LAYERS) )
+        # CSV_FILE_PATH.append( extract_information(root='./data', net=['imagenet'],    dest='./data/detection',   nr=nr, csv_filename='imagenet{}.csv'.format(APP), layers=LAYERS) )
         
         # architecture='wrn_28_10_25'
         # CSV_FILE_PATH.append( extract_information(root='./data', net=['imagenet32'],  dest='./data/detection', nr=nr, csv_filename='imagenet32{}.csv'.format(architecture), layers=LAYERS, architecture=architecture) )
@@ -411,7 +409,7 @@ if __name__ == "__main__":
         # architecture='wrn_28_10_250'
         # CSV_FILE_PATH.append( extract_information(root='./data', net=['imagenet32'],  dest='./data/detection', nr=nr, csv_filename='imagenet32{}.csv'.format(architecture), layers=LAYERS, architecture=architecture) )
 
-        copy_var(CSV_FILE_PATH, OUT_PATH, nr)
+        # copy_var(CSV_FILE_PATH, OUT_PATH, nr)
 
 
 
@@ -428,10 +426,22 @@ if __name__ == "__main__":
 # extract_information(root='./data', net=['imagenet128'], dest='./data/attack_transfer', run_nr=[1], csv_filename='attack_transfer.csv', layers=False, ATTACKS='attacks', DETECTION='attack_transfer')
 # extract_information(root='./data', net=['celebaHQ128'], dest='./data/attack_transfer', run_nr=[1], csv_filename='attack_transfer.csv', layers=False, ATTACKS='attacks', DETECTION='attack_transfer')
 
-# extract_information(root='./data', net=['cif10'], dest='./data/attack_transfer', run_nr=[1], csv_filename='attack_transfer.csv', layers=False, ATTACKS='attacks', DETECTION='attack_transfer')
-
 # extract_information(root='./data', net=['imagenet32'], dest='./data/attack_transfer', run_nr=[1], csv_filename='attack_transfer.csv', layers=False, ATTACKS='attacks', DETECTION='attack_transfer')
 # extract_information(root='./data', net=['celebaHQ32'], dest='./data/attack_transfer', run_nr=[1], csv_filename='attack_transfer.csv', layers=False, ATTACKS='attacks', DETECTION='attack_transfer')
+
+# extract_information( root='./data', net=['cif10', 'cif100', 'cif10vgg', 'cif100vgg', 'imagenet'], dest='./data/attack_transfer', nr=1, csv_filename='attack_transfer_lid.csv', layers=False, ATTACKS='attacks', DETECTION='attack_transfer' )
+
+# extract_information( root='./data', net=['cif10'], dest='./data/attack_transfer', nr=1, csv_filename='attack_transfer_lid.csv', layers=False, ATTACKS='attacks', DETECTION='attack_transfer' )
+# extract_information( root='./data', net=['cif100'], dest='./data/attack_transfer', nr=1, csv_filename='attack_transfer_lid_cif100.csv', layers=False, ATTACKS='attacks', DETECTION='attack_transfer' )
+
+# extract_information( root='./data', net=['cif10vgg' ], dest='./data/attack_transfer', nr=1, csv_filename='attack_transfer_lid_cif10vgg.csv', layers=False, ATTACKS='attacks', DETECTION='attack_transfer' )
+# extract_information( root='./data', net=['cif100vgg'], dest='./data/attack_transfer', nr=1, csv_filename='attack_transfer_lid_cif100vgg.csv', layers=False, ATTACKS='attacks', DETECTION='attack_transfer' )
+
+# extract_information( root='./data', net=['imagenet'], dest='./data/attack_transfer', nr=1, csv_filename='attack_transfer_lid_imagenet.csv', layers=False, ATTACKS='attacks', DETECTION='attack_transfer' )
+
+
+
+
 
 
 

@@ -27,13 +27,15 @@ TRTE=False
 TRAINERR=False
 SELECTED_COL= ['asr', 'auc', 'f1', 'acc','pre','tpr', 'fnr', 'asrd']
 # ATTACKS_LIST = ['gauss', 'fgsm', 'bim', 'pgd', 'std', 'df', 'cw']
-# ATTACKS_LIST= ['gauss', 'fgsm', 'bim', 'pgd', 'std', 'df', 'cw']
+# ATTACKS_LIST = ['gauss', 'fgsm', 'bim', 'pgd', 'std', 'df', 'cw']
 ATTACKS_LIST= ['gauss', 'fgsm', 'bim', 'pgd', 'df', 'cw']
 
 DETECTOR_LIST_LAYERS= ['LID']
 DETECTOR_LIST       = ['LID']
 CLF = ['LR']
 
+
+NR_SAMPLES = 10
 
 def check_eps(str_val):
     if '8./255.' in str_val:
@@ -241,7 +243,7 @@ def extract_information(root='./data', net=['cif10'], dest='./data/detection', n
         except Exception as e:
             print(e)
             
-        for x_k in range(100):
+        for x_k in range(NR_SAMPLES):
             meta_info = {}
             meta_info['path'] =         tmp_path
             meta_info['layer'] =        splitted[-2].split('_')[-1]
@@ -257,12 +259,15 @@ def extract_information(root='./data', net=['cif10'], dest='./data/detection', n
             meta_info['score_adv'] = formatNumber(charact_adv[x_k][0], 2)
             meta_infos[iterator] = meta_info
             iterator += 1
+            
+            if iterator >= 999:
+                print ( "iterator: ", iterator )
     
     df = pd.DataFrame.from_dict(meta_infos, orient='index')
     
-    df.to_pickle(os.path.join(OUT_PATH, 'pkl', str(k) + "_" + csv_filename  +  '.pkl'))
-    df.to_csv(os.path.join(OUT_PATH,    'csv', str(k) + "_" + csv_filename  +  '.csv'))
-    df.to_excel(os.path.join(OUT_PATH,  'xlsx',str(k) + "_" + csv_filename  +  '.xlsx'))
+    df.to_csv(os.path.join(OUT_PATH,    'csv', str(NR_SAMPLES), str(k) + "_" + csv_filename  +  '.csv'))
+    df.to_pickle(os.path.join(OUT_PATH, 'pkl', str(NR_SAMPLES), str(k) + "_" + csv_filename  +  '.pkl'))
+    # df.to_excel(os.path.join(OUT_PATH,  'xlsx',str(k) + "_" + csv_filename  +  '.xlsx'))
 
 
 def copy_run_to_root(root='./data/', net=['cif10', 'cif10vgg', 'cif100', 'cif100vgg'], dest='./log_evaluation/cif', run_nr=2):
@@ -330,8 +335,6 @@ def copy_var(input_path, output_path, nr):
 
 
 if __name__ == "__main__":
-
-    
     # OUT_PATH = "analysis/variance/run_gauss_"
     APP = '_k'
     # APP = '_HPF'
@@ -355,10 +358,10 @@ if __name__ == "__main__":
 
     for nr in NR:
         architecture='wrn_28_10_10'
-        # extract_information( root=root, net=['cif10'], dest=dest, nr=nr, csv_filename='cif10{}'.format(APP), DETECTION=DETECTION, layers=LAYERS, architecture=architecture, k=5 )
-        # extract_information( root=root, net=['cif10'], dest=dest, nr=nr, csv_filename='cif10{}'.format(APP), DETECTION=DETECTION, layers=LAYERS, architecture=architecture, k=10 )
-        # extract_information( root=root, net=['cif10'], dest=dest, nr=nr, csv_filename='cif10{}'.format(APP), DETECTION=DETECTION, layers=LAYERS, architecture=architecture, k=20 )
-        # extract_information( root=root, net=['cif10'], dest=dest, nr=nr, csv_filename='cif10{}'.format(APP), DETECTION=DETECTION, layers=LAYERS, architecture=architecture, k=50 )
+        extract_information( root=root, net=['cif10'], dest=dest, nr=nr, csv_filename='cif10{}'.format(APP), DETECTION=DETECTION, layers=LAYERS, architecture=architecture, k=5 )
+        extract_information( root=root, net=['cif10'], dest=dest, nr=nr, csv_filename='cif10{}'.format(APP), DETECTION=DETECTION, layers=LAYERS, architecture=architecture, k=10 )
+        extract_information( root=root, net=['cif10'], dest=dest, nr=nr, csv_filename='cif10{}'.format(APP), DETECTION=DETECTION, layers=LAYERS, architecture=architecture, k=20 )
+        extract_information( root=root, net=['cif10'], dest=dest, nr=nr, csv_filename='cif10{}'.format(APP), DETECTION=DETECTION, layers=LAYERS, architecture=architecture, k=50 )
         
         architecture='wrn_28_10_100'
         # extract_information( root=root, net=['cif100'], dest=dest, nr=nr, csv_filename='cif100{}'.format(APP), DETECTION=DETECTION, layers=LAYERS, architecture=architecture, k=5 )
@@ -373,13 +376,13 @@ if __name__ == "__main__":
         # extract_information( root=root, net=['cif10vgg'], dest=dest, nr=nr, csv_filename='cif10vgg{}'.format(APP), DETECTION=DETECTION, layers=LAYERS, architecture=architecture, k=50 )
 
         architecture='vgg_16_0_100'
-        extract_information( root=root, net=['cif100vgg'], dest=dest, nr=nr, csv_filename='cif100vgg{}'.format(APP), DETECTION=DETECTION, layers=LAYERS, architecture=architecture, k=5 )
+        # extract_information( root=root, net=['cif100vgg'], dest=dest, nr=nr, csv_filename='cif100vgg{}'.format(APP), DETECTION=DETECTION, layers=LAYERS, architecture=architecture, k=5 )
         # extract_information( root=root, net=['cif100vgg'], dest=dest, nr=nr, csv_filename='cif100vgg{}'.format(APP), DETECTION=DETECTION, layers=LAYERS, architecture=architecture, k=10 )
         # extract_information( root=root, net=['cif100vgg'], dest=dest, nr=nr, csv_filename='cif100vgg{}'.format(APP), DETECTION=DETECTION, layers=LAYERS, architecture=architecture, k=20 )
         # extract_information( root=root, net=['cif100vgg'], dest=dest, nr=nr, csv_filename='cif100vgg{}'.format(APP), DETECTION=DETECTION, layers=LAYERS, architecture=architecture, k=50 )
         
         architecture='wrn_50_2'
-        extract_information( root=root, net=['imagenet'], dest=dest, nr=nr, csv_filename='imagenet{}'.format(APP), DETECTION=DETECTION, layers=LAYERS, architecture=architecture, k=5 )
+        # extract_information( root=root, net=['imagenet'], dest=dest, nr=nr, csv_filename='imagenet{}'.format(APP), DETECTION=DETECTION, layers=LAYERS, architecture=architecture, k=5 )
         # extract_information( root=root, net=['imagenet'], dest=dest, nr=nr, csv_filename='imagenet{}'.format(APP), DETECTION=DETECTION, layers=LAYERS, architecture=architecture, k=10 )
         # extract_information( root=root, net=['imagenet'], dest=dest, nr=nr, csv_filename='imagenet{}'.format(APP), DETECTION=DETECTION, layers=LAYERS, architecture=architecture, k=20 )
         # extract_information( root=root, net=['imagenet'], dest=dest, nr=nr, csv_filename='imagenet{}'.format(APP), DETECTION=DETECTION, layers=LAYERS, architecture=architecture, k=50 )

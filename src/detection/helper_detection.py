@@ -11,12 +11,11 @@ from sklearn.metrics import roc_curve
 
 import  numpy as np
 
-from time import time
+import time
 
 def show_results(args, logger, y_test, y_hat, y_hat_pr):
 
     nr_not_detect_adv = 0
-
     benign_rate = 0
     benign_guesses = 0
     ad_guesses = 0
@@ -37,10 +36,9 @@ def show_results(args, logger, y_test, y_hat, y_hat_pr):
 
     acc = (benign_rate+ad_rate)/len(y_hat)        
     TP = 2*ad_rate/len(y_hat)
-    TN = 2*benign_rate/len(y_hat)
+    TNR = 2*benign_rate/len(y_hat)
 
     precision = ad_rate/ad_guesses
-
     TPR = 2 * ad_rate / len(y_hat)
     recall = round(100*TPR, 2)
 
@@ -51,23 +49,32 @@ def show_results(args, logger, y_test, y_hat, y_hat_pr):
         auc = -1
     else: 
         auc = round(100*roc_auc_score(y_test, y_hat_pr), 2)
+        
     acc = round(100*acc, 2)
     pre = round(100*precision, 1)
     tpr = round(100*TP, 2)
     f1  = round((2 * (prec*rec) / (prec+rec))*100, 2)
+    tnr = round(100*TNR, 2)
     fnr = round(100 - tpr, 2)
 
     logger.log('F1-Measure: ' + str(f1) )
     logger.log('PREC: ' + str(pre) )
-    logger.log('ACC: ' + str(acc) )
-    logger.log('AUC: ' + str(auc) )
-    logger.log('TNR: ' + str(round(100*TN, 2)) ) # True negative rate/normal detetcion rate/selectivity is 
-    logger.log('TPR: ' + str(tpr) )# True positive rate/adversarial detetcion rate/recall/sensitivity is 
-    logger.log('FNR: ' + str(fnr) )
-    logger.log('RES:, AUC, ACC, PRE, TPR, F1, FNR' )
-    logger.log('RES:,' + str(auc) + ',' + str(acc) + ',' + str(pre) + ',' + str(tpr) + ',' + str(f1) + ',' + str(fnr) )
+    logger.log('ACC: ' +  str(acc) )
+    logger.log('AUC: ' +  str(auc) )
+    logger.log('TPR: ' +  str(tpr) )# True positive rate/adversarial detetcion rate/recall/sensitivity is 
+    logger.log('TNR: ' +  str(tnr) ) # True negative rate/normal detetcion rate/selectivity is 
+    logger.log('FNR: ' +  str(fnr) )
+    # logger.log('RES:, AUC, ACC, PRE, TPR, F1, FNR' )
+    # logger.log('RES:,' + str(auc) + ',' + str(acc) + ',' + str(pre) + ',' + str(tpr) + ',' + str(f1) + ',' + str(fnr) )
+    
+    print("TNR other: ",  np.sum( (y_hat == 0) & (y_test == 0) ) / np.sum(y_test == 0) )
+    
+    logger.log('RES:, AUC, ACC, PRE, TPR, F1, TNR, FNR' )
+    logger.log('RES:,' + str(auc) + ',' + str(acc) + ',' + str(pre) + ',' + str(tpr) + ',' + str(f1) + ',' + str(tnr) + ',' + str(fnr) )
+    # logger.log('RES:, AUC, ACC, PRE, TPR, F1, FNR' )
+    # logger.log('RES:,' + str(auc) + ',' + str(acc) + ',' + str(pre) + ',' + str(tpr) + ',' + str(f1) + ',' + str(fnr) )
     logger.log('<==========================================================================')
-
+    
     # tn, fp, fn, tp = confusion_matrix(y_test, y_hat, labels=list(range(args.num_classes))).ravel()
     # tn, fp, fn, tp = confusion_matrix(y_test, y_hat, labels=list(range(args.num_classes))).ravel()
 
@@ -127,26 +134,36 @@ def save_load_clf(args, clf, output_path_dir):
 
 def compute_time_sample(args, clf, X_train, y_train, X_test, y_test):
     
+    print("compute time sample")
+    print("clf: ", clf)
+    
+    NR_LOOPS = 100
+    WARM_UP = 10
+    nr_samples = 100
     compute_time_sample = []
     
-    # for x_test in X_test:
-    #     tstart = time()
-    #     import pdb; pdb.set_trace()
-    #     y_hat = clf.predict(x_test)
-    #     tend = time()
-    #     difference = tend - tstart
-    #     compute_time_sample.append(difference)
-    #     import pdb; pdb.set_trace()
+    
+    for loop in range(NR_LOOPS + WARM_UP):
+        tstart = time.time() * 1000.0
+        # import pdb; pdb.set_trace()
+        y_hat = clf.predict(X_test[:nr_samples])
+        tend = time.time() * 1000.0
+        difference = tend - tstart
+        if loop >= WARM_UP:
+            compute_time_sample.append(difference / nr_samples)
+    
+    np_compute_time_sample     = np.asarray(compute_time_sample)
+    StdDev = np.std(np_compute_time_sample)
+    Mean = np.mean(np_compute_time_sample)
+    print("NR_LOOPS:   ", NR_LOOPS)
+    print("WarmUp:     ", WARM_UP)
+    print("OneSample:    {}".format(np_compute_time_sample[50]))
+    print("Mean:       ", Mean )
+    print("StdDev:     ", StdDev )
     
     
-
-    tstart = time()
-    # import pdb; pdb.set_trace()
-    y_hat = clf.predict(X_test[:100])
-    tend = time()
-    difference = tend - tstart
-    compute_time_sample.append(difference / 100)
-    # import pdb; pdb.set_trace()
+    print("NR_LOOPS, WARM_UP, OneSample, Mean, StdDev")
+    print(NR_LOOPS, WARM_UP, np_compute_time_sample[50], Mean, StdDev)
+    print("==========================================================================")
     
     
-    print("The prediction took {} seconds to execute".format(difference))

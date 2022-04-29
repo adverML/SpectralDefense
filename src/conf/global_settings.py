@@ -118,9 +118,10 @@ ISSAMPLEMEANCALCULATED = False # True # Mahalannobis; set true if sample mean an
 TRTE = False
 TRAINERR = False
 # SELECTED_COL = ['asr', 'auc', 'fnr' , 'asrd']
-SELECTED_COL = ['asr', 'auc', 'f1', 'acc','pre','tpr', 'fnr', 'asrd']
+# SELECTED_COL = ['asr',   'auc',  'f1',  'acc', 'pre', 'tpr', 'fnr', 'asrd']
+SELECTED_COL = ['asr',   'auc',  'f1',  'acc', 'pre', 'tpr', 'tnr', 'fnr', 'asrd']
 
-ATTACKS_LIST = ['gauss', 'fgsm', 'bim', 'pgd', 'std', 'df', 'cw']
+ATTACKS_LIST = ['gauss', 'fgsm', 'bim', 'pgd', 'std', 'df',  'cw']
 
 # ATTACKS_LIST = ['fgsm', 'bim', 'pgd', 'cw', ] 
 # ATTACKS_LIST = ['std', 'df'] 

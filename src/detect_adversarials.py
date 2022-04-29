@@ -129,7 +129,6 @@ if shape[0] < args.wanted_samples:
 X_train, y_train, X_test, y_test = split_data(args, logger, characteristics, characteristics_adv, k=2000, test_size=0.1, random_state=42)
 # X_train, y_train, X_test, y_test = split_data(args, logger, characteristics, characteristics_adv[:2000], k=shape[0], test_size=0.2, random_state=42)
 
-
 # scaler  = MinMaxScaler().fit(X_train)
 # X_train = scaler.transform(X_train)
 # X_test  = scaler.transform(X_test)
@@ -173,10 +172,8 @@ if settings.SAVE_CLASSIFIER:
     
     clf = save_load_clf(args, clf,   output_path_dir=output_path_dir)
 else: # load clf
+    # import pdb; pdb.set_trace()
     clf = save_load_clf(args, clf=0, output_path_dir=output_path_dir)
-
-
-
-compute_time_sample(args, clf, X_train, y_train, X_test, y_test)
+    # compute_time_sample(args, clf, X_train, y_train, X_test, y_test)
 
 show_results(args, logger, y_test, y_hat, y_hat_pr)
