@@ -28,14 +28,17 @@ from utils import (
 # fined tuned again when retrained all models with X in [-0.5, 0.5]
 # https://github.com/pokaxpoka/deep_Mahalanobis_detector/blob/master/ADV_Samples.py
 STDEVS = {
-    # 'cif10': {'fgsm': 0.0504, 'bim':0.0084, 'bim-a': 0.0084, 'bim-b': 0.0428, 'pgd': 0.04, 'std': 0.04, 'df': 0.007, 'cw': 0.007}
-    'cif10': {'fgsm': 0.0504, 'bim': 0.0084, 'pgd': 0.04, 'std': 0.04, 'df': 0.007, 'cw': 0.007}
+    'cif10':     {'fgsm': 0.015686, 'bim': 0.015686, 'pgd': 0.015686, 'std': 0.015686, 'df': 0.015686, 'cw': 0.015686},
+    'cif100':    {'fgsm': 0.015686, 'bim': 0.015686, 'pgd': 0.015686, 'std': 0.015686, 'df': 0.015686, 'cw': 0.015686},
+    'cif10vgg':  {'fgsm': 0.015686, 'bim': 0.015686, 'pgd': 0.015686, 'std': 0.015686, 'df': 0.015686, 'cw': 0.015686},
+    'cif100vgg': {'fgsm': 0.015686, 'bim': 0.015686, 'pgd': 0.015686, 'std': 0.015686, 'df': 0.015686, 'cw': 0.015686},
+    'imagenet':  {'fgsm': 0.015686, 'bim': 0.015686, 'pgd': 0.015686, 'std': 0.015686, 'df': 0.015686, 'cw': 0.015686},
 }
 
-# CLIP_MIN = 0.0
-# CLIP_MAX = 1.0
-CLIP_MIN = -0.5
-CLIP_MAX = 0.5
+CLIP_MIN = 0.0
+CLIP_MAX = 1.0
+# CLIP_MIN = -0.5
+# CLIP_MAX = 0.5
 
 # Set random seed
 np.random.seed(0)
@@ -232,7 +235,7 @@ def lidnoise(args, model, images, images_advs, layers, get_layer_feature_maps, a
         # X_act       = get_layer_feature_maps(batch.to(device), act_layers)
         # X_adv_act   = get_layer_feature_maps(batch_adv.to(device), act_layers)
         
-        batch_noise_init = get_noisy_samples(batch_noise, dataset='cif10', attack='fgsm')
+        batch_noise_init = get_noisy_samples(batch_noise, dataset=args.net, attack=args.attack)
 
         batch       = normalize_images(batch, args)
         batch_noise = normalize_images(batch_noise_init, args)

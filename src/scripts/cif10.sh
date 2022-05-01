@@ -29,22 +29,10 @@ RUNS="1"
 # ATTACKS="gauss bim std df"
 # ATTACKS="gauss"
 
-
-ATTACKS="gauss"
+ATTACKS="gauss fgsm bim pgd std df cw"
 
 # ATTACKS="apgd-ce apgd-t fab-t square"
-# ATTACKS="gauss"
-# ATTACKS="gauss bim std df"
-# ATTACKS="cw"
-
-# ATTACKS="fgsm bim pgd cw"
 # ATTACKS="aa+"
-
-# ATTACKS="gauss df cw"
-# ATTACKS="fgsm"
-# ATTACKS="pgd cw"
-
-# ATTACKS="apgd-ce"
 
 # DETECTORS="InputMFS"
 # DETECTORS="InputMFS LayerMFS"
@@ -56,9 +44,9 @@ ATTACKS="gauss"
 # DETECTORS="InputMFS LayerMFS LID Mahalanobis"
 # DETECTORS="LayerMFS"
 # DETECTORS="Mahalanobis"
-DETECTORS="LID"
+# DETECTORS="LID"
 # DETECTORS="HPF"
-# DETECTORS="LID LIDNOISE"
+DETECTORS="LIDNOISE"
 
 # DETECTORS="InputPFS LayerPFS"
 
@@ -204,19 +192,19 @@ extractcharacteristics ()
                         fi
 
                         if [ "$net" == cif10_rb ]; then
-                            python -u extract_characteristics.py --net "$net" --attack "$att" --detector "$det" --eps "$eps" --run_nr "$run"  --wanted_samples "$WANTEDSAMPLES" --take_inputimage_off 
+                            python -u extract_characteristics.py --net "$net" --attack "$att" --detector "$det" --eps "$eps" --run_nr "$run"  --wanted_samples "$WANTEDSAMPLES"  --take_inputimage_off 
                         fi 
 
                         if [ "$net" == cif10vgg ]; then
-                            python -u extract_characteristics.py --net "$net" --attack "$att" --detector "$det" --eps "$eps" --run_nr "$run"  --wanted_samples "$WANTEDSAMPLES" --take_inputimage_off 
+                            python -u extract_characteristics.py --net "$net" --attack "$att" --detector "$det" --eps "$eps" --run_nr "$run"  --wanted_samples "$WANTEDSAMPLES"  --take_inputimage_off 
                         fi 
 
                         if [ "$net" == cif10rn34 ]; then
-                            python -u extract_characteristics.py --net "$net" --attack "$att" --detector "$det" --eps "$eps" --run_nr "$run"  --wanted_samples "$WANTEDSAMPLES" --take_inputimage_off 
+                            python -u extract_characteristics.py --net "$net" --attack "$att" --detector "$det" --eps "$eps" --run_nr "$run"  --wanted_samples "$WANTEDSAMPLES"  --take_inputimage_off 
                         fi 
 
                         if [ "$net" == cif10rn34sota ]; then
-                            python -u extract_characteristics.py --net "$net" --attack "$att" --detector "$det" --eps "$eps"--run_nr "$run"  --wanted_samples "$WANTEDSAMPLES" --take_inputimage_off 
+                            python -u extract_characteristics.py --net "$net" --attack "$att" --detector "$det" --eps "$eps"--run_nr "$run"  --wanted_samples "$WANTEDSAMPLES"  --take_inputimage_off 
                         fi  
 
                         if [ "$net" == cif100 ]; then                            
@@ -248,15 +236,15 @@ extractcharacteristicslayer ()
                     for nr in $LAYERNR; do 
                         log_msg "Layer Nr. $nr; attack $att; detectors $det"
                         if [ "$net" == cif10 ]; then
-                            python -u extract_characteristics.py --net "$net" --attack "$att" --detector "$det" --nr "$nr" --run_nr "$run"  --wanted_samples "$WANTEDSAMPLES" --take_inputimage_off
+                            python -u extract_characteristics.py --net "$net" --attack "$att" --detector "$det" --nr "$nr" --run_nr "$run"  --wanted_samples "$WANTEDSAMPLES"  --take_inputimage_off
                         fi
 
                         if [ "$net" == cif10_rb ]; then
-                            python -u extract_characteristics.py --net "$net" --attack "$att" --detector "$det" --nr "$nr" --run_nr "$run"  --wanted_samples "$WANTEDSAMPLES" --take_inputimage_off
+                            python -u extract_characteristics.py --net "$net" --attack "$att" --detector "$det" --nr "$nr" --run_nr "$run"  --wanted_samples "$WANTEDSAMPLES"  --take_inputimage_off
                         fi
 
                         if [ "$net" == cif10vgg ]; then
-                            python -u extract_characteristics.py --net "$net" --attack "$att" --detector "$det" --nr "$nr" --run_nr "$run"  --wanted_samples "$WANTEDSAMPLES" --take_inputimage_off
+                            python -u extract_characteristics.py --net "$net" --attack "$att" --detector "$det" --nr "$nr" --run_nr "$run"  --wanted_samples "$WANTEDSAMPLES"  --take_inputimage_off
                         fi 
                     done
                 done
@@ -354,7 +342,7 @@ detectadversarialslayer ()
 # printn
 # genereratecleandata
 # attacks
-extractcharacteristics
+# extractcharacteristics
 detectadversarials
 
 # extractcharacteristicslayer

@@ -105,10 +105,12 @@ if  args.detector in  ['VAEInputPFS', 'VAEInputMFS']:
 logger.log("characteristics_path:      " + str(characteristics_path) )
 # logger.log("characteristics_advs_path: " + str(characteristics_path) )
 
-characteristics     = torch.load(characteristics_path)[:args.wanted_samples]
-characteristics_adv = torch.load(characteristics_advs_path)[:args.wanted_samples]
+k = 1
+if args.detector == 'LIDNOISE':
+    k = 2
 
-# pdb.set_trace()
+characteristics     = torch.load(characteristics_path)[:args.wanted_samples * k]
+characteristics_adv = torch.load(characteristics_advs_path)[:args.wanted_samples]
 
 characteristics     = np.asarray(characteristics)
 characteristics_adv = np.asarray(characteristics_adv)
@@ -120,18 +122,16 @@ if shape[0] < args.wanted_samples:
     logger.log("CAUTION: The actual number is smaller as the wanted samples!")
 
 
-# import pdb; pdb.set_trace()
-# tmp1 = characteristics[:1000]
-# tmp2 = characteristics[2000:3000]
-# characteristics = np.concatenate((tmp1, tmp2), axis=0)
-
-
-X_train, y_train, X_test, y_test = split_data(args, logger, characteristics, characteristics_adv, k=2000, test_size=0.1, random_state=42)
+if args.detector == 'LIDNOISE':
+    X_train, y_train, X_test, y_test = split_data(args, logger, characteristics, characteristics_adv, noise=True, test_size=0.1, random_state=42)
+else:
+    X_train, y_train, X_test, y_test = split_data(args, logger, characteristics, characteristics_adv, noise=False, test_size=0.1, random_state=42)
+    
 # X_train, y_train, X_test, y_test = split_data(args, logger, characteristics, characteristics_adv[:2000], k=shape[0], test_size=0.2, random_state=42)
-
 # scaler  = MinMaxScaler().fit(X_train)
 # X_train = scaler.transform(X_train)
 # X_test  = scaler.transform(X_test)
+
 
 if args.pca_features > 0:
     logger.log('Apply PCA decomposition. Reducing number of features from {} to {}'.format(X_train.shape[1], args.pca_features))

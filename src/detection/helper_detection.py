@@ -13,101 +13,125 @@ import  numpy as np
 
 import time
 
-def show_results(args, logger, y_test, y_hat, y_hat_pr):
 
-    nr_not_detect_adv = 0
-    benign_rate = 0
-    benign_guesses = 0
-    ad_guesses = 0
-    ad_rate = 0
-    for i in range(len(y_hat)):
-        if y_hat[i] == 0:
-            benign_guesses += 1
-            if y_test[i] == 0:
-                benign_rate += 1
-        else:
-            ad_guesses += 1
-            if y_test[i] == 1:
-                ad_rate += 1
 
-        if y_test[i] == 1:
-            if y_hat[i] == 0:
-                nr_not_detect_adv  +=1
+def perf_measure(y_actual, y_hat):
+    """
+    https://shouland.com/false-positive-rate-test-sklearn-code-example
+    """
+    TP = 0
+    FP = 0
+    TN = 0
+    FN = 0
 
-    acc = (benign_rate+ad_rate)/len(y_hat)        
-    TP = 2*ad_rate/len(y_hat)
-    TNR = 2*benign_rate/len(y_hat)
+    for i in range(len(y_hat)): 
+        if y_actual[i]==y_hat[i]==1:
+           TP += 1
+        if y_hat[i]==1 and y_actual[i]!=y_hat[i]:
+           FP += 1
+        if y_actual[i]==y_hat[i]==0:
+           TN += 1
+        if y_hat[i]==0 and y_actual[i]!=y_hat[i]:
+           FN += 1
 
-    precision = ad_rate/ad_guesses
-    TPR = 2 * ad_rate / len(y_hat)
-    recall = round(100*TPR, 2)
+    return (TP, FP, TN, FN)
 
-    prec = precision 
-    rec = TPR 
+
+def show_results(args, logger, y_actual, y_hat, y_hat_pr):
+    
+    print("len(y_actual)",   len(y_actual) )
+    print("len(y_hat)",    len(y_hat) )
+    print("len(y_hat_pr)", len(y_hat_pr) )
+    
+    TP, FP, TN, FN = perf_measure(y_actual, y_hat)
+    
+    TPR = TP / (TP + FN)
+    TNR = TN / (TN + FP) 
+    FNR = FN / (FN + TP)
+    
+    ACC = (TP + TN) / (TP + TN + FP + FN)
+    PRECISION = TP / (TP + FP)
+    
+    F1 =  2 * (PRECISION*TPR) / (PRECISION+TPR)
 
     if args.clf == 'IF': 
         auc = -1
     else: 
-        auc = round(100*roc_auc_score(y_test, y_hat_pr), 2)
+        auc = round(100*roc_auc_score(y_actual, y_hat_pr), 2)
         
-    acc = round(100*acc, 2)
-    pre = round(100*precision, 1)
-    tpr = round(100*TP, 2)
-    f1  = round((2 * (prec*rec) / (prec+rec))*100, 2)
+    f1  = round(100*F1, 2)
+    pre = round(100*PRECISION, 2)
+    acc = round(100*ACC, 2)
+    tpr = round(100*TPR, 2)
     tnr = round(100*TNR, 2)
-    fnr = round(100 - tpr, 2)
+    fnr = round(100*FNR, 2)
 
-    logger.log('F1-Measure: ' + str(f1) )
-    logger.log('PREC: ' + str(pre) )
-    logger.log('ACC: ' +  str(acc) )
-    logger.log('AUC: ' +  str(auc) )
-    logger.log('TPR: ' +  str(tpr) )# True positive rate/adversarial detetcion rate/recall/sensitivity is 
-    logger.log('TNR: ' +  str(tnr) ) # True negative rate/normal detetcion rate/selectivity is 
-    logger.log('FNR: ' +  str(fnr) )
+    logger.log('F1:   ' +  str(f1) )
+    logger.log('PREC: ' +  str(pre) )
+    logger.log('ACC:  ' +  str(acc) )
+    logger.log('AUC:  ' +  str(auc) )
+    logger.log('TPR:  ' +  str(tpr) ) # True positive rate/adversarial detetcion rate/recall/sensitivity is 
+    logger.log('TNR:  ' +  str(tnr) ) # True negative rate/normal detetcion rate/selectivity is 
+    logger.log('FNR:  ' +  str(fnr) )
+    
     # logger.log('RES:, AUC, ACC, PRE, TPR, F1, FNR' )
     # logger.log('RES:,' + str(auc) + ',' + str(acc) + ',' + str(pre) + ',' + str(tpr) + ',' + str(f1) + ',' + str(fnr) )
-    
-    print("TNR other: ",  np.sum( (y_hat == 0) & (y_test == 0) ) / np.sum(y_test == 0) )
-    
+
     logger.log('RES:, AUC, ACC, PRE, TPR, F1, TNR, FNR' )
     logger.log('RES:,' + str(auc) + ',' + str(acc) + ',' + str(pre) + ',' + str(tpr) + ',' + str(f1) + ',' + str(tnr) + ',' + str(fnr) )
     # logger.log('RES:, AUC, ACC, PRE, TPR, F1, FNR' )
     # logger.log('RES:,' + str(auc) + ',' + str(acc) + ',' + str(pre) + ',' + str(tpr) + ',' + str(f1) + ',' + str(fnr) )
     logger.log('<==========================================================================')
     
-    # tn, fp, fn, tp = confusion_matrix(y_test, y_hat, labels=list(range(args.num_classes))).ravel()
-    # tn, fp, fn, tp = confusion_matrix(y_test, y_hat, labels=list(range(args.num_classes))).ravel()
+    # tn, fp, fn, tp = confusion_matrix(y_actual, y_hat, labels=list(range(args.num_classes))).ravel()
+    # tn, fp, fn, tp = confusion_matrix(y_actual, y_hat, labels=list(range(args.num_classes))).ravel()
 
-    # aa, bb, cc, dd = perf_measure(y_test, y_hat)
+    # aa, bb, cc, dd = perf_measure(y_actual, y_hat)
 
-    # fpr, tpr, _ = roc_curve(y_test, y_hat_pr)
+    # fpr, tpr, _ = roc_curve(y_actual, y_hat_pr)
     # print("fpr", fpr)
     # print("tpr", tpr)
 
 
-def split_data(args, logger, characteristics, characteristics_adv, k, test_size=0.2, random_state=42):
+def split_data(args, logger, characteristics, characteristics_adv, noise, test_size=0.2, random_state=42):
     
     shape_adv = np.shape(characteristics_adv)[0]
     shape_char = np.shape(characteristics)[0]
     
-    adv_X_train_val, adv_X_test, adv_y_train_val, adv_y_test = train_test_split(characteristics_adv, np.ones(shape_adv),   test_size=test_size, random_state=random_state)
-    b_X_train_val, b_X_test, b_y_train_val, b_y_test         = train_test_split(characteristics,     np.zeros(shape_char), test_size=test_size, random_state=random_state)
-    adv_X_train, adv_X_val, adv_y_train, adv_y_val           = train_test_split(adv_X_train_val,     adv_y_train_val,      test_size=test_size, random_state=random_state)
-    b_X_train, b_X_val, b_y_train, b_y_val                   = train_test_split(b_X_train_val,       b_y_train_val,        test_size=test_size, random_state=random_state)
+    # import pdb; pdb.set_trace()
+    
+    if not noise:
+        adv_X_train_val, adv_X_test, adv_y_train_val, adv_y_actual = train_test_split(characteristics_adv, np.ones(shape_adv),   test_size=test_size, random_state=random_state)
+        b_X_train_val, b_X_test, b_y_train_val, b_y_actual         = train_test_split(characteristics,     np.zeros(shape_char), test_size=test_size, random_state=random_state)
+        adv_X_train, adv_X_val, adv_y_train, adv_y_val           = train_test_split(adv_X_train_val,     adv_y_train_val,      test_size=test_size, random_state=random_state)
+        b_X_train, b_X_val, b_y_train, b_y_val                   = train_test_split(b_X_train_val,       b_y_train_val,        test_size=test_size, random_state=random_state)
+    else:
+        adv_X_train_val, adv_X_test, adv_y_train_val, adv_y_actual = train_test_split(characteristics_adv,    np.ones(shape_adv),  test_size=test_size, random_state=random_state)
+        b_X_train_val, b_X_test, b_y_train_val, b_y_actual         = train_test_split(characteristics[:shape_adv], np.zeros(shape_adv), test_size=test_size, random_state=random_state)
+        # b_X_train_val3, b_X_test3, b_y_train_val3, b_y_actual3     = train_test_split(characteristics[:2000], np.zeros(shape_adv), test_size=test_size, random_state=random_state)
+        b_X_train_val2, b_X_test2, b_y_train_val2, b_y_actual2     = train_test_split(characteristics[shape_adv:], np.zeros(shape_adv), test_size=test_size, random_state=random_state)
+        
+        b_X_train_val = np.concatenate((b_X_train_val, b_X_train_val2))
+        b_X_test = np.concatenate((b_X_test, b_X_test2))
+        b_y_train_val = np.concatenate((b_y_train_val, b_y_train_val2))
+        b_y_actual = np.concatenate((b_y_actual, b_y_actual2)) 
+        
+        adv_X_train, adv_X_val, adv_y_train, adv_y_val           = train_test_split(adv_X_train_val,     adv_y_train_val,      test_size=test_size, random_state=random_state)
+        b_X_train, b_X_val, b_y_train, b_y_val                   = train_test_split(b_X_train_val,       b_y_train_val,        test_size=test_size, random_state=random_state)
+
 
     X_train = np.concatenate(( b_X_train, adv_X_train) )
     y_train = np.concatenate(( b_y_train, adv_y_train) )
 
-
     X_test = np.concatenate( (b_X_test, adv_X_test, b_X_val, adv_X_val) )
-    y_test = np.concatenate( (b_y_test, adv_y_test, b_y_val, adv_y_val) )
+    y_actual = np.concatenate( (b_y_actual, adv_y_actual, b_y_val, adv_y_val) )
 
     # if args.mode == 'test':
     #     X_test = np.concatenate( (b_X_test, adv_X_test) )
-    #     y_test = np.concatenate( (b_y_test, adv_y_test) )
+    #     y_actual = np.concatenate( (b_y_actual, adv_y_actual) )
     # elif args.mode == 'validation':
     #     X_test = np.concatenate( (b_X_val, adv_X_val) )
-    #     y_test = np.concatenate( (b_y_val, adv_y_val) )
+    #     y_actual = np.concatenate( (b_y_val, adv_y_val) )
     # else:
     #     logger.log('Not a valid mode')
 
@@ -117,7 +141,7 @@ def split_data(args, logger, characteristics, characteristics_adv, k, test_size=
     logger.log("b_X_test" + str(b_X_test.shape) )
     logger.log("adv_X_test" + str(adv_X_test.shape) )
 
-    return X_train, y_train, X_test, y_test
+    return X_train, y_train, X_test, y_actual
 
 
 def save_load_clf(args, clf, output_path_dir):
@@ -131,8 +155,7 @@ def save_load_clf(args, clf, output_path_dir):
     return clf
 
 
-
-def compute_time_sample(args, clf, X_train, y_train, X_test, y_test):
+def compute_time_sample(args, clf, X_train, y_train, X_test, y_actual):
     
     print("compute time sample")
     print("clf: ", clf)
@@ -141,7 +164,6 @@ def compute_time_sample(args, clf, X_train, y_train, X_test, y_test):
     WARM_UP = 10
     nr_samples = 100
     compute_time_sample = []
-    
     
     for loop in range(NR_LOOPS + WARM_UP):
         tstart = time.time() * 1000.0
@@ -161,9 +183,6 @@ def compute_time_sample(args, clf, X_train, y_train, X_test, y_test):
     print("Mean:       ", Mean )
     print("StdDev:     ", StdDev )
     
-    
     print("NR_LOOPS, WARM_UP, OneSample, Mean, StdDev")
     print(NR_LOOPS, WARM_UP, np_compute_time_sample[50], Mean, StdDev)
     print("==========================================================================")
-    
-    
