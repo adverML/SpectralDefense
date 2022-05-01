@@ -28,6 +28,14 @@ import argparse
 import copy
 import pdb
 
+from detection.helper_detection import (
+    show_results, 
+    split_data, 
+    save_load_clf, 
+    compute_time_sample
+)
+
+
 # Detect Adversarials
 SAVE_CLASSIFIER = False
 
@@ -46,6 +54,8 @@ parser.add_argument("--wanted_samples", default='1500', type=int, help=settings.
 parser.add_argument("--clf",            default='LR',             help="Logistic Regression (LR) or Random Forest (RF)")
 parser.add_argument("--num_classes",    default='10',   type=int, help=settings.HELP_NUM_CLASSES)
 parser.add_argument("--num_classes_eval",    default='1000',   type=int, help=settings.HELP_NUM_CLASSES)
+
+parser.add_argument("--k_lid",    default='-1',  type=int,     help="k for LID")
 
 # parser.add_argument("--eps",       default='-1',       help="epsilon: 4/255, 3/255, 2/255, 1/255, 0.5/255")
 parser.add_argument("--eps",       default='8./255.',            help=settings.HELP_AA_EPSILONS)
@@ -87,143 +97,29 @@ logger.log("shape: " + str(shape))
 if shape[0] < args.wanted_samples:
     logger.log("CAUTION: The actual number is smaller as the wanted samples!")
 
-k = shape[0]
-
-test_size = 0.2
-adv_X_train_val, adv_X_test, adv_y_train_val, adv_y_test = train_test_split(characteristics_adv, np.ones(k), test_size=test_size, random_state=42)
-b_X_train_val, b_X_test, b_y_train_val, b_y_test         = train_test_split(characteristics, np.zeros(k), test_size=test_size, random_state=42)
-adv_X_train, adv_X_val, adv_y_train, adv_y_val           = train_test_split(adv_X_train_val, adv_y_train_val, test_size=test_size, random_state=42)
-b_X_train, b_X_val, b_y_train, b_y_val                   = train_test_split(b_X_train_val, b_y_train_val, test_size=test_size, random_state=42)
-
-X_train = np.concatenate(( b_X_train, adv_X_train) )
-y_train = np.concatenate(( b_y_train, adv_y_train) )
-
-if args.mode == 'test':
-    X_test = np.concatenate( (b_X_test, adv_X_test) )
-    y_test = np.concatenate( (b_y_test, adv_y_test) )
-elif args.mode == 'validation':
-    X_test = np.concatenate( (b_X_val, adv_X_val) )
-    y_test = np.concatenate( (b_y_val, adv_y_val) )
-else:
-    logger.log('Not a valid mode')
-
-logger.log("b_X_train" + str(b_X_train.shape) )
-logger.log("adv_X_train" + str(adv_X_train.shape) )
-
-logger.log("b_X_test" + str(b_X_test.shape) )
-logger.log("adv_X_test" + str(adv_X_test.shape) )
 
 #train classifier
 logger.log('Training classifier...')
 
 
-# if args.clf == 'LR' and settings.SAVE_CLASSIFIER:
-#     clf = LogisticRegression()
-#     logger.log(clf)
-#     clf.fit(X_train,y_train)
-#     logger.log("train error: " + str(clf.score(X_train, y_train)) )
-#     logger.log("test error:  " + str(clf.score(X_test,  y_test)) )
+X_train, y_train, X_test, y_test = split_data(args, logger, characteristics, characteristics_adv, noise=False, test_size=0.1, random_state=42)
 
-# if args.clf == 'RF' and not settings.SAVE_CLASSIFIER:
-#     # trees = [100, 200, 300, 400, 500]
-#     # trees = [600, 700, 800, 900]
-#     # trees = [ 500 ]
-#     trees = [ 300 ]
-
-#     clf = RandomForestClassifier(n_estimators=100, n_jobs=-1)
-
-#     save_clf = copy.deepcopy(clf)
-#     test_score_save = 0
-
-#     for tr in trees:
-#         clf.set_params(n_estimators=tr)
-#         clf.fit(X_train, y_train)
-
-#         test_score = clf.score(X_test, y_test)
-#         logger.log("Tr "+ str(tr) + "train error: " + str(clf.score(X_train, y_train)) )
-#         logger.log("Tr "+ str(tr) + "test error:  " + str(test_score) )
-#         if test_score > test_score_save:
-#             save_clf = copy.deepcopy(clf)
-#     clf = copy.deepcopy(save_clf)
 
 
 #save classifier
 classifier_pth = from_trained_clf + os.sep + str(args.clf) + '.clf'
-if SAVE_CLASSIFIER:
-    torch.save(clf, classifier_pth)
-else:
-    logger.log("load clf: " + classifier_pth)
-    clf = torch.load(classifier_pth)
+# if SAVE_CLASSIFIER:
+#     torch.save(clf, classifier_pth)
+# else:
+logger.log("load clf: " + classifier_pth)
+clf = torch.load(classifier_pth)
 
 
 logger.log('Evaluating classifier...')
 y_hat =    clf.predict(X_test)
 y_hat_pr = clf.predict_proba(X_test)[:, 1]
 
-# logger.log( "train error: " + str(clf.score(X_train, y_train)) )
-# logger.log( "test error:  " + str(clf.score(X_test, y_test)) )
+logger.log( "train score: " + str(clf.score(X_train, y_train)) )
+logger.log( "test score:  " + str(clf.score(X_test, y_test))   )
 
-nr_not_detect_adv = 0
-
-benign_rate = 0
-benign_guesses = 0
-ad_guesses = 0
-ad_rate = 0
-for i in range(len(y_hat)):
-    if y_hat[i] == 0:
-        benign_guesses +=1
-        if y_test[i]==0:
-            benign_rate +=1
-    else:
-        ad_guesses +=1
-        if y_test[i]==1:
-            ad_rate +=1
-
-    if y_test[i] == 1:
-        if y_hat[i] == 0:
-            nr_not_detect_adv  +=1
-
-acc = (benign_rate+ad_rate)/len(y_hat)        
-TP = 2*ad_rate/len(y_hat)
-TN = 2*benign_rate/len(y_hat)
-
-precision = ad_rate/ad_guesses
-
-TPR = 2 * ad_rate / len(y_hat)
-recall = round(100*TPR, 2)
-
-prec = precision 
-rec = TPR 
-
-
-auc = round(100*roc_auc_score(y_test, y_hat_pr), 2)
-acc = round(100*acc, 2)
-pre = round(100*precision, 1)
-tpr = round(100*TP, 2)
-f1  = round((2 * (prec*rec) / (prec+rec))*100, 2)
-fnr = round(100 - tpr, 2)
-
-
-logger.log("Data Transfer!")
-logger.log("Runnr: "  + str(args.run_nr))
-logger.log("From: "   + args.net)
-logger.log("To: "     +  args.net_eval)
-logger.log('F1-Measure: ' + str(f1) )
-logger.log('PREC: ' + str(pre) )
-logger.log('ACC: ' + str(acc) )
-logger.log('AUC: ' + str(auc) )
-logger.log('TNR: ' + str(round(100*TN, 2)) ) # True negative rate/normal detetcion rate/selectivity is 
-logger.log('TPR: ' + str(tpr) )# True positive rate/adversarial detetcion rate/recall/sensitivity is 
-logger.log('FNR: ' + str(fnr) )
-logger.log('RES:, AUC, ACC, PRE, TPR, F1, FNR' )
-logger.log('RES:,' + str(auc) + ',' + str(acc) + ',' + str(pre) + ',' + str(tpr) + ',' + str(f1) + ',' + str(fnr) )
-logger.log('<==========================================================================')
-
-# tn, fp, fn, tp = confusion_matrix(y_test, y_hat, labels=list(range(args.num_classes))).ravel()
-# tn, fp, fn, tp = confusion_matrix(y_test, y_hat, labels=list(range(args.num_classes))).ravel()
-
-# aa, bb, cc, dd = perf_measure(y_test, y_hat)
-
-# fpr, tpr, _ = roc_curve(y_test, y_hat_pr)
-# print("fpr", fpr)
-# print("tpr", tpr)
+show_results(args, logger, y_test, y_hat, y_hat_pr)

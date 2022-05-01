@@ -105,7 +105,7 @@ if shape[0] < args.wanted_samples:
 k = shape[0]
 
 
-X_train, y_train, X_test, y_test = split_data(args, logger, characteristics, characteristics_adv, k=2000, test_size=0.1, random_state=42)
+X_train, y_train, X_test, y_test = split_data(args, logger, characteristics, characteristics_adv, noise=False, test_size=0.1, random_state=42)
 
 
 #train classifier

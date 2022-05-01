@@ -16,8 +16,8 @@ RUNS="1"
 # RUNS="10"
 
 
-# ATTACKS="fgsm bim pgd"
-ATTACKS="gauss"
+ATTACKS="gauss fgsm bim pgd std df cw"
+# ATTACKS="gauss"
 # ATTACKS="fgsm bim pgd std"
 # ATTACKS="aa+"
 
@@ -28,12 +28,9 @@ ATTACKS="gauss"
 # ATTACKS="fab-t"
 
 
-# DETECTORS="InputMFS LayerMFS LID Mahalanobis"
-# DETECTORS="LayerMFS"
-# DETECTORS="InputMFS LayerMFS"
-# DETECTORS="InputPFS LayerPFS InputMFS LayerMFS LID Mahalanobis"
+# DETECTORS="LID" 
+DETECTORS="LIDNOISE" 
 
-DETECTORS="LID" 
 
 # DETECTORS="LID LIDNOISE"
 
@@ -51,12 +48,11 @@ ATTACKSLAYERNR="gauss fgsm bim std pgd df cw"
 # ATTACKSLAYERNR="bim df"
 
 # ATTACKSLAYERNR="fgsm bim pgd std df cw"
-# LAYERNR="0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16"
-LAYERNR="11 12 13"
+LAYERNR="0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16"
+# LAYERNR="11 12 13"
 
 
-DETECTORSLAYERNR="LID"
-# DETECTORSLAYERNR="LayerMFS LayerPFS"
+DETECTORSLAYERNR="LIDNOISE"
 
 # NRSAMPLES="300 500 1000 1200 1500 2000"
 ALLSAMPLES="3000"
