@@ -58,9 +58,9 @@ def get_whitebox_features(args, logger, model):
     logger.log("INFO: layer_nr " + str(layer_nr) ) 
 
     if args.net == 'cif10vgg' or args.net == 'cif100vgg':
-        # indice of activation layers
-        act_layers= [2,5,9,12,16,19,22,26,29,32,36,39,42]
-        # fourier_act_layers = [9,16,22,29,36,42]
+        # indices of activation layers
+        # act_layers= [2,5,9,12,16,19,22,26,29,32,36,39,42]
+        
         #get a list of all feature maps of all layers
         model_features = model.features
         def get_layer_feature_maps(X, layers):
@@ -73,12 +73,13 @@ def get_whitebox_features(args, logger, model):
             return X_l
 
         # default layer
-        # layers = [2, 12, 22, 29, 36, 42]
-        # layers = [29, 36, 42]
-        layers = [9, 16, 22, 29, 36, 42]
+        layers = [9, 16, 22, 29, 36, 42] # fourier_act_layers
         
         if args.net == 'cif100vgg' and (args.attack == 'cw' or args.attack == 'df'):
             layers = [42]
+            
+        if args.detector in ['LID', 'Mahalanobis']:
+            layers = [2,5,9,12,16,19,22,26,29,32,36,39,42]
 
         if layer_nr == 0:
             layers = [2]
@@ -310,7 +311,7 @@ def get_whitebox_features(args, logger, model):
         layer_name = layer_name_cif10
         # fourier_act_layers = [ 'conv2_0_relu_1', 'conv2_0_relu_4', 'conv2_1_relu_1', 'conv2_1_relu_4', 'conv2_2_relu_1', 'conv2_2_relu_4', 'conv2_3_relu_1', 'conv2_3_relu_4']
 
-        if not args.nr == -1:
+        if not args.nr == -1 or args.detector in ['LID', 'Mahalanobis']:
             model.conv2[0].residual[1].register_forward_hook( get_activation('conv2_0_relu_1') )
             model.conv2[0].residual[4].register_forward_hook( get_activation('conv2_0_relu_4') )
 
@@ -356,6 +357,8 @@ def get_whitebox_features(args, logger, model):
 
             # 12
             model.relu.register_forward_hook(get_activation('relu'))
+            
+            
         else:
 
             # if args.detector == "LID":
@@ -450,6 +453,11 @@ def get_whitebox_features(args, logger, model):
                         ]
 
 
+        if args.detector in ['LID', 'Mahalanobis']:
+            layers = [
+                'conv2_0_relu_4',  'conv2_1_relu_4',  'conv2_2_relu_4', 'conv2_3_relu_4', 'conv3_0_relu_4', 'conv3_1_relu_4', 
+                'conv3_2_relu_4', 'conv3_3_relu_4', 'conv4_0_relu_4', 'conv4_1_relu_4','conv4_2_relu_4', 'conv4_3_relu_4', 'relu' 
+            ]
 
         if layer_nr == 0:
             layers = ['conv2_0_relu_4']
@@ -480,6 +488,9 @@ def get_whitebox_features(args, logger, model):
         else:
             logger.log( "INFO: layer nr > 12" + ", args.nr " + str(args.nr) )
             assert True
+
+
+
 
 
 
@@ -570,9 +581,6 @@ def get_whitebox_features(args, logger, model):
 
     elif args.net == 'imagenet' or args.net == 'imagenet_hierarchy':
 
-        # print(model)
-        # import pdb; pdb.set_trace()
-
         def get_layer_feature_maps(activation_dict, act_layer_list):
             act_val_list = []
             for it in act_layer_list:
@@ -580,7 +588,7 @@ def get_whitebox_features(args, logger, model):
                 act_val_list.append(act_val)
             return act_val_list
 
-        if not args.nr == -1:
+        if not args.nr == -1 or args.detector in ['LID', 'Mahalanobis']:
             model.relu.register_forward_hook( get_activation('0_relu') )
 
             model.layer1[0].relu.register_forward_hook( get_activation('layer_1_0_relu') )
@@ -657,6 +665,14 @@ def get_whitebox_features(args, logger, model):
 
         # layers = ['layer_1_0_relu', 'layer_1_1_relu', 'layer_1_2_relu', 'layer_2_0_relu', 'layer_2_1_relu', 'layer_2_2_relu']
         # layers = ['layer_1_0_relu', 'layer_1_1_relu', 'layer_1_2_relu', 'layer_2_0_relu']
+        
+        
+        if args.detector in ['LID', 'Mahalanobis']:
+            layers = [
+                '0_relu', 'layer_1_0_relu', 'layer_1_1_relu', 'layer_1_2_relu', 'layer_2_0_relu', 'layer_2_1_relu', 'layer_2_2_relu',  'layer_2_3_relu', 
+                'layer_3_0_relu', 'layer_3_1_relu',  'layer_3_2_relu',      'layer_3_3_relu', 'layer_3_4_relu',  'layer_3_5_relu',  'layer_4_0_relu',  'layer_4_1_relu',   'layer_4_2_relu'
+            ]
+        
         
         if layer_nr == 0:
             layers = ['0_relu']

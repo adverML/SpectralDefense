@@ -27,9 +27,9 @@ RUNS="1"
 # ATTACKS="linfdf"
 
 # ATTACKS="gauss bim std df"
-# ATTACKS="gauss"
+# ATTACKS="std"
 
-ATTACKS="fgsm bim pgd std df cw"
+ATTACKS="gauss fgsm bim pgd std df cw"
 
 # ATTACKS="apgd-ce apgd-t fab-t square"
 # ATTACKS="gauss"
@@ -45,7 +45,9 @@ ATTACKS="fgsm bim pgd std df cw"
 
 # ATTACKS="apgd-ce"
 
-DETECTORS="LIDNOIsE"
+DETECTORS="LID"
+# DETECTORS="LIDNOIsE"
+
 
 # EPSILONS="8./255. 4./255. 2./255. 1./255. 0.5/255."
 EPSILONS="8./255."
@@ -56,7 +58,7 @@ EPSILONS="8./255."
 # CLF="cuSVC"
 # CLF="IF"
 
-CLF="LR RF"
+CLF="LR"
 
 IMAGENET32CLASSES="25 50 100 250 1000"
 # NRSAMPLES="300 500 1000 1200 1500 2000" # only at detectadversarialslayer
@@ -68,13 +70,14 @@ NRSAMPLES="2000" # detect
 
 
 DATASETSLAYERNR="cif10"
-ATTACKSLAYERNR="fgsm bim pgd std df cw"
+ATTACKSLAYERNR="std"
 
 # LAYERNR="0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24"
 LAYERNR="0 1 2 3 4 5 6 7 8 9 10 11 12"
-DETECTORSLAYERNR="LIDNOISE"
+DETECTORSLAYERNR="LID"
 PCA_FEATURES="0"
-LID_K="5 10 20 50"
+# LID_K="5 10 20 50"
+LID_K="10"
 
 
 #-----------------------------------------------------------------------------------------------------------------------------------
@@ -321,18 +324,20 @@ detectadversarialslayer ()
                     for nrsamples in $NRSAMPLES; do
                         for classifier in $CLF; do
                             for nr in $LAYERNR; do 
-                                log_msg "Layer Nr. $nr"
-                                if [ "$net" == cif10 ]; then
-                                    python -u detect_adversarials.py --net "$net" --attack "$att" --detector "$det" --wanted_samples "$nrsamples" --clf "$classifier" --num_classes 10 --nr "$nr" --run_nr  "$run" 
-                                fi
+                                for lidk in $LID_K; do 
+                                    log_msg "Layer Nr. $nr"
+                                    if [ "$net" == cif10 ]; then
+                                        python -u detect_adversarials.py --net "$net" --attack "$att" --detector "$det" --wanted_samples "$nrsamples" --clf "$classifier" --k_lid "$lidk" --num_classes 10 --nr "$nr" --run_nr  "$run" 
+                                    fi
 
-                                if [ "$net" == cif10_rb ]; then
-                                    python -u detect_adversarials.py --net "$net" --attack "$att" --detector "$det" --wanted_samples "$nrsamples" --clf "$classifier" --num_classes 10 --nr "$nr" --run_nr  "$run" 
-                                fi
+                                    if [ "$net" == cif10_rb ]; then
+                                        python -u detect_adversarials.py --net "$net" --attack "$att" --detector "$det" --wanted_samples "$nrsamples" --clf "$classifier" --num_classes 10 --nr "$nr" --run_nr  "$run" 
+                                    fi
 
-                                if [ "$net" == cif10vgg ]; then
-                                    python -u detect_adversarials.py --net "$net" --attack "$att" --detector "$det" --wanted_samples "$nrsamples" --clf "$classifier" --num_classes 10 --nr "$nr" --run_nr  "$run" 
-                                fi 
+                                    if [ "$net" == cif10vgg ]; then
+                                        python -u detect_adversarials.py --net "$net" --attack "$att" --detector "$det" --wanted_samples "$nrsamples" --clf "$classifier" --num_classes 10 --nr "$nr" --run_nr  "$run" 
+                                    fi 
+                                done
                             done
                         done
                     done
@@ -347,9 +352,9 @@ detectadversarialslayer ()
 # genereratecleandata
 # attacks
 # extractcharacteristics
-# detectadversarials
+detectadversarials
 
-extractcharacteristicslayer
+# extractcharacteristicslayer
 # detectadversarialslayer
 
 # #-----------------------------------------------------------------------------------------------------------------------------------

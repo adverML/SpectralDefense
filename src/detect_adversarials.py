@@ -132,7 +132,6 @@ else:
 # X_train = scaler.transform(X_train)
 # X_test  = scaler.transform(X_test)
 
-
 if args.pca_features > 0:
     logger.log('Apply PCA decomposition. Reducing number of features from {} to {}'.format(X_train.shape[1], args.pca_features))
     from sklearn.decomposition import PCA # https://scikit-learn.org/stable/modules/generated/sklearn.decomposition.PCA.html?highlight=pca#sklearn.decomposition.PCA

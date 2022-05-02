@@ -7,7 +7,7 @@ function log_msg {
 # DATASETS=(cif10 cif10vgg cif100 cif100vgg imagenet imagenet32 imagenet64 imagenet128 celebaHQ32 celebaHQ64 celebaHQ128)
 # DATASETS="cif10 cif10vgg  cif100 cif100vgg cif10_rb"
 # DATASETS="cif10 cif100"
-DATASETS="cif10vgg"
+DATASETS="cif10vgg cif100vgg"
 # DATASETS="cif10vgg"
 # DATASETS="cif10rn34 cif100rn34"
 # DATASETS="cif10rn34sota"
@@ -25,14 +25,8 @@ RUNS="1"
 # ATTACKS="linfdf l2pgd"
 # ATTACKS="linfdf"
 
-# ATTACKS="gauss fgsm bim pgd std df cw"
-# ATTACKS="apgd-ce apgd-t fab-t square"
+ATTACKS="gauss fgsm bim pgd std df cw"
 # ATTACKS="gauss"
-# ATTACKS="gauss fgsm bim std df"
-ATTACKS="gauss"
-# ATTACKS="fgsm"
-# ATTACKS="pgd cw"
-
 # ATTACKS="apgd-ce"
 
 # DETECTORS="InputMFS"
@@ -50,7 +44,7 @@ EPSILONS="8./255."
 # CLF="LR RF"
 # CLF="IF"
 # CLF="RF"
-CLF="LR"
+CLF="LR RF"
 
 
 IMAGENET32CLASSES="25 50 100 250 1000"
@@ -333,7 +327,7 @@ detectadversarialslayer ()
 # printn
 # genereratecleandata
 # attacks
-# extractcharacteristics
+extractcharacteristics
 detectadversarials
 
 # #-----------------------------------------------------------------------------------------------------------------------------------

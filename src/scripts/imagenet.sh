@@ -17,13 +17,13 @@ RUNS="1"
 
 
 # ATTACKS="fgsm bim pgd"
-ATTACKS="gauss"
+# ATTACKS="gauss"
 # ATTACKS="fgsm bim pgd std"
 # ATTACKS="aa+"
 
 # ATTACKS="apgd-dlr+ fab+ square+ apgd-t+ fab-t+"
 # ATTACKS="apgd-ce+"
-# ATTACKS="fgsm bim std pgd df cw"
+ATTACKS="gauss fgsm bim std pgd df cw"
 # ATTACKS="apgd-ce apgd-t fab-t square"
 # ATTACKS="fab-t"
 
@@ -41,8 +41,8 @@ DETECTORS="LID"
 # EPSILONS="8./255. 4./255. 2./255. 1./255. 0.5/255."
 EPSILONS="8./255."
 
-# CLF="LR RF"
-CLF="RF"
+CLF="LR RF"
+# CLF="RF"
 # CLF="LR"
 # CLF="IF"
 
@@ -181,7 +181,7 @@ detectadversarialslayer ()
 
 # genereratecleandata
 # attacks
-# extractcharacteristics
+extractcharacteristics
 detectadversarials
 
 # extractcharacteristicslayer

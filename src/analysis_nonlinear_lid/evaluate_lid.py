@@ -28,7 +28,8 @@ TRAINERR=False
 SELECTED_COL= ['asr', 'auc', 'f1', 'acc','pre','tpr', 'fnr', 'asrd']
 # ATTACKS_LIST = ['gauss', 'fgsm', 'bim', 'pgd', 'std', 'df', 'cw']
 # ATTACKS_LIST = ['gauss', 'fgsm', 'bim', 'pgd', 'std', 'df', 'cw']
-ATTACKS_LIST= ['gauss', 'fgsm', 'bim', 'pgd', 'df', 'cw']
+# ATTACKS_LIST= ['gauss', 'fgsm', 'bim', 'pgd', 'df', 'cw']
+ATTACKS_LIST= ['std']
 
 DETECTOR_LIST_LAYERS= ['LID']
 DETECTOR_LIST       = ['LID']
@@ -192,6 +193,7 @@ def extract_information(root='./data', net=['cif10'], dest='./data/detection', n
                     if DETECTION == 'extracted_characteristics':
                         if layers:
                             if att == 'std':
+                                import pdb; pdb.set_trace()
                                 search_path = in_dir_detects + architecture + "/**/" + att + "/8_255/**/" + det + "/k_{}/layer_*/log.txt".format(k)
                             else:
                                 search_path = in_dir_detects + architecture + "/**/" + att + "/" + det + "/k_{}/layer_*/log.txt".format(k)
@@ -265,8 +267,8 @@ def extract_information(root='./data', net=['cif10'], dest='./data/detection', n
     
     df = pd.DataFrame.from_dict(meta_infos, orient='index')
     
-    df.to_csv(os.path.join(OUT_PATH,    'csv', str(NR_SAMPLES), str(k) + "_" + csv_filename  +  '.csv'))
-    df.to_pickle(os.path.join(OUT_PATH, 'pkl', str(NR_SAMPLES), str(k) + "_" + csv_filename  +  '.pkl'))
+    # df.to_csv(os.path.join(OUT_PATH,    'csv', str(NR_SAMPLES), str(k) + "_" + csv_filename  +  '.csv'))
+    # df.to_pickle(os.path.join(OUT_PATH, 'pkl', str(NR_SAMPLES), str(k) + "_" + csv_filename  +  '.pkl'))
     # df.to_excel(os.path.join(OUT_PATH,  'xlsx',str(k) + "_" + csv_filename  +  '.xlsx'))
 
 

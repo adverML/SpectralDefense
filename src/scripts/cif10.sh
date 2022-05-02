@@ -9,7 +9,7 @@ function log_msg {
 # DATASETS="cif10 cif10vgg  cif100 cif100vgg"
 # DATASETS="cif100vgg"
 # DATASETS="cif10rn34 cif100rn34"
-DATASETS="cif10"
+DATASETS="cif100"
 # DATASETS="cif10_rb"
 # DATASETS="cif10 cif10vgg cif10_rb cif10rn34 cif100 cif100vgg cif100rn34"
 
@@ -46,7 +46,9 @@ ATTACKS="gauss fgsm bim pgd std df cw"
 # DETECTORS="Mahalanobis"
 # DETECTORS="LID"
 # DETECTORS="HPF"
-DETECTORS="LIDNOISE"
+# DETECTORS="LIDNOISE"
+DETECTORS="LID"
+
 
 # DETECTORS="InputPFS LayerPFS"
 
@@ -71,7 +73,7 @@ ALLSAMPLES="3000"
 NRSAMPLES="2000" # detect
 
 
-DATASETSLAYERNR="cif10"
+DATASETSLAYERNR="cif100 cif10vgg cif100vgg"
 ATTACKSLAYERNR="df"
 
 # LAYERNR="0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24"
@@ -342,7 +344,7 @@ detectadversarialslayer ()
 # printn
 # genereratecleandata
 # attacks
-# extractcharacteristics
+extractcharacteristics
 detectadversarials
 
 # extractcharacteristicslayer
