@@ -19,6 +19,10 @@ from utils import (
 
 def deep_mahalanobis(args, logger, model, images, images_advs, layers, get_layer_feature_maps, activation, output_path_dir):   
     args.batch_size = 100
+    
+    if args.net == 'imagenet':
+        args.batch_size = 50
+    
     sample_mean_path      = output_path_dir + 'sample_mean_' + args.net
     sample_precision_path = output_path_dir + 'precision_'   + args.net
 
@@ -142,24 +146,29 @@ def deep_mahalanobis(args, logger, model, images, images_advs, layers, get_layer
     if  args.net == 'mnist' or args.net == 'cif10' or args.net == 'cif10vgg' or args.net == 'imagenet32' or args.net == 'celebaHQ32':
         if args.attack == 'gauss':
             magnitude = 0.01
-        if args.attack == 'fgsm':
+        elif args.attack == 'fgsm':
             magnitude = 0.0002
+        elif  args.attack == 'std':
+            magnitude = 0.05
         elif args.attack == 'cw':
             magnitude = 0.00001
         else:
             magnitude = 0.00005
     else:
-        if args.attack == 'fgsm':
+        if args.attack == 'gauss':
+            magnitude = 0.01
+        elif args.attack == 'fgsm':
             magnitude = 0.005
         elif args.attack == 'cw':
             magnitude = 0.00001
+        
         elif args.attack == 'df':
             magnitude = 0.0005
         else:
             magnitude = 0.01
 
-    image_loader = torch.utils.data.DataLoader(images,      batch_size=100, shuffle=args.shuffle_on)
-    adv_loader   = torch.utils.data.DataLoader(images_advs, batch_size=100, shuffle=args.shuffle_on)
+    image_loader = torch.utils.data.DataLoader(images,      batch_size=args.batch_size, shuffle=args.shuffle_on)
+    adv_loader   = torch.utils.data.DataLoader(images_advs, batch_size=args.batch_size, shuffle=args.shuffle_on)
 
     def get_mah(test_loader, layer_index):
         Mahalanobis = []

@@ -4,8 +4,7 @@ function log_msg {
   echo  "`date` $@"
 }
 
-# DATASETS=(cif10 cif10vgg cif100 cif100vgg imagenet imagenet32 imagenet64 imagenet128 celebaHQ32 celebaHQ64 celebaHQ128)
-DATASETS="cif10"
+DATASETS="imagenet"
 # DATASETS="imagenet_hierarchy"
 # DATASETS="restricted_imagenet"
 
@@ -179,7 +178,7 @@ detectadversarialslayer ()
 }
 
 # genereratecleandata
-attacks
+# attacks
 extractcharacteristics
 detectadversarials
 

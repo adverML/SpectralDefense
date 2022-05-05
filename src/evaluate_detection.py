@@ -263,7 +263,7 @@ def extract_information(root='./data', net=['cif10'], dest='./data/detection', n
             if not len_found and len(line_split) > 0:
                 len_found = True
                 
-                import pdb; pdb.set_trace()
+                # import pdb; pdb.set_trace()
                 if not (len(line_split[-1]) == len(COLUMNS)-2):
                     COLUMNS       = [ 'asr', 'auc',   'f1', 'acc', 'pre', 'tpr', 'fnr', 'asrd']
                     COLUMNS_CLEAN = [ 'auc',  'f1',  'acc', 'pre', 'tpr', 'fnr', 'asr', 'asrd']
@@ -388,10 +388,10 @@ if __name__ == "__main__":
 
 
     for nr in NR:
-        CSV_FILE_PATH.append( extract_information( root='./data', net=['cif10'], dest='./data/detection', nr=nr, csv_filename='cif10{}.csv'.format(APP), layers=LAYERS ) )
-        # CSV_FILE_PATH.append( extract_information(root='./data', net=['cif100'],        dest='./data/detection',  nr=nr, csv_filename='cif100{}.csv'.format(APP), layers=LAYERS) )
-        # CSV_FILE_PATH.append( extract_information(root='./data', net=['cif10vgg'],      dest='./data/detection',  nr=nr, csv_filename='cif10vgg{}.csv'.format(APP), layers=LAYERS) )
-        # CSV_FILE_PATH.append( extract_information(root='./data', net=['cif100vgg'],     dest='./data/detection',  nr=nr, csv_filename='cif100vgg{}.csv'.format(APP), layers=LAYERS) )
+        # CSV_FILE_PATH.append( extract_information(root='./data', net=['cif10'],    dest='./data/detection',  nr=nr, csv_filename='cif10{}.csv'.format(APP), layers=LAYERS ) )
+        # CSV_FILE_PATH.append( extract_information(root='./data', net=['cif100'],   dest='./data/detection',  nr=nr, csv_filename='cif100{}.csv'.format(APP), layers=LAYERS) )        # CSV_FILE_PATH.append( extract_information(root='./data', net=['cif10vgg'],      dest='./data/detection',  nr=nr, csv_filename='cif10vgg{}.csv'.format(APP), layers=LAYERS) )
+        # CSV_FILE_PATH.append( extract_information(root='./data', net=['cif10vgg'],  dest='./data/detection',  nr=nr, csv_filename='cif10vgg{}.csv'.format(APP), layers=LAYERS) )
+        # CSV_FILE_PATH.append( extract_information(root='./data', net=['cif100vgg'], dest='./data/detection',  nr=nr, csv_filename='cif100vgg{}.csv'.format(APP), layers=LAYERS) )
 
         # CSV_FILE_PATH.append( extract_information(root='./data', net=['cif10rn34'],   dest='./data/detection', nr=nr, csv_filename='cif10rn34{}.csv'.format(APP), layers=LAYERS) )
         # CSV_FILE_PATH.append( extract_information(root='./data', net=['cif100rn34'],  dest='./data/detection', nr=nr, csv_filename='cif100rn34{}.csv'.format(APP), layers=LAYERS) )
@@ -405,7 +405,7 @@ if __name__ == "__main__":
         # CSV_FILE_PATH.append( extract_information(root='./data', net=['celebaHQ128'], dest='./data/detection', nr=nr, csv_filename='celebaHQ128{}.csv'.format(APP), layers=LAYERS) )
 
         # CSV_FILE_PATH.append( extract_information(root='./data', net=['cif10_rb'],    dest='./data/detection',   nr=nr, csv_filename='cif10_rb{}.csv'.format(APP), layers=LAYERS) )
-        # CSV_FILE_PATH.append( extract_information(root='./data', net=['imagenet'],    dest='./data/detection',   nr=nr, csv_filename='imagenet{}.csv'.format(APP), layers=LAYERS) )
+        CSV_FILE_PATH.append( extract_information(root='./data', net=['imagenet'],    dest='./data/detection',   nr=nr, csv_filename='imagenet{}.csv'.format(APP), layers=LAYERS) )
         
         # architecture='wrn_28_10_25'
         # CSV_FILE_PATH.append( extract_information(root='./data', net=['imagenet32'],  dest='./data/detection', nr=nr, csv_filename='imagenet32{}.csv'.format(architecture), layers=LAYERS, architecture=architecture) )

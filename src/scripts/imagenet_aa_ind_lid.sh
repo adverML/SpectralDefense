@@ -28,7 +28,7 @@ ATTACKS="apgd-ce apgd-t fab-t square"
 # ATTACKS="apgd-ce apgd-t"
 
 
-DETECTORS="LID Mahalanobis"
+DETECTORS="Mahalanobis"
 # DETECTORS="InputMFS LayerMFS LID Mahalanobis"
 
 # DETECTORS="InputMFS LayerMFS"

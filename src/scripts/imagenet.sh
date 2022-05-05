@@ -33,9 +33,7 @@ ATTACKS="gauss fgsm bim std pgd df cw"
 # DETECTORS="InputMFS LayerMFS"
 # DETECTORS="InputPFS LayerPFS InputMFS LayerMFS LID Mahalanobis"
 
-DETECTORS="LID" 
-
-# DETECTORS="LID LIDNOISE"
+DETECTORS="LID"
 
 
 # EPSILONS="8./255. 4./255. 2./255. 1./255. 0.5/255."

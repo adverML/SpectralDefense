@@ -28,7 +28,7 @@ from utils import (
 # fined tuned again when retrained all models with X in [-0.5, 0.5]
 # https://github.com/pokaxpoka/deep_Mahalanobis_detector/blob/master/ADV_Samples.py
 STDEVS = {
-    'cif10':     {'fgsm': 0.015686, 'bim': 0.015686, 'pgd': 0.015686, 'std': 0.015686, 'df': 0.015686, 'cw': 0.015686},
+    'cif10':     {'fgsm': 0.038821902, 'bim': 0.020980978, 'pgd': 0.02295211, 'std': 0.028931687, 'df': 0.006160808, 'cw': 0.0020574536},
     'cif100':    {'fgsm': 0.015686, 'bim': 0.015686, 'pgd': 0.015686, 'std': 0.015686, 'df': 0.015686, 'cw': 0.015686},
     'cif10vgg':  {'fgsm': 0.015686, 'bim': 0.015686, 'pgd': 0.015686, 'std': 0.015686, 'df': 0.015686, 'cw': 0.015686},
     'cif100vgg': {'fgsm': 0.015686, 'bim': 0.015686, 'pgd': 0.015686, 'std': 0.015686, 'df': 0.015686, 'cw': 0.015686},
@@ -68,6 +68,7 @@ def lid_newest(args, model, images, images_advs, layers, get_layer_feature_maps,
         k = min(k, len(data)-1)
         f = lambda v: -k / np.sum(np.log(v/v[-1]))
         a = cdist(batch, data)
+        import pdb; pdb.set_trace()
         a = np.apply_along_axis(np.sort, axis=1, arr=a)[:,1:k+1]
         a = np.apply_along_axis(f, axis=1, arr=a)
         return a

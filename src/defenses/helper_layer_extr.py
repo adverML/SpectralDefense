@@ -490,10 +490,6 @@ def get_whitebox_features(args, logger, model):
             assert True
 
 
-
-
-
-
         # if layer_nr == 0:
         #     layers = ['conv2_0_relu_1', 'conv2_0_relu_4']
         # elif layer_nr == 1:

@@ -68,12 +68,12 @@ parser.add_argument('--net_normalization', action='store_true',   help=settings.
 
 parser.add_argument('--version',    type=str, default='standard')
 # parser.add_argument("--eps",       default='-1',       help=settings.HELP_AA_EPSILONS) # to activate the best layers
-parser.add_argument("--eps",       default='8./255.',       help=settings.HELP_AA_EPSILONS)
-# parser.add_argument("--eps",       default='4./255.',       help=settings.HELP_AA_EPSILONS)
-# parser.add_argument("--eps",       default='2./255.',       help=settings.HELP_AA_EPSILONS)
-# parser.add_argument("--eps",       default='1./255.',       help=settings.HELP_AA_EPSILONS)
-# parser.add_argument("--eps",       default='1./255.',       help=settings.HELP_AA_EPSILONS)
-# parser.add_argument("--eps",       default='0.5/255.',       help=settings.HELP_AA_EPSILONS)
+parser.add_argument("--eps",       default='8./255.',    help=settings.HELP_AA_EPSILONS)
+# parser.add_argument("--eps",       default='4./255.',  help=settings.HELP_AA_EPSILONS)
+# parser.add_argument("--eps",       default='2./255.',  help=settings.HELP_AA_EPSILONS)
+# parser.add_argument("--eps",       default='1./255.',  help=settings.HELP_AA_EPSILONS)
+# parser.add_argument("--eps",       default='1./255.',  help=settings.HELP_AA_EPSILONS)
+# parser.add_argument("--eps",       default='0.5/255.', help=settings.HELP_AA_EPSILONS)
 
 parser.add_argument("--k_lid",       default='-1',  type=int, help="k for LID")
 
@@ -114,8 +114,6 @@ model, _ = load_model(args)
 device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 model = model.to(device)
 model = model.eval()
-
-
 
 layer_nr = int(args.nr)
 logger.log("INFO: layer_nr " + str(layer_nr) ) 

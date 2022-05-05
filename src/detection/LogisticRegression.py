@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 
+from sklearn.preprocessing import MinMaxScaler, StandardScaler
 from sklearn.linear_model import LogisticRegression
 
 def LR(args, logger, X_train, y_train, X_test, y_test):
@@ -15,6 +16,12 @@ def LR(args, logger, X_train, y_train, X_test, y_test):
     # random_stateint, RandomState instance, default=None
     # max_iter int, default=100
     # multi_class{‘auto’, ‘ovr’, ‘multinomial’}, default=’auto’
+    
+    # scaler  = MinMaxScaler().fit(X_train)
+    scaler  = StandardScaler().fit(X_train)
+    X_train = scaler.transform(X_train)
+    X_test  = scaler.transform(X_test)
+
 
     logger.log(clf)
     clf.fit(X_train, y_train)

@@ -45,8 +45,8 @@ ATTACKS="gauss fgsm bim pgd std df cw"
 
 # ATTACKS="apgd-ce"
 
-DETECTORS="LID"
-# DETECTORS="LIDNOIsE"
+# DETECTORS="LID"
+DETECTORS="LIDNOISE"
 
 
 # EPSILONS="8./255. 4./255. 2./255. 1./255. 0.5/255."
@@ -351,8 +351,8 @@ detectadversarialslayer ()
 # printn
 # genereratecleandata
 # attacks
-# extractcharacteristics
-detectadversarials
+extractcharacteristics
+# detectadversarials
 
 # extractcharacteristicslayer
 # detectadversarialslayer

@@ -10,8 +10,6 @@ import torch
 import sys, os
 import pdb
 
-from sklearn.preprocessing import MinMaxScaler, StandardScaler
-from sklearn import svm
 import argparse
 
 from conf import settings
@@ -62,9 +60,9 @@ parser.add_argument("--eps",    default='8./255.',     help=settings.HELP_AA_EPS
 parser.add_argument("--k_lid",    default='-1',  type=int,     help="k for LID")
 
 args = parser.parse_args()
+
 # check args
 args = check_args_attack(args, version=True, net_normalization=False, img_size=False)
-
 
 # output data
 output_path_dir = create_dir_detection(args, root='./data/detection/')
@@ -78,7 +76,6 @@ logger.log('INFO: Loading characteristics...')
 # input data
 extracted_characteristics_path = create_dir_extracted_characteristics(args, root='./data/extracted_characteristics/', wait_input=False)
 characteristics_path, characteristics_advs_path = create_save_dir_path(extracted_characteristics_path, args, filename='characteristics')
-
 
 
 if  args.detector in  ['VAEInputPFS', 'VAEInputMFS']:
@@ -140,7 +137,7 @@ if args.pca_features > 0:
 
     pca.fit(X_train)
     X_train = pca.transform(X_train)
-    X_test = pca.transform(X_test)
+    X_test  = pca.transform(X_test)
     # import pdb; pdb.set_trace()
     # # X_train = torch.from_numpy(X_train)
     # from submodules.PyTorch.TorchPCA import PCA

@@ -27,9 +27,9 @@ RUNS="1"
 # ATTACKS="linfdf"
 
 # ATTACKS="gauss bim std df"
-# ATTACKS="gauss"
+ATTACKS="std"
 
-ATTACKS="gauss fgsm bim pgd std df cw"
+# ATTACKS="gauss fgsm bim pgd std df cw"
 
 # ATTACKS="apgd-ce apgd-t fab-t square"
 # ATTACKS="aa+"
@@ -43,8 +43,8 @@ ATTACKS="gauss fgsm bim pgd std df cw"
 # DETECTORS="LID Mahalanobis"
 # DETECTORS="InputMFS LayerMFS LID Mahalanobis"
 # DETECTORS="LayerMFS"
+# DETECTORS="Mahalanobis"
 DETECTORS="Mahalanobis"
-# DETECTORS="LID"
 # DETECTORS="HPF"
 # DETECTORS="LIDNOISE"
 # DETECTORS="LID"
@@ -57,12 +57,12 @@ DETECTORS="Mahalanobis"
 EPSILONS="8./255."
 
 # CLF="RF"
-# CLF="RF"
+CLF="LR"
 # CLF="SVC"
 # CLF="cuSVC"
 # CLF="IF"
 
-CLF="LR RF"
+# CLF="LR RF"
 
 IMAGENET32CLASSES="25 50 100 250 1000"
 # NRSAMPLES="300 500 1000 1200 1500 2000" # only at detectadversarialslayer
