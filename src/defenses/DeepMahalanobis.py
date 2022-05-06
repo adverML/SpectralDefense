@@ -21,7 +21,7 @@ def deep_mahalanobis(args, logger, model, images, images_advs, layers, get_layer
     args.batch_size = 100
     
     if args.net == 'imagenet':
-        args.batch_size = 50
+        args.batch_size = 10
     
     sample_mean_path      = output_path_dir + 'sample_mean_' + args.net
     sample_precision_path = output_path_dir + 'precision_'   + args.net
@@ -236,7 +236,7 @@ def deep_mahalanobis(args, logger, model, images, images_advs, layers, get_layer
         Mah_adv[:,layer_index]=np.array(get_mah(adv_loader, layer_index))
         Mah[:,layer_index]=np.array(get_mah(image_loader, layer_index))
     
-    characteristics = Mah
+    characteristics     = Mah
     characteristics_adv = Mah_adv
 
     return characteristics, characteristics_adv

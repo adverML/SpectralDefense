@@ -236,7 +236,7 @@ def get_whitebox_features(args, logger, model):
             model.conv5_x[2].residual_function[2].register_forward_hook( get_activation('conv5_2_relu') )      
 
         else:
-            if not (args.attack  in ['df', 'cw', 'fab','fab-t']):
+            if not ( args.attack  in ['df', 'cw', 'fab','fab-t'] ):
                 
                 if not args.attack == 'fgsm':
                     # last block
@@ -311,7 +311,7 @@ def get_whitebox_features(args, logger, model):
         layer_name = layer_name_cif10
         # fourier_act_layers = [ 'conv2_0_relu_1', 'conv2_0_relu_4', 'conv2_1_relu_1', 'conv2_1_relu_4', 'conv2_2_relu_1', 'conv2_2_relu_4', 'conv2_3_relu_1', 'conv2_3_relu_4']
 
-        if not args.nr == -1 or args.detector in ['LID', 'Mahalanobis']:
+        if not args.nr == -1 or args.detector in ['LID', 'LIDNOISE', 'Mahalanobis']:
             model.conv2[0].residual[1].register_forward_hook( get_activation('conv2_0_relu_1') )
             model.conv2[0].residual[4].register_forward_hook( get_activation('conv2_0_relu_4') )
 
@@ -453,7 +453,7 @@ def get_whitebox_features(args, logger, model):
                         ]
 
 
-        if args.detector in ['LID', 'Mahalanobis']:
+        if args.detector in ['LID', 'LIDNOISE', 'Mahalanobis']:
             layers = [
                 'conv2_0_relu_4',  'conv2_1_relu_4',  'conv2_2_relu_4', 'conv2_3_relu_4', 'conv3_0_relu_4', 'conv3_1_relu_4', 
                 'conv3_2_relu_4', 'conv3_3_relu_4', 'conv4_0_relu_4', 'conv4_1_relu_4','conv4_2_relu_4', 'conv4_3_relu_4', 'relu' 
@@ -663,10 +663,16 @@ def get_whitebox_features(args, logger, model):
         # layers = ['layer_1_0_relu', 'layer_1_1_relu', 'layer_1_2_relu', 'layer_2_0_relu']
         
         
-        if args.detector in ['LID', 'Mahalanobis']:
+        if args.detector in ['LID']:
             layers = [
                 '0_relu', 'layer_1_0_relu', 'layer_1_1_relu', 'layer_1_2_relu', 'layer_2_0_relu', 'layer_2_1_relu', 'layer_2_2_relu',  'layer_2_3_relu', 
                 'layer_3_0_relu', 'layer_3_1_relu',  'layer_3_2_relu',      'layer_3_3_relu', 'layer_3_4_relu',  'layer_3_5_relu',  'layer_4_0_relu',  'layer_4_1_relu',   'layer_4_2_relu'
+            ]
+            
+        if args.detector in ['Mahalanobis']:
+            layers = [
+                # '0_relu', 'layer_1_0_relu', 'layer_1_1_relu', 'layer_1_2_relu', 'layer_2_0_relu', 'layer_2_1_relu', 'layer_2_2_relu',  'layer_2_3_relu', 
+                'layer_3_0_relu', 'layer_3_1_relu',  'layer_3_2_relu', 'layer_3_3_relu', 'layer_3_4_relu',  'layer_3_5_relu',  'layer_4_0_relu',  'layer_4_1_relu',   'layer_4_2_relu'
             ]
         
         

@@ -118,7 +118,7 @@ model = model.eval()
 layer_nr = int(args.nr)
 logger.log("INFO: layer_nr " + str(layer_nr) ) 
 
-if args.detector == 'LayerMFS' or args.detector == 'LayerPFS' or args.detector == 'LID'  or args.detector == 'LIDNOISE' or args.detector == 'Mahalanobis':
+if args.detector in ['LayerMFS',  'LayerPFS',  'LID',  'LIDNOISE',  'Mahalanobis']:
     get_layer_feature_maps, layers, model, activation = get_whitebox_features(args, logger, model)
 elif args.detector == 'DkNN':
     layers = dfknn_layer(args, model)
@@ -148,7 +148,19 @@ elif args.detector == 'LID':
 ####### LIDNOISE 
 elif args.detector == 'LIDNOISE':
     from defenses.Lid import lidnoise
-    characteristics, characteristics_adv = lidnoise(args, model, images, images_advs, layers, get_layer_feature_maps, activation)
+    characteristics,  characteristics_noise, characteristics_adv, lid_tmp_k, lid_tmp_k_noise, lid_tmp_k_adv = lidnoise(args, model, images, images_advs, layers, get_layer_feature_maps, activation)
+    
+    lid_tmp_k_path, lid_tmp_k_advs_path = create_save_dir_path(output_path_dir, args, filename='lid_tmp_k' )
+    noise_path, _                       = create_save_dir_path(output_path_dir, args, filename='lid_tmp_k_noise' )
+    characteristics_noise_path, _       = create_save_dir_path(output_path_dir, args, filename='characteristics_noise' )
+    
+    torch.save(lid_tmp_k,      lid_tmp_k_path,       pickle_protocol=4)
+    torch.save(lid_tmp_k_adv,  lid_tmp_k_advs_path,  pickle_protocol=4)
+    torch.save(lid_tmp_k_adv,  noise_path,           pickle_protocol=4)
+    
+    torch.save(characteristics_noise, characteristics_noise_path, pickle_protocol=4)
+    # characteristics      = np.concatenate((characteristics, characteristics_noise), axis=0)
+    
 
 ####### Mahalanobis section
 elif args.detector == 'Mahalanobis':
