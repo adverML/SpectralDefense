@@ -33,7 +33,7 @@ from utils import (
 
 num_epochs = 6            # number of training epochs
 batch_size_train = 256    # batch size for training
-batch_size_test = 512    # batch size for testing
+batch_size_test = 512     # batch size for testing
 learning_rate = 0.001     # learning rate for training
 calibset_size = 750       # size of the calibration set for DkNN
 neighbors = 75            # number of nearest neighbors for DkNN

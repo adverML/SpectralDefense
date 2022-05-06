@@ -27,7 +27,7 @@ RUNS="1"
 # ATTACKS="linfdf"
 
 # ATTACKS="gauss bim std df"
-ATTACKS="std"
+ATTACKS="fgsm"
 
 # ATTACKS="gauss fgsm bim pgd std df cw"
 
@@ -44,10 +44,10 @@ ATTACKS="std"
 # DETECTORS="InputMFS LayerMFS LID Mahalanobis"
 # DETECTORS="LayerMFS"
 # DETECTORS="Mahalanobis"
-DETECTORS="Mahalanobis"
+# DETECTORS="Mahalanobis"
 # DETECTORS="HPF"
 # DETECTORS="LIDNOISE"
-# DETECTORS="LID"
+DETECTORS="LID"
 
 
 # DETECTORS="InputPFS LayerPFS"
@@ -57,18 +57,18 @@ DETECTORS="Mahalanobis"
 EPSILONS="8./255."
 
 # CLF="RF"
-CLF="LR"
+# CLF="LR"
 # CLF="SVC"
 # CLF="cuSVC"
 # CLF="IF"
 
-# CLF="LR RF"
+CLF="LR RF"
 
 IMAGENET32CLASSES="25 50 100 250 1000"
 # NRSAMPLES="300 500 1000 1200 1500 2000" # only at detectadversarialslayer
 
 WANTEDSAMPLES="2000"
-ALLSAMPLES="3000"
+ALLSAMPLES="4200"
 # NRSAMPLES="1500" # detect
 NRSAMPLES="2000" # detect
 
@@ -343,9 +343,9 @@ detectadversarialslayer ()
 
 # printn
 # genereratecleandata
-# attacks
-extractcharacteristics
-detectadversarials
+attacks
+# extractcharacteristics
+# detectadversarials
 
 # extractcharacteristicslayer
 # detectadversarialslayer

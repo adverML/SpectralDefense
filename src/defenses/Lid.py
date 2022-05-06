@@ -207,13 +207,23 @@ def lidnoise(args, model, images, images_advs, layers, get_layer_feature_maps, a
         batch = np.asarray(batch, dtype=np.float32)
         k = min(k, len(data)-1)
         f  = lambda v: - k / np.sum(np.log(v/v[-1]))
-        f2 = lambda v: - np.log(v/v[-1])
+        f2 = lambda v: - k / np.log( v/ v[-1] )
+        
+        
+        
         dist = cdist(batch, data)
         dist = np.apply_along_axis(np.sort, axis=1, arr=dist)[:,1:k+1]
         sol = np.apply_along_axis(f, axis=1, arr=dist)
         
-        # import pdb; pdb.set_trace()
+        import pdb; pdb.set_trace()
         a2 = np.apply_along_axis(f2, axis=1, arr=dist)
+        
+        a2 = np.zeros_like(dist)
+        
+        for j in range(k):
+            for i in range(dist.shape[0]):
+                a2[i,j] =  dist[]
+        
         
         return sol, a2
 
@@ -284,7 +294,7 @@ def lidnoise(args, model, images, images_advs, layers, get_layer_feature_maps, a
             lid_batch_noise[:, i] = tmp_batch_noise
             lid_batch_adv[:, i]   = tmp_batch_adv
             
-        return lid_batch, lid_batch_noise, lid_batch_adv, tmp_k, tmp_k_noise, tmp_k_adv
+        return lid_batch, lid_batch_noise, lid_batch_adv, lid_batch_k, lid_batch_noise_k, lid_batch_adv_k
 
     lids = []
     lid_noise = []
