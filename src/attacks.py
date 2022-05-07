@@ -49,7 +49,8 @@ if __name__ == '__main__':
     parser.add_argument("--wanted_samples",    default='2000',  type=int, help=settings.HELP_WANTED_SAMPLES)
     parser.add_argument("--all_samples",       default='4000',  type=int, help="Samples from generate Clean data")
     parser.add_argument("--shuffle_on",        action='store_true',       help="Switch shuffle data on")
-
+    parser.add_argument("--fixed_clean_data",  action='store_true',       help="Fixed Clean Data")
+    
     # Only for Autoatack
     parser.add_argument('--norm',       type=str, default='Linf')
     parser.add_argument('--eps',        type=str, default='8./255.')

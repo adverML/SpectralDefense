@@ -4,21 +4,14 @@ function log_msg {
   echo  "`date` $@"
 }
 
-# DATASETS=(cif10 cif10vgg cif100 cif100vgg imagenet imagenet32 imagenet64 imagenet128 celebaHQ32 celebaHQ64 celebaHQ128)
-# DATASETS="cif10 cif10vgg  cif100 cif100vgg cif10_rb"
-# DATASETS="cif10 cif10vgg  cif100 cif100vgg"
-# DATASETS="cif100vgg"
-# DATASETS="cif10rn34 cif100rn34"
-DATASETS="cif10"
-# DATASETS="cif10_rb"
-# DATASETS="cif10 cif10vgg cif10_rb cif10rn34 cif100 cif100vgg cif100rn34"
 
-# DATASETS="cif10_rb"
-# DATASETS="cif10vgg"
 
-# DATASETS="imagenet64 celebaHQ64 imagenet128 celebaHQ128"
-# RUNS="1 2 3"
-RUNS="1"
+
+DATASETS="cif10_rb"
+
+
+RUNS="1 2 3"
+# RUNS="1"
 
 
 # ATTACKS="df"
@@ -29,12 +22,12 @@ RUNS="1"
 # ATTACKS="gauss bim std df"
 # ATTACKS="fgsm"
 
-ATTACKS="fgsm bim pgd std df cw"
+ATTACKS="gauss fgsm bim pgd std df cw"
 
 # ATTACKS="apgd-ce apgd-t fab-t square"
 # ATTACKS="aa+"
 
-# DETECTORS="InputMFS"
+DETECTORS="LayerMFS"
 # DETECTORS="InputMFS LayerMFS"
 # DETECTORS="InputMFS LayerMFS"
 
@@ -44,9 +37,8 @@ ATTACKS="fgsm bim pgd std df cw"
 # DETECTORS="InputMFS LayerMFS LID Mahalanobis"
 # DETECTORS="LayerMFS"
 # DETECTORS="Mahalanobis"
-# DETECTORS="Mahalanobis"
 # DETECTORS="HPF"
-DETECTORS="LIDNOISE"
+# DETECTORS="LIDNOISE"
 # DETECTORS="LID"
 
 
@@ -100,35 +92,35 @@ genereratecleandata ()
     for run in $RUNS; do
         for net in $DATASETS; do
             if [ "$net" == cif10 ]; then
-                python -u generate_clean_data.py --net "$net" --num_classes 10  --run_nr "$run" --wanted_samples "$ALLSAMPLES" 
+                python -u generate_clean_data.py --net "$net" --num_classes 10  --run_nr "$run" --wanted_samples "$ALLSAMPLES" --shuffle_off
             fi 
 
             if [ "$net" == cif10_rb ]; then
-                python -u generate_clean_data.py --net "$net" --num_classes 10  --run_nr "$run" --wanted_samples "$ALLSAMPLES" 
+                python -u generate_clean_data.py --net "$net" --num_classes 10  --run_nr "$run" --wanted_samples "$ALLSAMPLES" --shuffle_off
             fi 
 
             if [ "$net" == cif10vgg ]; then
-                python -u generate_clean_data.py --net "$net" --num_classes 10  --run_nr "$run" --wanted_samples "$ALLSAMPLES" 
+                python -u generate_clean_data.py --net "$net" --num_classes 10  --run_nr "$run" --wanted_samples "$ALLSAMPLES" --shuffle_off
             fi 
 
             if [ "$net" == cif10rn34 ]; then
-                python -u generate_clean_data.py --net "$net" --num_classes 10  --run_nr "$run" --wanted_samples "$ALLSAMPLES" 
+                python -u generate_clean_data.py --net "$net" --num_classes 10  --run_nr "$run" --wanted_samples "$ALLSAMPLES" --shuffle_off
             fi 
 
             if [ "$net" == cif10rn34sota ]; then
-                python -u generate_clean_data.py --net "$net" --num_classes 10  --run_nr "$run" --wanted_samples "$ALLSAMPLES" 
+                python -u generate_clean_data.py --net "$net" --num_classes 10  --run_nr "$run" --wanted_samples "$ALLSAMPLES" --shuffle_off
             fi 
 
             if [ "$net" == cif100rn34 ]; then
-                python -u generate_clean_data.py --net "$net" --num_classes 100  --run_nr "$run" --wanted_samples "$ALLSAMPLES" 
+                python -u generate_clean_data.py --net "$net" --num_classes 100  --run_nr "$run" --wanted_samples "$ALLSAMPLES" --shuffle_off
             fi 
 
             if [ "$net" == cif100 ]; then
-                python -u generate_clean_data.py --net "$net" --num_classes 100  --run_nr "$run" --wanted_samples "$ALLSAMPLES" 
+                python -u generate_clean_data.py --net "$net" --num_classes 100  --run_nr "$run" --wanted_samples "$ALLSAMPLES" --shuffle_off
             fi 
 
             if [ "$net" == cif100vgg ]; then 
-                python -u generate_clean_data.py --net "$net" --num_classes 100  --run_nr "$run" --wanted_samples "$ALLSAMPLES"
+                python -u generate_clean_data.py --net "$net" --num_classes 100  --run_nr "$run" --wanted_samples "$ALLSAMPLES" --shuffle_off
             fi 
         done
     done
@@ -345,7 +337,7 @@ detectadversarialslayer ()
 # genereratecleandata
 # attacks
 extractcharacteristics
-# detectadversarials
+detectadversarials
 
 # extractcharacteristicslayer
 # detectadversarialslayer

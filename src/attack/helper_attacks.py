@@ -186,6 +186,11 @@ def create_advs(logger, args, model, output_path_dir, clean_data_path, wanted_sa
                         success_counter = success_counter + 1
                         if (success_counter % 1000) == 0:
                             get_debug_info( msg="success_counter " + str(success_counter) + " / " + str(wanted_samples) )
+                            
+                    elif args.fixed_clean_data:
+                        images.append( x_test[it].cpu() )     
+                        labels.append( y_test[it].cpu() )
+
 
                 success.append( len(tmp_images_advs) / max_nr )
 
@@ -261,13 +266,17 @@ def create_advs(logger, args, model, output_path_dir, clean_data_path, wanted_sa
             for idx, suc in enumerate(success):
                 counter = counter + 1
                 if suc:
-                    images_advs.append( adv_clip[idx].squeeze_(0).cpu() )
                     images.append( image[idx].squeeze_(0).cpu() )
+                    images_advs.append( adv_clip[idx].squeeze_(0).cpu() )
 
                     labels.append( label[idx].cpu().item() )
                     labels_advs.append( predicted_adv[idx].cpu().item() )
 
                     success_counter = success_counter + 1
+                
+                elif args.fixed_clean_data:
+                    images.append( image[idx].squeeze_(0).cpu() )
+                    labels.append( label[idx].cpu().item() )
 
             if success_counter >= wanted_samples:
                 logger.log("INFO: wanted samples reached {}".format(wanted_samples))

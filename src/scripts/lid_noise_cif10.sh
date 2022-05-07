@@ -27,9 +27,11 @@ RUNS="1"
 # ATTACKS="linfdf"
 
 # ATTACKS="gauss bim std df"
-# ATTACKS="fgsm"
+# ATTACKS="gauss"
 
-ATTACKS="fgsm bim pgd std df cw"
+# ATTACKS="fgsm bim pgd std df cw"
+ATTACKS="bim"
+
 
 # ATTACKS="apgd-ce apgd-t fab-t square"
 # ATTACKS="aa+"
@@ -44,11 +46,9 @@ ATTACKS="fgsm bim pgd std df cw"
 # DETECTORS="InputMFS LayerMFS LID Mahalanobis"
 # DETECTORS="LayerMFS"
 # DETECTORS="Mahalanobis"
-# DETECTORS="Mahalanobis"
+# DETECTORS="LID"
 # DETECTORS="HPF"
 DETECTORS="LIDNOISE"
-# DETECTORS="LID"
-
 
 # DETECTORS="InputPFS LayerPFS"
 
@@ -57,7 +57,7 @@ DETECTORS="LIDNOISE"
 EPSILONS="8./255."
 
 # CLF="RF"
-# CLF="LR"
+# CLF="RF"
 # CLF="SVC"
 # CLF="cuSVC"
 # CLF="IF"
@@ -67,13 +67,13 @@ CLF="LR RF"
 IMAGENET32CLASSES="25 50 100 250 1000"
 # NRSAMPLES="300 500 1000 1200 1500 2000" # only at detectadversarialslayer
 
-WANTEDSAMPLES="2000"
-ALLSAMPLES="4200"
+WANTEDSAMPLES="100"
+ALLSAMPLES="3000"
 # NRSAMPLES="1500" # detect
 NRSAMPLES="2000" # detect
 
 
-DATASETSLAYERNR="cif100 cif10vgg cif100vgg"
+DATASETSLAYERNR="cif10"
 ATTACKSLAYERNR="df"
 
 # LAYERNR="0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24"
@@ -100,35 +100,35 @@ genereratecleandata ()
     for run in $RUNS; do
         for net in $DATASETS; do
             if [ "$net" == cif10 ]; then
-                python -u generate_clean_data.py --net "$net" --num_classes 10  --run_nr "$run" --wanted_samples "$ALLSAMPLES" 
+                python -u generate_clean_data.py --net "$net" --num_classes 10  --run_nr "$run" --wanted_samples "$ALLSAMPLES" --shuffle_off
             fi 
 
             if [ "$net" == cif10_rb ]; then
-                python -u generate_clean_data.py --net "$net" --num_classes 10  --run_nr "$run" --wanted_samples "$ALLSAMPLES" 
+                python -u generate_clean_data.py --net "$net" --num_classes 10  --run_nr "$run" --wanted_samples "$ALLSAMPLES" --shuffle_off
             fi 
 
             if [ "$net" == cif10vgg ]; then
-                python -u generate_clean_data.py --net "$net" --num_classes 10  --run_nr "$run" --wanted_samples "$ALLSAMPLES" 
+                python -u generate_clean_data.py --net "$net" --num_classes 10  --run_nr "$run" --wanted_samples "$ALLSAMPLES" --shuffle_off
             fi 
 
             if [ "$net" == cif10rn34 ]; then
-                python -u generate_clean_data.py --net "$net" --num_classes 10  --run_nr "$run" --wanted_samples "$ALLSAMPLES" 
+                python -u generate_clean_data.py --net "$net" --num_classes 10  --run_nr "$run" --wanted_samples "$ALLSAMPLES" --shuffle_off
             fi 
 
             if [ "$net" == cif10rn34sota ]; then
-                python -u generate_clean_data.py --net "$net" --num_classes 10  --run_nr "$run" --wanted_samples "$ALLSAMPLES" 
+                python -u generate_clean_data.py --net "$net" --num_classes 10  --run_nr "$run" --wanted_samples "$ALLSAMPLES" --shuffle_off
             fi 
 
             if [ "$net" == cif100rn34 ]; then
-                python -u generate_clean_data.py --net "$net" --num_classes 100  --run_nr "$run" --wanted_samples "$ALLSAMPLES" 
+                python -u generate_clean_data.py --net "$net" --num_classes 100  --run_nr "$run" --wanted_samples "$ALLSAMPLES" --shuffle_off
             fi 
 
             if [ "$net" == cif100 ]; then
-                python -u generate_clean_data.py --net "$net" --num_classes 100  --run_nr "$run" --wanted_samples "$ALLSAMPLES" 
+                python -u generate_clean_data.py --net "$net" --num_classes 100  --run_nr "$run" --wanted_samples "$ALLSAMPLES" --shuffle_off
             fi 
 
             if [ "$net" == cif100vgg ]; then 
-                python -u generate_clean_data.py --net "$net" --num_classes 100  --run_nr "$run" --wanted_samples "$ALLSAMPLES"
+                python -u generate_clean_data.py --net "$net" --num_classes 100  --run_nr "$run" --wanted_samples "$ALLSAMPLES" --shuffle_off
             fi 
         done
     done
