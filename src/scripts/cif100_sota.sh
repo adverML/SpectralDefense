@@ -6,7 +6,7 @@ function log_msg {
 
 # DATASETS=(cif10 cif10vgg cif100 cif100vgg imagenet imagenet32 imagenet64 imagenet128 celebaHQ32 celebaHQ64 celebaHQ128)
 # DATASETS="cif10 cif10vgg  cif100 cif100vgg cif10_rb"
-DATASETS="cif100"
+DATASETS="cif100 cif100vgg"
 # DATASETS="cif100vgg"
 # DATASETS="cif10rn34 cif100rn34"
 # DATASETS="cif10rn34sota"
@@ -26,7 +26,7 @@ RUNS="1 2 3"
 # ATTACKS="linfdf l2pgd"
 # ATTACKS="linfdf"
 
-ATTACKS="gauss fgsm bim pgd std df cw"
+ATTACKS="fgsm bim pgd std df cw"
 # ATTACKS="apgd-ce apgd-t fab-t square"
 # ATTACKS="gauss"
 # ATTACKS="gauss bim std df"
@@ -47,7 +47,7 @@ ATTACKS="gauss fgsm bim pgd std df cw"
 
 # DETECTORS="InputPFS LayerMFS"
 
-DETECTORS="LID Mahalanobis"
+DETECTORS="Mahalanobis"
 # DETECTORS="InputMFS LayerMFS LID Mahalanobis"
 # DETECTORS="LayerMFS"
 # DETECTORS="InputPFS LayerPFS InputMFS LayerMFS LID Mahalanobis"

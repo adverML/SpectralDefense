@@ -29,7 +29,7 @@ RUNS="1"
 # ATTACKS="gauss bim std df"
 # ATTACKS="std"
 
-ATTACKS="gauss fgsm bim pgd std df cw"
+ATTACKS="fgsm bim std pgd df cw"
 
 # ATTACKS="apgd-ce apgd-t fab-t square"
 # ATTACKS="gauss"
@@ -58,7 +58,7 @@ EPSILONS="8./255."
 # CLF="cuSVC"
 # CLF="IF"
 
-CLF="LR"
+CLF="LR RF"
 
 IMAGENET32CLASSES="25 50 100 250 1000"
 # NRSAMPLES="300 500 1000 1200 1500 2000" # only at detectadversarialslayer
@@ -66,7 +66,7 @@ IMAGENET32CLASSES="25 50 100 250 1000"
 WANTEDSAMPLES="2000"
 ALLSAMPLES="3000"
 # NRSAMPLES="1500" # detect
-NRSAMPLES="2000" # detect
+NRSAMPLES="2000"
 
 
 DATASETSLAYERNR="cif10"
@@ -77,7 +77,7 @@ LAYERNR="0 1 2 3 4 5 6 7 8 9 10 11 12"
 DETECTORSLAYERNR="LID"
 PCA_FEATURES="0"
 # LID_K="5 10 20 50"
-LID_K="10"
+LID_K=""
 
 
 #-----------------------------------------------------------------------------------------------------------------------------------
@@ -239,7 +239,7 @@ extractcharacteristicslayer ()
                             for lidk in $LID_K; do      
                                 log_msg "Layer Nr. $nr; attack $att; detectors $det"
                                 if [ "$net" == cif10 ]; then
-                                    python -u extract_characteristics.py --net "$net" --attack "$att" --detector "$det"  --eps "$eps" --run_nr "$run" --nr "$nr" --k_lid "$lidk" --wanted_samples "$WANTEDSAMPLES" --take_inputimage_off
+                                    python -u extract_characteristics.py --net "$net" --attack "$att" --detector "$det"  --eps "$eps" --run_nr "$run" --nr "$nr"  --wanted_samples "$WANTEDSAMPLES" --take_inputimage_off
                                 fi
 
                                 if [ "$net" == cif10_rb ]; then
@@ -267,44 +267,42 @@ detectadversarials ()
         for net in $DATASETS; do
             for att in $ATTACKS; do
                 for eps in $EPSILONS; do
-                    for det in $DETECTORS; do
-                        for lidk in $LID_K; do                        
+                    for det in $DETECTORS; do                     
                             for nrsamples in $NRSAMPLES; do
                                 for classifier in $CLF; do
                                     if [ "$net" == cif10 ]; then
-                                        python -u detect_adversarials.py --net "$net" --attack "$att" --detector "$det" --wanted_samples "$nrsamples" --clf "$classifier" --k_lid "$lidk" --eps "$eps" --num_classes 10  --run_nr "$run"  --pca_features "$PCA_FEATURES"
+                                        python -u detect_adversarials.py --net "$net" --attack "$att" --detector "$det" --wanted_samples "$nrsamples" --clf "$classifier"  --eps "$eps" --num_classes 10  --run_nr "$run"  --pca_features "$PCA_FEATURES" --lid_k_log
                                     fi
 
                                     if [ "$net" == cif10_rb ]; then
-                                        python -u detect_adversarials.py --net "$net" --attack "$att" --detector "$det" --wanted_samples "$nrsamples" --clf "$classifier" --eps "$eps" --num_classes 10  --run_nr "$run"  --pca_features "$PCA_FEATURES"
+                                        python -u detect_adversarials.py --net "$net" --attack "$att" --detector "$det" --wanted_samples "$nrsamples" --clf "$classifier" --eps "$eps" --num_classes 10  --run_nr "$run"  --pca_features "$PCA_FEATURES" --lid_k_log
                                     fi
 
                                     if [ "$net" == cif10vgg ]; then
-                                        python -u detect_adversarials.py --net "$net" --attack "$att" --detector "$det" --wanted_samples "$nrsamples" --clf "$classifier" --num_classes 10  --run_nr "$run"  --pca_features "$PCA_FEATURES"
+                                        python -u detect_adversarials.py --net "$net" --attack "$att" --detector "$det" --wanted_samples "$nrsamples" --clf "$classifier" --num_classes 10  --run_nr "$run"  --pca_features "$PCA_FEATURES" --lid_k_log
                                     fi 
 
                                     if [ "$net" == cif10rn34 ]; then
-                                        python -u detect_adversarials.py --net "$net" --attack "$att" --detector "$det" --wanted_samples "$nrsamples" --clf "$classifier" --num_classes 10  --run_nr "$run"  --pca_features "$PCA_FEATURES"
-                                    fi 
+                                        python -u detect_adversarials.py --net "$net" --attack "$att" --detector "$det" --wanted_samples "$nrsamples" --clf "$classifier" --num_classes 10  --run_nr "$run"  --pca_features "$PCA_FEATURES" --lid_k_log
+                                    fi  
 
                                     if [ "$net" == cif10rn34sota ]; then
-                                        python -u detect_adversarials.py --net "$net" --attack "$att" --detector "$det" --wanted_samples "$nrsamples" --clf "$classifier" --num_classes 10  --run_nr "$run"  --pca_features "$PCA_FEATURES"
+                                        python -u detect_adversarials.py --net "$net" --attack "$att" --detector "$det" --wanted_samples "$nrsamples" --clf "$classifier" --num_classes 10  --run_nr "$run"  --pca_features "$PCA_FEATURES" --lid_k_log
                                     fi 
 
 
                                     if [ "$net" == cif100 ]; then
-                                        python -u detect_adversarials.py --net "$net" --attack "$att" --detector "$det" --wanted_samples "$nrsamples" --clf "$classifier" --num_classes 100 --eps "$eps"  --run_nr "$run"  --pca_features "$PCA_FEATURES"
+                                        python -u detect_adversarials.py --net "$net" --attack "$att" --detector "$det" --wanted_samples "$nrsamples" --clf "$classifier" --num_classes 100 --eps "$eps"  --run_nr "$run"  --pca_features "$PCA_FEATURES" --lid_k_log
                                     fi
 
                                     if [ "$net" == cif100vgg ]; then
-                                        python -u detect_adversarials.py --net "$net" --attack "$att" --detector "$det" --wanted_samples "$nrsamples" --clf "$classifier" --num_classes 100   --run_nr "$run"  --pca_features "$PCA_FEATURES"
+                                        python -u detect_adversarials.py --net "$net" --attack "$att" --detector "$det" --wanted_samples "$nrsamples" --clf "$classifier" --num_classes 100   --run_nr "$run"  --pca_features "$PCA_FEATURES" --lid_k_log
                                     fi 
                                     
                                     if [ "$net" == cif100rn34 ]; then
-                                        python -u detect_adversarials.py --net "$net" --attack "$att" --detector "$det" --wanted_samples "$nrsamples" --clf "$classifier" --num_classes 100   --run_nr "$run"  --pca_features "$PCA_FEATURES"
+                                        python -u detect_adversarials.py --net "$net" --attack "$att" --detector "$det" --wanted_samples "$nrsamples" --clf "$classifier" --num_classes 100   --run_nr "$run"  --pca_features "$PCA_FEATURES" --lid_k_log
                                     fi 
                                 done
-                            done
                         done
                     done
                 done
@@ -327,7 +325,7 @@ detectadversarialslayer ()
                                 for lidk in $LID_K; do 
                                     log_msg "Layer Nr. $nr"
                                     if [ "$net" == cif10 ]; then
-                                        python -u detect_adversarials.py --net "$net" --attack "$att" --detector "$det" --wanted_samples "$nrsamples" --clf "$classifier" --k_lid "$lidk" --num_classes 10 --nr "$nr" --run_nr  "$run" 
+                                        python -u detect_adversarials.py --net "$net" --attack "$att" --detector "$det" --wanted_samples "$nrsamples" --clf "$classifier" --k_lid "$lidk" --num_classes 10 --nr "$nr" --run_nr  "$run"   
                                     fi
 
                                     if [ "$net" == cif10_rb ]; then
@@ -351,8 +349,8 @@ detectadversarialslayer ()
 # printn
 # genereratecleandata
 # attacks
-extractcharacteristics
-# detectadversarials
+# extractcharacteristics
+detectadversarials
 
 # extractcharacteristicslayer
 # detectadversarialslayer

@@ -52,7 +52,7 @@ if __name__ == '__main__':
     parser.add_argument("--num_classes",    default=10,   type=int, help=settings.HELP_NUM_CLASSES)
     parser.add_argument("--batch_size",     default=1   , type=int, help=settings.HELP_BATCH_SIZE)
     parser.add_argument("--wanted_samples", default=4000, type=int, help=settings.HELP_WANTED_SAMPLES)
-    parser.add_argument("--shuffle_off",    action='store_false',  help="Switch shuffle data off")         # shuffle is switched on by default
+    parser.add_argument("--shuffle_off",    action='store_false',   help="Switch shuffle data off")        # shuffle is switched on by default
 
     parser.add_argument('--net_normalization', action='store_false', help=settings.HELP_NET_NORMALIZATION) # net normalization is switched on by default
     

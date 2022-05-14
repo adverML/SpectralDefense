@@ -40,16 +40,17 @@ from attack.helper_attacks import (
 if __name__ == '__main__':
     # processing the arguments
     parser = argparse.ArgumentParser()
-    parser.add_argument("--run_nr",            default=1,       type=int, help="Which run should be taken?")
+    parser.add_argument("--run_nr",                default=1,       type=int, help="Which run should be taken?")
     
-    parser.add_argument("--attack",            default='fgsm',            help=settings.HELP_ATTACK)
-    parser.add_argument("--net",               default='cif10',           help=settings.HELP_NET)
-    parser.add_argument("--img_size",          default='32',    type=int, help=settings.HELP_IMG_SIZE)
-    parser.add_argument("--num_classes",       default='10',    type=int, help=settings.HELP_NUM_CLASSES)
-    parser.add_argument("--wanted_samples",    default='2000',  type=int, help=settings.HELP_WANTED_SAMPLES)
-    parser.add_argument("--all_samples",       default='4000',  type=int, help="Samples from generate Clean data")
-    parser.add_argument("--shuffle_on",        action='store_true',       help="Switch shuffle data on")
-    parser.add_argument("--fixed_clean_data",  action='store_true',       help="Fixed Clean Data")
+    parser.add_argument("--attack",                default='fgsm',             help=settings.HELP_ATTACK)
+    parser.add_argument("--net",                   default='cif10',            help=settings.HELP_NET)
+    parser.add_argument("--img_size",              default='32',    type=int,  help=settings.HELP_IMG_SIZE)
+    parser.add_argument("--num_classes",           default='10',    type=int,  help=settings.HELP_NUM_CLASSES)
+    parser.add_argument("--wanted_samples",        default='2000',  type=int,  help=settings.HELP_WANTED_SAMPLES)
+    parser.add_argument("--all_samples",           default='4000',  type=int,  help="Samples from generate Clean data")
+    parser.add_argument("--shuffle_on",            action='store_true',        help="Switch shuffle data on")
+    parser.add_argument("--fixed_clean_data",      action='store_true',        help="Fixed Clean Data")
+    parser.add_argument("--use_clean_train_data",  action='store_false',       help="use_clean_test_data")
     
     # Only for Autoatack
     parser.add_argument('--norm',       type=str, default='Linf')
@@ -64,7 +65,6 @@ if __name__ == '__main__':
     args = parser.parse_args()
     args = check_args_attack(args)
 
-
     # output data
     output_path_dir = create_dir_attacks(args, root='./data/attacks/')
 
@@ -74,7 +74,7 @@ if __name__ == '__main__':
 
     device_name = getdevicename()
 
-    #load model
+    # load model
     logger.log('INFO: Load model...')
     model, preprocessing = load_model(args)
 
@@ -90,7 +90,7 @@ if __name__ == '__main__':
     clean_data_path = create_dir_clean_data(args, root='./data/clean_data/')
     logger.log('INFO: clean data path: ' + clean_data_path)
     
-    images, labels, images_advs, labels_advs = create_advs(logger, args, model, output_path_dir, clean_data_path, args.wanted_samples, preprocessing, option=2)
+    images, labels, images_advs, labels_advs = create_advs(logger, args, model, output_path_dir, clean_data_path, args.wanted_samples, preprocessing, use_clean_test_data=args.use_clean_train_data, option=2)
 
     # create save dir 
     images_path, images_advs_path = create_save_dir_path(output_path_dir, args)

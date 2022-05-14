@@ -9,14 +9,14 @@ DATASETS="imagenet"
 # DATASETS="imagenet_hierarchy"
 # DATASETS="restricted_imagenet"
 
-RUNS="1"
+RUNS="4"
 # RUNS="1 2 3"
 # RUNS="8"
 # RUNS="7"
 # RUNS="10"
 
-
-ATTACKS="gauss fgsm bim pgd std df cw"
+ATTACKS="apgd-cel2"
+# ATTACKS="gauss fgsm bim pgd std df cw"
 # ATTACKS="gauss"
 # ATTACKS="fgsm bim pgd std"
 # ATTACKS="aa+"
@@ -28,18 +28,15 @@ ATTACKS="gauss fgsm bim pgd std df cw"
 # ATTACKS="fab-t"
 
 
-# DETECTORS="LID" 
-DETECTORS="LIDNOISE" 
-
-
-# DETECTORS="LID LIDNOISE"
-
+DETECTORS="LID" 
+# DETECTORS="LIDNOISE" 
 
 # EPSILONS="8./255. 4./255. 2./255. 1./255. 0.5/255."
-EPSILONS="8./255."
+# EPSILONS="8./255."
+EPSILONS="0.5 0.4 0.3 0.2 0.1"
 
 # CLF="LR RF"
-CLF="RF"
+CLF="LR RF"
 # CLF="LR"
 # CLF="IF"
 
@@ -55,15 +52,15 @@ LAYERNR="0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16"
 DETECTORSLAYERNR="LIDNOISE"
 
 # NRSAMPLES="300 500 1000 1200 1500 2000"
-ALLSAMPLES="3000"
 WANTEDSAMPLES="2000"
+ALLSAMPLES="9600"
 WANTEDSAMPLES_TR="18000"
 WANTEDSAMPLES_TE="18000"
 
 NRSAMPLES="2000" # detect
 
 # LID_K="5"
-LID_K="5 10 20 50"
+LID_K="3 5 10 20 50"
 
 
 #-----------------------------------------------------------------------------------------------------------------------------------
@@ -104,7 +101,9 @@ extractcharacteristics ()
             for att in $ATTACKS; do  
                 for eps in $EPSILONS; do
                     for det in $DETECTORS; do
-                        python -u extract_characteristics.py --net "$net" --attack "$att" --detector "$det" --run_nr "$run"  --eps "$eps" --wanted_samples $WANTEDSAMPLES --take_inputimage_off
+                        for lidk in $LID_K; do
+                            python -u extract_characteristics.py --net "$net" --attack "$att" --detector "$det" --run_nr "$run"  --eps "$eps" --wanted_samples $WANTEDSAMPLES --take_inputimage_off  --k_lid "$lidk"
+                        done
                     done
                 done
             done
@@ -123,7 +122,9 @@ detectadversarials ()
                     for nrsamples in $NRSAMPLES; do
                         for classifier in $CLF; do
                             for eps in $EPSILONS; do
-                                python -u detect_adversarials.py --net "$net" --attack "$att" --detector "$det" --wanted_samples "$nrsamples" --clf "$classifier"   --eps "$eps"  --run_nr "$run" --pca_features 0
+                                for lidk in $LID_K; do 
+                                    python -u detect_adversarials.py --net "$net" --attack "$att" --detector "$det" --wanted_samples "$nrsamples" --clf "$classifier"   --eps "$eps"  --run_nr "$run" --pca_features 0  --k_lid "$lidk"
+                                done
                             done
                         done
                     done
@@ -184,10 +185,10 @@ detectadversarialslayer ()
 
 # genereratecleandata
 # attacks
-# extractcharacteristics
-# detectadversarials
+extractcharacteristics
+detectadversarials
 
-extractcharacteristicslayer
+# extractcharacteristicslayer
 # detectadversarialslayer
 
 # #------------------------------------------------------------------------------------------------------------

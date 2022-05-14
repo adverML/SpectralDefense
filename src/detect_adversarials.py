@@ -35,18 +35,20 @@ from attack.helper_attacks import check_args_attack
 parser = argparse.ArgumentParser()
 parser.add_argument("--run_nr",         default=1,      type=int, help="Which run should be taken?")
 
-parser.add_argument("--attack",         default='fgsm',           help=settings.HELP_ATTACK)
-parser.add_argument("--detector",       default='InputMFS',       help=settings.HELP_DETECTOR)
-parser.add_argument("--net",            default='cif10',          help=settings.HELP_NET)
-parser.add_argument("--mode",           default='test',           help="Choose test or validation case")
-parser.add_argument("--nr",             default='-1',   type=int, help=settings.HELP_LAYER_NR)
-parser.add_argument("--wanted_samples", default='1500', type=int, help=settings.HELP_WANTED_SAMPLES)
-parser.add_argument("--num_classes",    default='10',   type=int, help=settings.HELP_NUM_CLASSES)
-parser.add_argument("--clf",            default='LR',             help="Logistic Regression (LR) or Random Forest (RF) or Isolation Forest (IF)")
-parser.add_argument("--trees",          default='300',  type=int, help=settings.HELP_NUM_CLASSES)
-parser.add_argument("--num_iter",       default='100',  type=int, help="LR: Number iteration")
-parser.add_argument("--kernel",         default='rbf',  type=str, help="SVC: rbf, poly, linear, sigmoid, precomputed")
-parser.add_argument("--pca_features",   default='0',    type=int, help="Number of PCA features to train")
+parser.add_argument("--attack",            default='fgsm',           help=settings.HELP_ATTACK)
+parser.add_argument("--detector",          default='InputMFS',       help=settings.HELP_DETECTOR)
+parser.add_argument("--net",               default='cif10',          help=settings.HELP_NET)
+parser.add_argument("--mode",              default='test',           help="Choose test or validation case")
+parser.add_argument("--nr",                default='-1',   type=int, help=settings.HELP_LAYER_NR)
+parser.add_argument("--wanted_samples",    default='1500', type=int, help=settings.HELP_WANTED_SAMPLES)
+parser.add_argument("--num_classes",       default='10',   type=int, help=settings.HELP_NUM_CLASSES)
+parser.add_argument("--clf",               default='LR',             help="Logistic Regression (LR) or Random Forest (RF) or Isolation Forest (IF)")
+parser.add_argument("--trees",             default='300',  type=int, help=settings.HELP_NUM_CLASSES)
+parser.add_argument("--num_iter",          default='100',  type=int, help="LR: Number iteration")
+parser.add_argument("--kernel",            default='rbf',  type=str, help="SVC: rbf, poly, linear, sigmoid, precomputed")
+parser.add_argument("--pca_features",      default='0',    type=int, help="Number of PCA features to train")
+parser.add_argument("--fixed_clean_data",  action='store_true',      help="Fixed Clean Data")
+parser.add_argument("--lid_k_log",         action='store_true',      help="LID expanded")
 
 parser.add_argument('--version',    type=str, default='standard')
 # parser.add_argument("--eps",   default='-1',     help="epsilon: 4/255, 3/255, 2/255, 1/255, 0.5/255")
@@ -75,7 +77,12 @@ logger.log('INFO: Loading characteristics...')
 
 # input data
 extracted_characteristics_path = create_dir_extracted_characteristics(args, root='./data/extracted_characteristics/', wait_input=False)
-characteristics_path, characteristics_advs_path = create_save_dir_path(extracted_characteristics_path, args, filename='characteristics')
+
+filename = 'characteristics'
+if args.lid_k_log:
+    filename = 'lid_tmp_k'
+
+characteristics_path, characteristics_advs_path = create_save_dir_path(extracted_characteristics_path, args, filename=filename)
 
 
 if  args.detector in  ['VAEInputPFS', 'VAEInputMFS']:
@@ -85,7 +92,6 @@ if  args.detector in  ['VAEInputPFS', 'VAEInputMFS']:
 
     if args.attack == 'fgsm':
         characteristics_path      = '/home/lorenzp/adversialml/src/submodules/CD-VAE/detection/data/cd-vae-1/resnet_cifar10/fft_clean_data_resnet_cifar10_FGSM{}.pth'.format(pfs)
-        # characteristics_advs_path = '/home/lorenzp/adversialml/src/submodules/CD-VAE/detection/data/cd-vae-1/resnet_cifar10/fft_clean_data_resnet_cifar10_FGSM.pth'
         characteristics_advs_path = '/home/lorenzp/adversialml/src/submodules/CD-VAE/detection/data/cd-vae-1/resnet_cifar10/fft_adv_data_resnet_cifar10_FGSM{}.pth'.format(pfs)
     elif args.attack == 'cw':
         characteristics_path      = '/home/lorenzp/adversialml/src/submodules/CD-VAE/detection/data/cd-vae-1/resnet_cifar10/fft_clean_data_resnet_cifar10_CW{}.pth'.format(pfs)
@@ -96,30 +102,42 @@ if  args.detector in  ['VAEInputPFS', 'VAEInputMFS']:
     elif args.attack == 'pgd':
         characteristics_path      = '/home/lorenzp/adversialml/src/submodules/CD-VAE/detection/data/cd-vae-1/resnet_cifar10/fft_clean_data_resnet_cifar10_PGD{}.pth'.format(pfs)
         characteristics_advs_path = '/home/lorenzp/adversialml/src/submodules/CD-VAE/detection/data/cd-vae-1/resnet_cifar10/fft_adv_data_resnet_cifar10_PGD{}.pth'.format(pfs)
-        
         print("characteristics_path: ", len(characteristics_path))
 
 logger.log("characteristics_path:      " + str(characteristics_path) )
 # logger.log("characteristics_advs_path: " + str(characteristics_path) )
 
-k = 1
-if args.detector == 'LIDNOISE':
-    k = 2
-
-characteristics     = torch.load(characteristics_path)[:args.wanted_samples * k]
-characteristics_adv = torch.load(characteristics_advs_path)[:args.wanted_samples]
-
+s = 1
+if args.detector == 'LIDNOISE' and not args.fixed_clean_data:
+    s = 2
+    characteristics     = torch.load(characteristics_path)[:args.wanted_samples * s]
+    characteristics_adv = torch.load(characteristics_advs_path)[:args.wanted_samples]
+    
+    if args.lid_k_log:
+        characteristics     = characteristics.reshape((characteristics.shape[0], -1))
+        characteristics_adv = characteristics_adv.reshape((characteristics_adv.shape[0], -1))
+        
+elif args.fixed_clean_data: 
+    characteristics     = torch.load(characteristics_path)
+    index = np.random.choice(characteristics.shape[0], args.wanted_samples, replace=False)  
+    characteristics = characteristics[index]
+    characteristics_adv = torch.load(characteristics_advs_path)[:args.wanted_samples]
+else:
+    characteristics     = torch.load(characteristics_path)[:args.wanted_samples]
+    characteristics_adv = torch.load(characteristics_advs_path)[:args.wanted_samples]
+    
 characteristics     = np.asarray(characteristics)
 characteristics_adv = np.asarray(characteristics_adv)
-
+    
+# import pdb; pdb.set_trace()
+    
 shape = np.shape(characteristics)
 logger.log("shape: " + str(shape))
 
 if shape[0] < args.wanted_samples:
     logger.log("CAUTION: The actual number is smaller as the wanted samples!")
 
-
-if args.detector == 'LIDNOISE':
+if args.detector == 'LIDNOISE' and not args.lid_k_log:
     X_train, y_train, X_test, y_test = split_data(args, logger, characteristics, characteristics_adv, noise=True, test_size=0.1, random_state=42)
 else:
     X_train, y_train, X_test, y_test = split_data(args, logger, characteristics, characteristics_adv, noise=False, test_size=0.1, random_state=42)
@@ -143,11 +161,9 @@ if args.pca_features > 0:
     # from submodules.PyTorch.TorchPCA import PCA
     # y = PCA.Decomposition(X_train.cuda(), k=1)
     # import pdb; pdb.set_trace()
-    
 
 #train classifier
 logger.log('Training classifier...')
-
 
 if settings.SAVE_CLASSIFIER:
     if args.clf == 'LR':

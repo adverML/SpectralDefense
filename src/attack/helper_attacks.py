@@ -12,7 +12,6 @@ import foolbox
 from foolbox import PyTorchModel, accuracy, samples
 import foolbox.attacks as fa
 
-
 from utils import (
     Logger,
     log_header,
@@ -25,11 +24,12 @@ from utils import (
     epsilon_to_float,
     get_num_classes,
     load_model,
-    get_debug_info
+    get_debug_info,
+    load_train_set
 )
 
-AA_std  = ['std', 'apgd-ce', 'apgd-t', 'fab-t' ,'square']
-AA_plus = ['aa+', 'apgd-ce+', 'apgd-dlr+', 'fab+', 'square+', 'apgd-t+', 'fab-t+']
+AA_std  = ['std', 'apgd-ce',   'apgd-cel2', 'apgd-t', 'fab-t' ,  'square']
+AA_plus = ['aa+', 'apgd-ce+',  'apgd-dlr+', 'fab+',   'square+', 'apgd-t+', 'fab-t+']
 
 def adapt_batchsize(args, device_name):
     get_debug_info(msg="device_name: " + device_name)
@@ -73,6 +73,10 @@ def check_version(args):
     if args.version == 'standard' and (args.attack in  AA_std[1:]):
         args.individual = True
         # args.version = 'custom'
+    
+    if args.attack in ['apgd-cel2']:
+        args.norm = "L2"
+        # args.eps = "0.5" 
         
     return args
 
@@ -115,7 +119,14 @@ def check_args_attack(args, version=True, net_normalization=True, num_classes=Tr
     return args
 
 
-def create_advs(logger, args, model, output_path_dir, clean_data_path, wanted_samples, preprocessing, option=2):
+
+def replacemany(our_str, to_be_replaced:tuple, replace_with:str):
+    for nextchar in to_be_replaced:
+        our_str = our_str.replace(nextchar, replace_with)
+    return our_str
+
+
+def create_advs(logger, args, model, output_path_dir, clean_data_path, wanted_samples, preprocessing, use_clean_test_data=True, option=2):
     # set up final lists
     images = []
     images_advs = []
@@ -137,13 +148,17 @@ def create_advs(logger, args, model, output_path_dir, clean_data_path, wanted_sa
     elif option == 2:
         indicator = ''
 
-    clean_path = 'clean_' + indicator + 'data' 
-    
-    dataset = torch.load(os.path.join(clean_data_path, clean_path))#[:args.all_samples]
-    get_debug_info( "actual len/wanted " + str(len(dataset)) + "/" + str(len(dataset)) )
+    if use_clean_test_data:
+        clean_path = 'clean_' + indicator + 'data' 
+        
+        dataset = torch.load( os.path.join(clean_data_path, clean_path) )#[:args.all_samples]
+        get_debug_info( "actual len/wanted " + str(len(dataset)) + os.sep + str(len(dataset)) )
+        data_loader = torch.utils.data.DataLoader(dataset, batch_size=args.batch_size, shuffle=args.shuffle_on)
+    else:
+        data_loader = load_train_set(args, preprocessing=None, clean_data=False, shuffle=True)
+        dataset = data_loader.dataset
+        
     tqdm_total = round(wanted_samples / args.batch_size)
-
-    data_loader = torch.utils.data.DataLoader(dataset, batch_size=args.batch_size, shuffle=args.shuffle_on)
     
     if args.attack  in (AA_std + AA_plus):
         logger.log('INFO: Load data...')
@@ -154,10 +169,11 @@ def create_advs(logger, args, model, output_path_dir, clean_data_path, wanted_sa
         
         adversary = AutoAttack_mod(model, norm=args.norm, eps=epsilon_to_float(args.eps), log_path=output_path_dir + os.sep + 'log.txt', version=args.version)
         if args.individual:
-            adversary.attacks_to_run = [ args.attack.replace('+', '') ]
+            adversary.attacks_to_run = [ replacemany(args.attack, ['+', 'l2'], '') ] 
 
         # run attack and save images
         with torch.no_grad():
+            # import pdb; pdb.set_trace()
             for it, (x_test, y_test) in enumerate(tqdm(data_loader, total=tqdm_total)):
                 # for x_test, x_test in data_loader:
                 x_test = torch.squeeze(x_test).cpu()
@@ -174,7 +190,7 @@ def create_advs(logger, args, model, output_path_dir, clean_data_path, wanted_sa
                     logger.log("INFO: mode: individual; not std")
                     # import pdb; pdb.set_trace()
                     adv_complete = adversary.run_standard_evaluation_individual(x_test, y_test, bs=args.batch_size, return_labels=True)
-                    x_adv, y_adv, max_nr = adv_complete[args.attack.replace('+', '')]
+                    x_adv, y_adv, max_nr = adv_complete[ replacemany(args.attack, ['+', 'l2'], '') ]
 
                 tmp_images_advs = []
                 for it, img in enumerate(x_adv):
@@ -220,7 +236,7 @@ def create_advs(logger, args, model, output_path_dir, clean_data_path, wanted_sa
             epsilons = [epsilon_to_float(args.eps)]
         elif args.attack == 'l2pgd':
             attack = fa.L2PGD()
-            epsilons = [0.3]
+            epsilons = [epsilon_to_float(args.eps)]
         elif args.attack == 'df':
             attack = fa.L2DeepFoolAttack()
             epsilons = None

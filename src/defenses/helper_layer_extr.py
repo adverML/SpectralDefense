@@ -453,10 +453,18 @@ def get_whitebox_features(args, logger, model):
                         ]
 
 
-        if args.detector in ['LID', 'LIDNOISE', 'Mahalanobis']:
+        if args.detector in ['LID', 'LIDNOISE']:
+            
             layers = [
                 'conv2_0_relu_4',  'conv2_1_relu_4',  'conv2_2_relu_4', 'conv2_3_relu_4', 'conv3_0_relu_4', 'conv3_1_relu_4', 
                 'conv3_2_relu_4', 'conv3_3_relu_4', 'conv4_0_relu_4', 'conv4_1_relu_4','conv4_2_relu_4', 'conv4_3_relu_4', 'relu' 
+            ]
+            
+        if args.detector in [ 'Mahalanobis' ]:
+            layers = [
+                'conv2_0_relu_4',  'conv2_1_relu_4',  'conv2_2_relu_4', 'conv2_3_relu_4', 'conv3_0_relu_4', 'conv3_1_relu_4', 
+                'conv3_2_relu_4', 'conv3_3_relu_4', 'conv4_0_relu_4', 'conv4_1_relu_4','conv4_2_relu_4', 'conv4_3_relu_4', 'relu' 
+                #   'conv2_2_relu_4',      'conv3_2_relu_4',  'conv4_0_relu_4', 'conv4_2_relu_4',  'relu' 
             ]
 
         if layer_nr == 0:

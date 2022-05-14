@@ -21,7 +21,7 @@ def deep_mahalanobis(args, logger, model, images, images_advs, layers, get_layer
     args.batch_size = 100
     
     if args.net == 'imagenet':
-        args.batch_size = 10
+        args.batch_size = 100
     
     sample_mean_path      = output_path_dir + 'sample_mean_' + args.net
     sample_precision_path = output_path_dir + 'precision_'   + args.net
@@ -230,7 +230,7 @@ def deep_mahalanobis(args, logger, model, images, images_advs, layers, get_layer
 
     logger.log('INFO: Calculating Mahalanobis scores...')
     Mah_adv = np.zeros((len(images_advs),len(act_layers_mah)))
-    Mah = np.zeros((len(images_advs),len(act_layers_mah)))
+    Mah = np.zeros((len(images),len(act_layers_mah)))
     
     for layer_index in tqdm(range(len(act_layers_mah))):
         Mah_adv[:,layer_index]=np.array(get_mah(adv_loader, layer_index))

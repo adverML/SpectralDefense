@@ -9,7 +9,9 @@ function log_msg {
 # DATASETS="cif10 cif10vgg  cif100 cif100vgg"
 # DATASETS="cif100vgg"
 # DATASETS="cif10rn34 cif100rn34"
-DATASETS="cif10"
+# DATASETS="cif100 cif10vgg cif100vgg"
+DATASETS="cif10 cif100"
+
 # DATASETS="cif10_rb"
 # DATASETS="cif10 cif10vgg cif10_rb cif10rn34 cif100 cif100vgg cif100rn34"
 
@@ -18,22 +20,20 @@ DATASETS="cif10"
 
 # DATASETS="imagenet64 celebaHQ64 imagenet128 celebaHQ128"
 # RUNS="1 2 3"
-RUNS="1"
+RUNS="4"
 
-
-# ATTACKS="df"
+# ATTACKS="cw"
 # ATTACKS="l2pgd linfdf"
 # ATTACKS="linfdf l2pgd"
 # ATTACKS="linfdf"
 
 # ATTACKS="gauss bim std df"
-# ATTACKS="fgsm"
-
-ATTACKS="fgsm bim pgd std df cw"
+# ATTACKS="fgsm bim pgd std df cw"
 
 # ATTACKS="apgd-ce apgd-t fab-t square"
-# ATTACKS="aa+"
+ATTACKS="apgd-ce"
 
+# ATTACKS="aa+"
 # DETECTORS="InputMFS"
 # DETECTORS="InputMFS LayerMFS"
 # DETECTORS="InputMFS LayerMFS"
@@ -43,18 +43,17 @@ ATTACKS="fgsm bim pgd std df cw"
 # DETECTORS="LID Mahalanobis"
 # DETECTORS="InputMFS LayerMFS LID Mahalanobis"
 # DETECTORS="LayerMFS"
-# DETECTORS="Mahalanobis"
+# DETECTORS="InputMFS"
 # DETECTORS="Mahalanobis"
 # DETECTORS="HPF"
-DETECTORS="LIDNOISE"
-# DETECTORS="LID"
-
+# DETECTORS="LIDNOISE"
+DETECTORS="LID"
 
 # DETECTORS="InputPFS LayerPFS"
-
 # DETECTORS="DkNN"
+
 # EPSILONS="8./255. 4./255. 2./255. 1./255. 0.5/255."
-EPSILONS="8./255."
+EPSILONS="4./255."
 
 # CLF="RF"
 # CLF="LR"
@@ -68,12 +67,12 @@ IMAGENET32CLASSES="25 50 100 250 1000"
 # NRSAMPLES="300 500 1000 1200 1500 2000" # only at detectadversarialslayer
 
 WANTEDSAMPLES="2000"
-ALLSAMPLES="4200"
+ALLSAMPLES="9600"
 # NRSAMPLES="1500" # detect
 NRSAMPLES="2000" # detect
 
 
-DATASETSLAYERNR="cif100 cif10vgg cif100vgg"
+DATASETSLAYERNR="cif10"
 ATTACKSLAYERNR="df"
 
 # LAYERNR="0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24"
@@ -100,35 +99,35 @@ genereratecleandata ()
     for run in $RUNS; do
         for net in $DATASETS; do
             if [ "$net" == cif10 ]; then
-                python -u generate_clean_data.py --net "$net" --num_classes 10  --run_nr "$run" --wanted_samples "$ALLSAMPLES" --shuffle_off
+                python -u generate_clean_data.py --net "$net" --num_classes 10  --run_nr "$run" --wanted_samples "$ALLSAMPLES" 
             fi 
 
             if [ "$net" == cif10_rb ]; then
-                python -u generate_clean_data.py --net "$net" --num_classes 10  --run_nr "$run" --wanted_samples "$ALLSAMPLES" --shuffle_off
+                python -u generate_clean_data.py --net "$net" --num_classes 10  --run_nr "$run" --wanted_samples "$ALLSAMPLES" 
             fi 
 
             if [ "$net" == cif10vgg ]; then
-                python -u generate_clean_data.py --net "$net" --num_classes 10  --run_nr "$run" --wanted_samples "$ALLSAMPLES" --shuffle_off
+                python -u generate_clean_data.py --net "$net" --num_classes 10  --run_nr "$run" --wanted_samples "$ALLSAMPLES" 
             fi 
 
             if [ "$net" == cif10rn34 ]; then
-                python -u generate_clean_data.py --net "$net" --num_classes 10  --run_nr "$run" --wanted_samples "$ALLSAMPLES" --shuffle_off
+                python -u generate_clean_data.py --net "$net" --num_classes 10  --run_nr "$run" --wanted_samples "$ALLSAMPLES" 
             fi 
 
             if [ "$net" == cif10rn34sota ]; then
-                python -u generate_clean_data.py --net "$net" --num_classes 10  --run_nr "$run" --wanted_samples "$ALLSAMPLES" --shuffle_off
+                python -u generate_clean_data.py --net "$net" --num_classes 10  --run_nr "$run" --wanted_samples "$ALLSAMPLES" 
             fi 
 
             if [ "$net" == cif100rn34 ]; then
-                python -u generate_clean_data.py --net "$net" --num_classes 100  --run_nr "$run" --wanted_samples "$ALLSAMPLES" --shuffle_off
+                python -u generate_clean_data.py --net "$net" --num_classes 100  --run_nr "$run" --wanted_samples "$ALLSAMPLES" 
             fi 
 
             if [ "$net" == cif100 ]; then
-                python -u generate_clean_data.py --net "$net" --num_classes 100  --run_nr "$run" --wanted_samples "$ALLSAMPLES" --shuffle_off
+                python -u generate_clean_data.py --net "$net" --num_classes 100  --run_nr "$run" --wanted_samples "$ALLSAMPLES" 
             fi 
 
             if [ "$net" == cif100vgg ]; then 
-                python -u generate_clean_data.py --net "$net" --num_classes 100  --run_nr "$run" --wanted_samples "$ALLSAMPLES" --shuffle_off
+                python -u generate_clean_data.py --net "$net" --num_classes 100  --run_nr "$run" --wanted_samples "$ALLSAMPLES"
             fi 
         done
     done
@@ -276,28 +275,28 @@ detectadversarials ()
                                 fi
 
                                 if [ "$net" == cif10vgg ]; then
-                                    python -u detect_adversarials.py --net "$net" --attack "$att" --detector "$det" --wanted_samples "$nrsamples" --clf "$classifier" --num_classes 10  --run_nr "$run"  --pca_features "$PCA_FEATURES"
+                                    python -u detect_adversarials.py --net "$net" --attack "$att" --detector "$det" --wanted_samples "$nrsamples" --clf "$classifier"  --eps "$eps" --num_classes 10  --run_nr "$run"  --pca_features "$PCA_FEATURES"
                                 fi 
 
                                 if [ "$net" == cif10rn34 ]; then
-                                    python -u detect_adversarials.py --net "$net" --attack "$att" --detector "$det" --wanted_samples "$nrsamples" --clf "$classifier" --num_classes 10  --run_nr "$run"  --pca_features "$PCA_FEATURES"
+                                    python -u detect_adversarials.py --net "$net" --attack "$att" --detector "$det" --wanted_samples "$nrsamples" --clf "$classifier"  --eps "$eps" --num_classes 10  --run_nr "$run"  --pca_features "$PCA_FEATURES"
                                 fi 
 
                                 if [ "$net" == cif10rn34sota ]; then
-                                    python -u detect_adversarials.py --net "$net" --attack "$att" --detector "$det" --wanted_samples "$nrsamples" --clf "$classifier" --num_classes 10  --run_nr "$run"  --pca_features "$PCA_FEATURES"
+                                    python -u detect_adversarials.py --net "$net" --attack "$att" --detector "$det" --wanted_samples "$nrsamples" --clf "$classifier"  --eps "$eps" --num_classes 10  --run_nr "$run"  --pca_features "$PCA_FEATURES"
                                 fi 
 
 
                                 if [ "$net" == cif100 ]; then
-                                    python -u detect_adversarials.py --net "$net" --attack "$att" --detector "$det" --wanted_samples "$nrsamples" --clf "$classifier" --num_classes 100 --eps "$eps"  --run_nr "$run"  --pca_features "$PCA_FEATURES"
+                                    python -u detect_adversarials.py --net "$net" --attack "$att" --detector "$det" --wanted_samples "$nrsamples" --clf "$classifier"  --eps "$eps" --num_classes 100  --run_nr "$run"  --pca_features "$PCA_FEATURES"
                                 fi
 
                                 if [ "$net" == cif100vgg ]; then
-                                    python -u detect_adversarials.py --net "$net" --attack "$att" --detector "$det" --wanted_samples "$nrsamples" --clf "$classifier" --num_classes 100   --run_nr "$run"  --pca_features "$PCA_FEATURES"
+                                    python -u detect_adversarials.py --net "$net" --attack "$att" --detector "$det" --wanted_samples "$nrsamples" --clf "$classifier"  --eps "$eps" --num_classes 100   --run_nr "$run"  --pca_features "$PCA_FEATURES"
                                 fi 
                                 
                                 if [ "$net" == cif100rn34 ]; then
-                                    python -u detect_adversarials.py --net "$net" --attack "$att" --detector "$det" --wanted_samples "$nrsamples" --clf "$classifier" --num_classes 100   --run_nr "$run"  --pca_features "$PCA_FEATURES"
+                                    python -u detect_adversarials.py --net "$net" --attack "$att" --detector "$det" --wanted_samples "$nrsamples" --clf "$classifier"  --eps "$eps" --num_classes 100   --run_nr "$run"  --pca_features "$PCA_FEATURES"
                                 fi 
                             done
                         done
@@ -340,17 +339,15 @@ detectadversarialslayer ()
     done
 }
 
-
 # printn
 # genereratecleandata
 # attacks
-extractcharacteristics
-# detectadversarials
+# extractcharacteristics
+detectadversarials
 
 # extractcharacteristicslayer
 # detectadversarialslayer
 
-# #-----------------------------------------------------------------------------------------------------------------------------------
+#-----------------------------------------------------------------------------------------------------------------------------------
 log_msg "finished"
 exit 0
-

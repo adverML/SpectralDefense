@@ -6,10 +6,10 @@ function log_msg {
 
 # DATASETS=(cif10 cif10vgg cif100 cif100vgg imagenet imagenet32 imagenet64 imagenet128 celebaHQ32 celebaHQ64 celebaHQ128)
 # DATASETS="cif10 cif10vgg  cif100 cif100vgg cif10_rb"
-# DATASETS="cif10 cif10vgg  cif100 cif100vgg"
+DATASETS="cif10 cif10vgg"
 # DATASETS="cif100vgg"
 # DATASETS="cif10rn34 cif100rn34"
-DATASETS="cif10"
+# DATASETS="cif10"
 # DATASETS="cif10_rb"
 # DATASETS="cif10 cif10vgg cif10_rb cif10rn34 cif100 cif100vgg cif100rn34"
 
@@ -18,10 +18,10 @@ DATASETS="cif10"
 
 # DATASETS="imagenet64 celebaHQ64 imagenet128 celebaHQ128"
 # RUNS="1 2 3"
-RUNS="1"
+RUNS="1 2 3"
 
 
-# ATTACKS="df"
+ATTACKS="fgsm bim pgd std df cw"
 # ATTACKS="l2pgd linfdf"
 # ATTACKS="linfdf l2pgd"
 # ATTACKS="linfdf"
@@ -29,26 +29,23 @@ RUNS="1"
 # ATTACKS="gauss bim std df"
 # ATTACKS="fgsm"
 
-ATTACKS="fgsm bim pgd std df cw"
+# ATTACKS="fgsm bim pgd std df cw"
 
 # ATTACKS="apgd-ce apgd-t fab-t square"
 # ATTACKS="aa+"
 
-# DETECTORS="InputMFS"
 # DETECTORS="InputMFS LayerMFS"
 # DETECTORS="InputMFS LayerMFS"
-
 # DETECTORS="InputPFS LayerPFS"
 
 # DETECTORS="LID Mahalanobis"
 # DETECTORS="InputMFS LayerMFS LID Mahalanobis"
 # DETECTORS="LayerMFS"
-# DETECTORS="Mahalanobis"
-# DETECTORS="Mahalanobis"
+# DETECTORS="InputMFS"
+DETECTORS="Mahalanobis"
 # DETECTORS="HPF"
-DETECTORS="LIDNOISE"
+# DETECTORS="LIDNOISE"
 # DETECTORS="LID"
-
 
 # DETECTORS="InputPFS LayerPFS"
 
@@ -68,7 +65,7 @@ IMAGENET32CLASSES="25 50 100 250 1000"
 # NRSAMPLES="300 500 1000 1200 1500 2000" # only at detectadversarialslayer
 
 WANTEDSAMPLES="2000"
-ALLSAMPLES="4200"
+ALLSAMPLES="9600"
 # NRSAMPLES="1500" # detect
 NRSAMPLES="2000" # detect
 
@@ -340,17 +337,15 @@ detectadversarialslayer ()
     done
 }
 
-
 # printn
 # genereratecleandata
 # attacks
 extractcharacteristics
-# detectadversarials
+detectadversarials
 
 # extractcharacteristicslayer
 # detectadversarialslayer
 
-# #-----------------------------------------------------------------------------------------------------------------------------------
+#-----------------------------------------------------------------------------------------------------------------------------------
 log_msg "finished"
 exit 0
-

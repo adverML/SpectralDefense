@@ -65,6 +65,7 @@ parser.add_argument("--num_classes",    default='10',   type=int, help=settings.
 
 parser.add_argument("--shuffle_on",        action='store_true',   help="Switch shuffle data on")
 parser.add_argument('--net_normalization', action='store_true',   help=settings.HELP_NET_NORMALIZATION)
+parser.add_argument("--fixed_clean_data",  action='store_true',       help="Fixed Clean Data")
 
 parser.add_argument('--version',    type=str, default='standard')
 # parser.add_argument("--eps",       default='-1',       help=settings.HELP_AA_EPSILONS) # to activate the best layers
@@ -102,8 +103,14 @@ images_path, images_advs_path = create_save_dir_path(input_path_dir, args)
 logger.log("INFO: images_path " + images_path)
 logger.log("INFO: images_advs " + images_advs_path)
 
-images =      torch.load(images_path)[:args.wanted_samples]
-images_advs = torch.load(images_advs_path)[:args.wanted_samples]
+
+if args.fixed_clean_data:
+    images =      torch.load(images_path)
+    images_advs = torch.load(images_advs_path)
+else:
+    images =      torch.load(images_path)[:args.wanted_samples]
+    images_advs = torch.load(images_advs_path)[:args.wanted_samples]
+
 
 number_images = len(images)
 logger.log("INFO: eps " + str(args.eps) + " INFO: nr_img " + str(number_images) + " INFO: Wanted Samples: " + str(args.wanted_samples) )
@@ -147,6 +154,7 @@ elif args.detector == 'LID':
 
 ####### LIDNOISE 
 elif args.detector == 'LIDNOISE':
+# elif args.detector == 'LID':
     from defenses.Lid import lidnoise
     characteristics,  characteristics_noise, characteristics_adv, lid_tmp_k, lid_tmp_k_noise, lid_tmp_k_adv = lidnoise(args, model, images, images_advs, layers, get_layer_feature_maps, activation)
     
@@ -154,9 +162,9 @@ elif args.detector == 'LIDNOISE':
     noise_path, _                       = create_save_dir_path(output_path_dir, args, filename='lid_tmp_k_noise' )
     characteristics_noise_path, _       = create_save_dir_path(output_path_dir, args, filename='characteristics_noise' )
     
-    torch.save(lid_tmp_k,      lid_tmp_k_path,       pickle_protocol=4)
-    torch.save(lid_tmp_k_adv,  lid_tmp_k_advs_path,  pickle_protocol=4)
-    torch.save(lid_tmp_k_adv,  noise_path,           pickle_protocol=4)
+    torch.save(lid_tmp_k,        lid_tmp_k_path,       pickle_protocol=4)
+    torch.save(lid_tmp_k_noise,  noise_path,           pickle_protocol=4)
+    torch.save(lid_tmp_k_adv,    lid_tmp_k_advs_path,  pickle_protocol=4)
     
     torch.save(characteristics_noise, characteristics_noise_path, pickle_protocol=4)
     # characteristics      = np.concatenate((characteristics, characteristics_noise), axis=0)
@@ -164,6 +172,11 @@ elif args.detector == 'LIDNOISE':
 
 ####### Mahalanobis section
 elif args.detector == 'Mahalanobis':
+    
+    if args.net == 'imagenet':
+        pass
+        # model = torch.nn.DataParallel(model, device_ids=[0, 1, 2, 4])
+    
     from defenses.DeepMahalanobis import deep_mahalanobis
     characteristics, characteristics_adv = deep_mahalanobis(args, logger, model, images, images_advs, layers, get_layer_feature_maps, activation, output_path_dir)
 

@@ -1258,7 +1258,7 @@ def epsilon_to_string(epsilon):
 def check_epsilon(args, TRANSFER=None):
     epsilon = ''
     if TRANSFER == None or TRANSFER == 'data':
-        if args.attack == 'std' or args.attack == 'ind':
+        if args.attack == 'std' or args.attack == 'ind' or  args.attack in [ 'apgd-ce', 'apgd-cel2', 'pgd', 'l2pgd' ] :
             epsilon = epsilon_to_string(args.eps)
     elif TRANSFER == 'attack':
         if args.attack_eval == 'std' or args.attack_eval == 'ind':
@@ -1361,55 +1361,3 @@ def log_header(logger, args, output_path_dir, sys):
     logger.log('ARGS: ' + str(args.__dict__))
     logger.log('OUTPUT_PATH_DIR: ' + output_path_dir)
 
-
-def perf_measure(y_actual, y_hat):
-    TP = 0
-    FP = 0
-    TN = 0
-    FN = 0
-
-    for i in range(len(y_hat)): 
-        if y_actual[i]==y_hat[i]==1:
-           TP += 1
-        if y_hat[i]==1 and y_actual[i]!=y_hat[i]:
-           FP += 1
-        if y_actual[i]==y_hat[i]==0:
-           TN += 1
-        if y_hat[i]==0 and y_actual[i]!=y_hat[i]:
-           FN += 1
-
-    print("TP: ", TP)
-    print("FP: ", FP)
-    print("TN: ", TN)
-    print("FN: ", FN)
-
-    # # Sensitivity, hit rate, recall, or true positive rate
-    # TPR = TP/(TP+FN)
-    # # Specificity or true negative rate
-    # TNR = TN/(TN+FP) 
-    # # Precision or positive predictive value
-    # PPV = TP/(TP+FP)
-    # # Negative predictive value
-    # NPV = TN/(TN+FN)
-    # # Fall out or false positive rate
-    # FPR = FP/(FP+TN)
-    # # False negative rate
-    # FNR = FN/(TP+FN)
-    # # False discovery rate
-    # FDR = FP/(TP+FP)
-
-    # Overall accuracy
-    ACC = (TP+TN)/(TP+FP+FN+TN)
-
-    # print("TPR: ", TPR)
-    # print("TNR: ", TNR)
-    # print("PPV: ", PPV)
-    # print("NPV: ", NPV)
-
-    # print("TNR: ", FPR)
-    # print("PPV: ", FNR)
-    # print("NPV: ", FDR)
-
-    print("ACC: ", ACC)
-
-    return (TP, FP, TN, FN)
