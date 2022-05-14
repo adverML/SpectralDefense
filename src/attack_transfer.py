@@ -8,23 +8,20 @@ import numpy as np
 import pickle
 import torch
 import sys 
+import os
 
 from conf import settings
 
-from utils import *
+from utils import (
+    create_dir_detection,
+    save_args_to_file,
+    log_header,
+    create_dir_extracted_characteristics,
+    create_save_dir_path,
+    Logger
+)
 
-from sklearn.model_selection import train_test_split
-from sklearn.linear_model import LogisticRegression
-
-from sklearn.ensemble import RandomForestClassifier
-from sklearn.metrics import confusion_matrix
-
-from sklearn.preprocessing import MinMaxScaler, StandardScaler
-from sklearn.metrics import roc_auc_score
-from sklearn.metrics import roc_curve
-from sklearn import svm
 import argparse
-
 import copy
 import pdb
 
@@ -32,7 +29,7 @@ from detection.helper_detection import (
     show_results, 
     split_data, 
     save_load_clf, 
-    compute_time_sample
+    compute_time_sample,
 )
 
 
@@ -73,18 +70,28 @@ parser.add_argument("--eps_to",       default='8./255.',            help=setting
 
 args = parser.parse_args()
 
+FROM = True
+if args.attack == 'std':
+    FROM = False
+
 # output data
-from_trained_clf = create_dir_detection(args, root='./data/detection/')
-output_path_dir  = create_dir_detection(args, root='./data/attack_transfer/', TRANSFER='attack')
+from_trained_clf = create_dir_detection(args, root='./data/detection/', TRANSFER='attack_from', FROM=FROM)
+print("--------------------------")
+print(from_trained_clf)
+
+output_path_dir  = create_dir_detection(args, root='./data/attack_transfer/', TRANSFER='attack', FROM=FROM)
+print("--------------------------")
+print(output_path_dir)
+
+
 save_args_to_file(args, output_path_dir)
 logger = Logger(output_path_dir + os.sep + 'log.txt')
 log_header(logger, args, output_path_dir, sys) # './data/extracted_characteristics/imagenet32/wrn_28_10/std/8_255/LayerMFS'
 
+# import pdb; pdb.set_trace()
+
 # load characteristics
 logger.log('INFO: Loading characteristics...')
-layer_name = layer_name_cif10
-if args.net == 'cif10vgg':
-    layer_name = layer_name_cif10vgg
 
 # input data
 extracted_characteristics_path = create_dir_extracted_characteristics(args, root='./data/extracted_characteristics/',  TRANSFER='attack', wait_input=False)
@@ -104,9 +111,7 @@ if shape[0] < args.wanted_samples:
 
 k = shape[0]
 
-
 X_train, y_train, X_test, y_test = split_data(args, logger, characteristics, characteristics_adv, noise=False, test_size=0.1, random_state=42)
-
 
 #train classifier
 logger.log('Training classifier...')

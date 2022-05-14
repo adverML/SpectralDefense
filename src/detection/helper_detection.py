@@ -52,7 +52,8 @@ def show_results(args, logger, y_actual, y_hat, y_hat_pr):
     ACC = (TP + TN) / (TP + TN + FP + FN)
     PRECISION = TP / (TP + FP)
     
-    F1 =  2 * (PRECISION*TPR) / (PRECISION+TPR)
+    # F1 =  2 * (PRECISION*TPR) / (PRECISION+TPR)
+    F1 = f1_score(y_actual, y_hat)
 
     if args.clf == 'IF': 
         auc = -1

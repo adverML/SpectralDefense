@@ -9,7 +9,7 @@ DATASETS="imagenet"
 # DATASETS="imagenet_hierarchy"
 # DATASETS="restricted_imagenet"
 
-RUNS="1"
+RUNS="3"
 # RUNS="1 2 3"
 # RUNS="8"
 # RUNS="7"
@@ -33,7 +33,7 @@ ATTACKS="gauss fgsm bim std pgd df cw"
 # DETECTORS="InputMFS LayerMFS"
 # DETECTORS="InputPFS LayerPFS InputMFS LayerMFS LID Mahalanobis"
 
-DETECTORS="Mahalanobis"
+DETECTORS="LID"
 
 
 # EPSILONS="8./255. 4./255. 2./255. 1./255. 0.5/255."
@@ -59,11 +59,11 @@ DETECTORSLAYERNR="LayerMFS LayerPFS"
 
 # NRSAMPLES="300 500 1000 1200 1500 2000"
 ALLSAMPLES="3000"
-WANTEDSAMPLES="1500"
+WANTEDSAMPLES="2000"
 WANTEDSAMPLES_TR="18000"
 WANTEDSAMPLES_TE="18000"
 
-NRSAMPLES="1500" # detect
+NRSAMPLES="2000" # detect
 
 #-----------------------------------------------------------------------------------------------------------------------------------
 log_msg "Networks are already trained!"
@@ -179,7 +179,7 @@ detectadversarialslayer ()
 
 # genereratecleandata
 # attacks
-extractcharacteristics
+# extractcharacteristics
 detectadversarials
 
 # extractcharacteristicslayer

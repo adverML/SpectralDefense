@@ -6,7 +6,7 @@ function log_msg {
 
 # DATASETS=(cif10 cif10vgg cif100 cif100vgg imagenet imagenet32 imagenet64 imagenet128 celebaHQ32 celebaHQ64 celebaHQ128)
 # DATASETS="cif10 cif10vgg  cif100 cif100vgg cif10_rb"
-DATASETS="cif10 cif10vgg"
+DATASETS="cif10"
 # DATASETS="cif100vgg"
 # DATASETS="cif10rn34 cif100rn34"
 # DATASETS="cif10"
@@ -21,13 +21,13 @@ DATASETS="cif10 cif10vgg"
 RUNS="1 2 3"
 
 
-ATTACKS="fgsm bim pgd std df cw"
+# ATTACKS="fgsm bim pgd std df cw"
 # ATTACKS="l2pgd linfdf"
 # ATTACKS="linfdf l2pgd"
 # ATTACKS="linfdf"
 
 # ATTACKS="gauss bim std df"
-# ATTACKS="fgsm"
+ATTACKS="fgsm"
 
 # ATTACKS="fgsm bim pgd std df cw"
 
@@ -42,10 +42,10 @@ ATTACKS="fgsm bim pgd std df cw"
 # DETECTORS="InputMFS LayerMFS LID Mahalanobis"
 # DETECTORS="LayerMFS"
 # DETECTORS="InputMFS"
-DETECTORS="Mahalanobis"
+# DETECTORS="Mahalanobis"
 # DETECTORS="HPF"
 # DETECTORS="LIDNOISE"
-# DETECTORS="LID"
+DETECTORS="LID"
 
 # DETECTORS="InputPFS LayerPFS"
 
@@ -140,7 +140,7 @@ attacks ()
             for att in $ATTACKS; do
                 for eps in $EPSILONS; do
                     if [ "$net" == cif10 ]; then     
-                        python -u attacks.py --net "$net" --attack "$att"  --batch_size 500  --eps "$eps" --run_nr "$run"  --wanted_samples "$WANTEDSAMPLES" --all_samples "$ALLSAMPLES"
+                        python -u attacks.py --net "$net" --attack "$att"  --batch_size 500  --eps "$eps" --run_nr "$run"  --wanted_samples "$WANTEDSAMPLES" --all_samples "$ALLSAMPLES" --use_clean_train_data
                     fi
 
                     if [ "$net" == cif10_rb ]; then     
@@ -339,7 +339,7 @@ detectadversarialslayer ()
 
 # printn
 # genereratecleandata
-# attacks
+attacks
 extractcharacteristics
 detectadversarials
 

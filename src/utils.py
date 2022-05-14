@@ -1218,10 +1218,10 @@ def create_output_filename(args, TRANSFER=None):
 def create_dir_clean_data(args, root='./data/clean_data/', wait_input=False):
     output_filename = create_output_filename(args)
 
-    output_path_dir = os.path.join(root, 'run_' + str(args.run_nr), args.net, output_filename)
+    output_path_dir = os.path.join( root, 'run_' + str(args.run_nr), args.net, output_filename )
 
     existed = make_dir(output_path_dir)
-    get_debug_info(msg='Info: clean_data_path: ' + output_path_dir + ', existed: ' + str(existed))
+    get_debug_info( msg='Info: clean_data_path: ' + output_path_dir + ', existed: ' + str(existed) )
     
     if existed and wait_input:
         input(settings.WARN_DIR_EXISTS)
@@ -1251,17 +1251,23 @@ def epsilon_to_string(epsilon):
     if epsilon.isdigit():
         get_debug_info("ERR: Input must be string!")
         assert True
- 
+        
     return epsilon.replace("/", "_").replace(".", "")
 
 
-def check_epsilon(args, TRANSFER=None):
+def check_epsilon(args, TRANSFER=None, FROM=False):
     epsilon = ''
-    if TRANSFER == None or TRANSFER == 'data':
-        if args.attack == 'std' or args.attack == 'ind' or  args.attack in [ 'apgd-ce', 'apgd-cel2', 'pgd', 'l2pgd' ] :
+    if TRANSFER == None:
+        if  args.attack in [  'std', 'ind', 'apgd-ce', 'apgd-cel2', 'pgd', 'l2pgd' ] :
+            epsilon = epsilon_to_string(args.eps)
+    elif TRANSFER == 'data':
+        if  args.attack in [ 'std', 'ind', 'apgd-ce', 'apgd-cel2' ] :
             epsilon = epsilon_to_string(args.eps)
     elif TRANSFER == 'attack':
-        if args.attack_eval == 'std' or args.attack_eval == 'ind':
+        if (args.attack_eval in ['std',  'ind']):
+            epsilon = epsilon_to_string(args.eps_to)
+    elif TRANSFER == 'attack_from':
+        if args.attack in ['std',  'ind']:
             epsilon = epsilon_to_string(args.eps_to)
     
     return epsilon
@@ -1286,11 +1292,11 @@ def check_k(args):
             k_lid = 'k_' + str(args.k_lid)
         
     return k_lid
-    
 
-def create_dir_attacks(args, root='./data/attacks/', wait_input=False):
+
+def create_dir_attacks(args, root='./data/attacks/', TRANSFER=None, wait_input=False):
     output_filename = create_output_filename(args)
-    epsilon = check_epsilon(args)
+    epsilon = check_epsilon(args, TRANSFER=TRANSFER)
     output_path_dir = os.path.join(root, 'run_' + str(args.run_nr), args.net, output_filename, args.attack, epsilon)
     existed = make_dir(output_path_dir)
     
@@ -1302,10 +1308,10 @@ def create_dir_attacks(args, root='./data/attacks/', wait_input=False):
     return output_path_dir
 
 
-def create_dir_extracted_characteristics(args, root='./data/extracted_characteristics/', TRANSFER=None, wait_input=False):
+def create_dir_extracted_characteristics(args, root='./data/extracted_characteristics/', TRANSFER=None, FROM=False, wait_input=False):
     output_filename = create_output_filename(args, TRANSFER=TRANSFER)
     layer_nr = check_layer_nr(args)
-    epsilon  = check_epsilon(args, TRANSFER=TRANSFER)
+    epsilon  = check_epsilon(args, TRANSFER=TRANSFER, FROM=FROM)
     k_lid    = check_k(args)
 
     if TRANSFER == None:
@@ -1327,19 +1333,22 @@ def create_dir_extracted_characteristics(args, root='./data/extracted_characteri
     return output_path_dir
 
 
-def create_dir_detection(args, root='./data/detection/', TRANSFER=None, wait_input=False):
+def create_dir_detection(args, root='./data/detection/', TRANSFER=None, FROM=False, wait_input=False):
+    
     output_filename = create_output_filename(args)
     layer_nr = check_layer_nr(args)
-    epsilon = check_epsilon(args, TRANSFER=None)
+    epsilon  = check_epsilon(args, TRANSFER=TRANSFER, FROM=FROM)
     k_lid    = check_k(args)
 
     if TRANSFER == None: 
         output_path_dir = os.path.join(root, 'run_' + str(args.run_nr), args.net, output_filename, args.attack, epsilon, args.detector, k_lid, layer_nr, args.clf)
     elif TRANSFER == 'attack':
-        epsilon_to = check_epsilon(args, TRANSFER='attack')
+        epsilon_to = check_epsilon(args, TRANSFER='attack', FROM=False)
         output_path_dir = os.path.join(root, 'run_' + str(args.run_nr), args.net, output_filename, args.attack, epsilon, args.detector, k_lid, layer_nr, args.clf, args.attack_eval, epsilon_to)
+    elif TRANSFER == 'attack_from':
+        output_path_dir = os.path.join(root, 'run_' + str(args.run_nr), args.net, output_filename, args.attack, epsilon, args.detector, k_lid, layer_nr, args.clf)    
     elif TRANSFER == 'data':
-        epsilon = check_epsilon(args, TRANSFER=None)
+        epsilon = check_epsilon(args, TRANSFER='data')
         output_path_dir = os.path.join(root, 'run_' + str(args.run_nr), args.net, output_filename, args.attack, epsilon, args.detector, k_lid, layer_nr, args.clf, args.net_eval, epsilon)
     else:
         raise Exception('Transfer not known!')
