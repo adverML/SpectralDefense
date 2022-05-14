@@ -69,7 +69,7 @@ parser.add_argument("--eps",       default='8./255.',            help=settings.H
 args = parser.parse_args()
 
 # output data
-from_trained_clf = create_dir_detection(args, root='./data/detection/')
+from_trained_clf = create_dir_detection(args, root='./data/detection/', TRANSFER='data_from')
 output_path_dir  = create_dir_detection(args, root='./data/data_transfer/', TRANSFER='data')
 save_args_to_file(args, output_path_dir)
 logger = Logger(output_path_dir + os.sep + 'log.txt')

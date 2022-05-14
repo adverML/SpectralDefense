@@ -1261,6 +1261,9 @@ def check_epsilon(args, TRANSFER=None, FROM=False):
         if  args.attack in [  'std', 'ind', 'apgd-ce', 'apgd-cel2', 'pgd', 'l2pgd' ] :
             epsilon = epsilon_to_string(args.eps)
     elif TRANSFER == 'data':
+        if  args.attack_eval in [ 'std', 'ind', 'apgd-ce', 'apgd-cel2' ] :
+            epsilon = epsilon_to_string(args.eps)
+    elif TRANSFER == 'data_from':
         if  args.attack in [ 'std', 'ind', 'apgd-ce', 'apgd-cel2' ] :
             epsilon = epsilon_to_string(args.eps)
     elif TRANSFER == 'attack':
@@ -1343,13 +1346,15 @@ def create_dir_detection(args, root='./data/detection/', TRANSFER=None, FROM=Fal
     if TRANSFER == None: 
         output_path_dir = os.path.join(root, 'run_' + str(args.run_nr), args.net, output_filename, args.attack, epsilon, args.detector, k_lid, layer_nr, args.clf)
     elif TRANSFER == 'attack':
-        epsilon_to = check_epsilon(args, TRANSFER='attack', FROM=False)
-        output_path_dir = os.path.join(root, 'run_' + str(args.run_nr), args.net, output_filename, args.attack, epsilon, args.detector, k_lid, layer_nr, args.clf, args.attack_eval, epsilon_to)
+        epsilon_from = check_epsilon(args, TRANSFER='attack_from', FROM=False)
+        output_path_dir = os.path.join(root, 'run_' + str(args.run_nr), args.net, output_filename, args.attack, epsilon_from, args.detector, k_lid, layer_nr, args.clf, args.attack_eval, epsilon)
     elif TRANSFER == 'attack_from':
         output_path_dir = os.path.join(root, 'run_' + str(args.run_nr), args.net, output_filename, args.attack, epsilon, args.detector, k_lid, layer_nr, args.clf)    
     elif TRANSFER == 'data':
         epsilon = check_epsilon(args, TRANSFER='data')
         output_path_dir = os.path.join(root, 'run_' + str(args.run_nr), args.net, output_filename, args.attack, epsilon, args.detector, k_lid, layer_nr, args.clf, args.net_eval, epsilon)
+    elif TRANSFER == 'data_from':
+        output_path_dir = os.path.join(root, 'run_' + str(args.run_nr), args.net, output_filename, args.attack, epsilon, args.detector, k_lid, layer_nr, args.clf) 
     else:
         raise Exception('Transfer not known!')
 

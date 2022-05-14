@@ -70,16 +70,12 @@ parser.add_argument("--eps_to",       default='8./255.',            help=setting
 
 args = parser.parse_args()
 
-FROM = True
-if args.attack == 'std':
-    FROM = False
-
 # output data
-from_trained_clf = create_dir_detection(args, root='./data/detection/', TRANSFER='attack_from', FROM=FROM)
+from_trained_clf = create_dir_detection(args, root='./data/detection/', TRANSFER='attack_from')
 print("--------------------------")
 print(from_trained_clf)
 
-output_path_dir  = create_dir_detection(args, root='./data/attack_transfer/', TRANSFER='attack', FROM=FROM)
+output_path_dir  = create_dir_detection(args, root='./data/attack_transfer/', TRANSFER='attack')
 print("--------------------------")
 print(output_path_dir)
 

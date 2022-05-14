@@ -9,7 +9,7 @@ function log_msg {
 # DATASETS="cif10 cif10vgg  cif100 cif100vgg"
 # DATASETS="cif100vgg"
 # DATASETS="cif10rn34 cif100rn34"
-DATASETS="cif10"
+DATASETS="cif100"
 # DATASETS="cif10_rb"
 # DATASETS="cif10 cif10vgg cif10_rb cif10rn34 cif100 cif100vgg cif100rn34"
 
@@ -77,7 +77,7 @@ LAYERNR="0 1 2 3 4 5 6 7 8 9 10 11 12"
 DETECTORSLAYERNR="LID"
 PCA_FEATURES="0"
 # LID_K="5 10 20 50"
-LID_K=""
+LID_K="-1"
 
 
 #-----------------------------------------------------------------------------------------------------------------------------------
@@ -349,8 +349,8 @@ detectadversarialslayer ()
 # printn
 # genereratecleandata
 # attacks
-# extractcharacteristics
-detectadversarials
+extractcharacteristics
+# detectadversarials
 
 # extractcharacteristicslayer
 # detectadversarialslayer
