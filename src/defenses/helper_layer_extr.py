@@ -592,7 +592,7 @@ def get_whitebox_features(args, logger, model):
                 act_val_list.append(act_val)
             return act_val_list
 
-        if not args.nr == -1 or args.detector in ['LID', 'Mahalanobis']:
+        if not args.nr == -1 or args.detector in ['LID', 'LIDNOISE', 'Mahalanobis']:
             model.relu.register_forward_hook( get_activation('0_relu') )
 
             model.layer1[0].relu.register_forward_hook( get_activation('layer_1_0_relu') )
@@ -674,9 +674,15 @@ def get_whitebox_features(args, logger, model):
         if args.detector in ['LID']:
             layers = [
                 '0_relu', 'layer_1_0_relu', 'layer_1_1_relu', 'layer_1_2_relu', 'layer_2_0_relu', 'layer_2_1_relu', 'layer_2_2_relu',  'layer_2_3_relu', 
-                'layer_3_0_relu', 'layer_3_1_relu',  'layer_3_2_relu',      'layer_3_3_relu', 'layer_3_4_relu',  'layer_3_5_relu',  'layer_4_0_relu',  'layer_4_1_relu',   'layer_4_2_relu'
+                'layer_3_0_relu', 'layer_3_1_relu',  'layer_3_2_relu',  'layer_3_3_relu', 'layer_3_4_relu',  'layer_3_5_relu',  'layer_4_0_relu',  'layer_4_1_relu',   'layer_4_2_relu'
             ]
-            
+        
+        if args.detector in ['LIDNOISE']:
+            layers = [
+               'layer_4_2_relu'
+            ]
+        
+        
         if args.detector in ['Mahalanobis']:
             layers = [
                 # '0_relu', 'layer_1_0_relu', 'layer_1_1_relu', 'layer_1_2_relu', 'layer_2_0_relu', 'layer_2_1_relu', 'layer_2_2_relu',  'layer_2_3_relu', 
@@ -724,9 +730,6 @@ def get_whitebox_features(args, logger, model):
 
 
     elif args.net == 'restricted_imagenet':
-
-        # print(model)
-        # import pdb; pdb.set_trace()
 
         def get_layer_feature_maps(activation_dict, act_layer_list):
             act_val_list = []

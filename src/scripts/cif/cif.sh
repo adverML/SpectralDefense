@@ -18,7 +18,7 @@ DATASETS="cif10"
 
 # DATASETS="imagenet64 celebaHQ64 imagenet128 celebaHQ128"
 # RUNS="1 2 3"
-RUNS="1 2 3"
+RUNS="1"
 
 
 # ATTACKS="fgsm bim pgd std df cw"
@@ -339,8 +339,8 @@ detectadversarialslayer ()
 
 # printn
 # genereratecleandata
-attacks
-extractcharacteristics
+# attacks
+# extractcharacteristics
 detectadversarials
 
 # extractcharacteristicslayer

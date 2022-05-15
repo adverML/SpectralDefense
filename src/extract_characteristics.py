@@ -95,7 +95,6 @@ save_args_to_file(args, output_path_dir)
 logger = Logger(output_path_dir + os.sep + 'log.txt')
 log_header(logger, args, output_path_dir, sys) # './data/extracted_characteristics/imagenet32/wrn_28_10/std/8_255/LayerMFS'
 
-
 # input data
 input_path_dir = create_dir_attacks(args, root='./data/attacks/')
 images_path, images_advs_path = create_save_dir_path(input_path_dir, args)
