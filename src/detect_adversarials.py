@@ -107,8 +107,10 @@ if  args.detector in  ['VAEInputPFS', 'VAEInputMFS']:
 logger.log("characteristics_path:      " + str(characteristics_path) )
 # logger.log("characteristics_advs_path: " + str(characteristics_path) )
 
+# import pdb; pdb.set_trace()
+
 s = 1
-if args.detector == 'LIDNOISE' and not args.fixed_clean_data:
+if args.detector in ['LIDNOISE', 'LIDLESSLayersFeatures'] and not args.fixed_clean_data:
     s = 2
     characteristics     = torch.load(characteristics_path)[:args.wanted_samples * s]
     characteristics_adv = torch.load(characteristics_advs_path)[:args.wanted_samples]
@@ -137,7 +139,7 @@ logger.log("shape: " + str(shape))
 if shape[0] < args.wanted_samples:
     logger.log("CAUTION: The actual number is smaller as the wanted samples!")
 
-if args.detector == 'LIDNOISE' and not args.lid_k_log:
+if args.detector in ['LIDNOISE', 'LIDLESSLayersFeatures'] and not args.lid_k_log:
     X_train, y_train, X_test, y_test = split_data(args, logger, characteristics, characteristics_adv, noise=True, test_size=0.1, random_state=42)
 else:
     X_train, y_train, X_test, y_test = split_data(args, logger, characteristics, characteristics_adv, noise=False, test_size=0.1, random_state=42)

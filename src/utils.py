@@ -1258,7 +1258,8 @@ def epsilon_to_string(epsilon):
 def check_epsilon(args, TRANSFER=None, FROM=False):
     epsilon = ''
     if TRANSFER == None:
-        if  args.attack in [  'std', 'ind', 'apgd-ce', 'apgd-cel2', 'pgd', 'l2pgd' ] :
+        # if  args.attack in [  'std', 'ind', 'apgd-ce', 'apgd-cel2', 'pgd', 'l2pgd' ]:
+        if  args.attack in [  'std', 'ind', 'apgd-ce', 'apgd-cel2', 'l2pgd' ]:
             epsilon = epsilon_to_string(args.eps)
     elif TRANSFER == 'data':
         if  args.attack_eval in [ 'std', 'ind', 'apgd-ce', 'apgd-cel2' ] :
@@ -1290,7 +1291,7 @@ def check_layer_nr(args):
 def check_k(args):
     k_lid = ''
     
-    if args.detector == 'LID':
+    if args.detector in ['LID', 'LIDNOISE']:
         if args.k_lid > 0:
             k_lid = 'k_' + str(args.k_lid)
         

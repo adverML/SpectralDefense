@@ -13,25 +13,11 @@ import pandas as pd
 import numpy as np
 from pathlib import Path
 
+import sys
+sys.path.append('./')
 
-# import datetime
-from conf import settings
-# import csv
-# import argparse
+from conf import settings as sett
 
-# from utils import (
-#     check_epsilon, 
-#     check_layer_nr,
-#     create_dir_attacks, 
-#     create_dir_detection, 
-#     create_dir_extracted_characteristics,
-#     create_output_filename, 
-#     make_dir
-# )
-
-
-# import logging
-# import logging.handlers
 
 
 def check_eps(str_val):
@@ -53,7 +39,19 @@ def check_eps(str_val):
         eps = '1_100'
     elif '1./1000.' in str_val:
         eps = '1_1000'
-
+    elif '0.5' in str_val:
+        eps = '05'
+    elif '0.4' in str_val:
+        eps = '04'
+    elif '0.3' in str_val:
+        eps = '03'
+    elif '0.2' in str_val:
+        eps = '02'
+    elif '0.1' in str_val:
+        eps = '01'
+    elif '0.01' in str_val:
+        eps = '001'    
+        
     return eps
 
 
@@ -65,7 +63,7 @@ def is_float(value):
     return False
 
 
-def get_clean_accuracy(paths):
+def get_clean_accuracy(settings, paths):
     result = {}
     for path in paths:
         if 'gauss' in path:
@@ -167,7 +165,7 @@ def get_clean_accuracy(paths):
             if line.__contains__(search_text) or line.__contains__(search_text2):
                 asr = float(line.strip().split(' ')[-1])
                 asr_list.append(asr)            
-                if attack_method  in ['std', 'apgd-ce']:
+                if attack_method  in ['std', 'apgd-ce', 'apgd-cel2']:
                     result[attack_method + '_' + eps] = asr_list[-1]
                 else:
                     result[attack_method] = asr_list[-1]
@@ -182,14 +180,16 @@ def sort_paths_by_layer(paths):
     return sorted_paths
 
 
-def extract_information(root='./data', net=['cif10'], dest='./data/detection', nr=1, csv_filename='eval.csv', layers=True, ATTACKS='attacks', DETECTION='detection', architecture=''):
+def extract_information(settings, root='./data', net=['cif10'], dest='./data/detection', nr=1, csv_filename='eval.csv', layers=True, ATTACKS='attacks', DETECTION='detection', architecture=''):
     print( ' Extract information! ' )
     
     if not architecture == '':
         architecture = '/' + architecture
     
     COLUMNS       = [ 'asr', 'auc',   'f1', 'acc', 'pre', 'tpr', 'tnr', 'fnr', 'asrd']
-    COLUMNS_CLEAN = [ 'auc',  'f1',  'acc', 'pre', 'tpr', 'tnr', 'fnr', 'asr', 'asrd']
+    # COLUMNS_CLEAN = [ 'auc',  'f1',  'acc', 'pre', 'tpr', 'tnr', 'fnr', 'asr', 'asrd']
+    COLUMNS_CLEAN = [ 'auc', 'acc', 'pre', 'tpr', 'f1',  'tnr', 'fnr', 'asr', 'asrd']
+    
 
     # output_path = ''
     final = []
@@ -202,7 +202,7 @@ def extract_information(root='./data', net=['cif10'], dest='./data/detection', n
             in_dir_detects = os.path.join( root, DETECTION, 'run_' + str(nr), net_path )
             
 
-        clean_acc = get_clean_accuracy( glob.glob( in_dir_attacks + architecture + "/**/log.txt", recursive=True ) )
+        clean_acc = get_clean_accuracy( settings, glob.glob( in_dir_attacks + architecture + "/**/log.txt", recursive=True ) )
         print("clean accuracy: ", clean_acc)
 
         if layers:
@@ -270,6 +270,8 @@ def extract_information(root='./data', net=['cif10'], dest='./data/detection', n
             print("path: ", path)
             with open(path) as f:
                 lines = f.readlines()
+                
+            # import pdb; pdb.set_trace()
 
             for line in lines:
                 if line.__contains__("RES"):
@@ -288,7 +290,7 @@ def extract_information(root='./data', net=['cif10'], dest='./data/detection', n
                 if line.__contains__("'attack':"):
                     for att in settings.ATTACKS_LIST:
                         if line.find(att) != -1:
-                            if att in ['std', 'apgd-ce']:
+                            if att in ['std', 'apgd-ce', 'apgd-cel2']:
                                 tmp_eps = check_eps(line)
                                 att = att + '_' + tmp_eps
                             asr_name.append( att )                        
@@ -408,14 +410,24 @@ if __name__ == "__main__":
 
     OUT_PATH = "analysis/variance/run_"
     # OUT_PATH = "analysis/variance/run_gauss_"
+    # APP = '_LID_ATTACKTRANSFER'
     # APP = '_LID'
+    
+    # APP = '_LIDNOISE'
+    # APP = '_LIDNOISE_ATTACKTRANSFER'
+    
+    # APP = '_LIDFeatures'
     # APP = '_eps'
     # APP = '_apgd-ce'
-    APP = '_apgd-cel2'
+    # APP = '_apgd-cel2'
+    APP = '_apgd-ce_multilid'
+    # APP = '_apgd-cel2'
+
     
+    # APP = '_lidfeat'
     
     # APP = '_HPF'
-    # APP = 'layers'
+    # # APP = 'layers'
     # APP = ''
     
     # APP = 'df_cw'
@@ -432,7 +444,7 @@ if __name__ == "__main__":
     
 
     for nr in NR:
-        CSV_FILE_PATH.append( extract_information(root='./data', net=['cif10'],      dest='./data/detection',   nr=nr, csv_filename='cif10{}.csv'.format(APP), layers=LAYERS ) )
+        CSV_FILE_PATH.append( extract_information(sett, root='./data', net=['cif10'],      dest='./data/detection',   nr=nr, csv_filename='cif10{}.csv'.format(APP), layers=LAYERS ) )
         # CSV_FILE_PATH.append( extract_information(root='./data', net=['cif100'],      dest='./data/detection',   nr=nr, csv_filename='cif100{}.csv'.format(APP), layers=LAYERS) )        # CSV_FILE_PATH.append( extract_information(root='./data', net=['cif10vgg'],      dest='./data/detection',  nr=nr, csv_filename='cif10vgg{}.csv'.format(APP), layers=LAYERS) )
         # CSV_FILE_PATH.append( extract_information(root='./data', net=['cif10vgg'],    dest='./data/detection',   nr=nr, csv_filename='cif10vgg{}.csv'.format(APP), layers=LAYERS) )
         # CSV_FILE_PATH.append( extract_information(root='./data', net=['cif100vgg'],   dest='./data/detection',   nr=nr, csv_filename='cif100vgg{}.csv'.format(APP), layers=LAYERS) )
@@ -464,12 +476,15 @@ if __name__ == "__main__":
         # architecture='wrn_28_10_250'
         # CSV_FILE_PATH.append( extract_information(root='./data', net=['imagenet32'],  dest='./data/detection', nr=nr, csv_filename='imagenet32{}.csv'.format(architecture), layers=LAYERS, architecture=architecture) )
 
+        
+        # attack_transfer
         # import pdb; pdb.set_trace()
+        # CSV_FILE_PATH.append(  extract_information( root='./data', net=['cif10'],     dest='./data/attack_transfer', nr=nr, csv_filename='attack_transfer_lid_cf10{}.csv'.format(APP), layers=False, ATTACKS='attacks', DETECTION='attack_transfer' ) )
+        # CSV_FILE_PATH.append(  extract_information( root='./data', net=['cif100'],    dest='./data/attack_transfer', nr=nr, csv_filename='attack_transfer_lid_cif100{}.csv'.format(APP), layers=False, ATTACKS='attacks', DETECTION='attack_transfer' ) )
+        # CSV_FILE_PATH.append(  extract_information( root='./data', net=['cif10vgg'],  dest='./data/attack_transfer', nr=nr, csv_filename='attack_transfer_lid_cif10vgg{}.csv'.format(APP), layers=False, ATTACKS='attacks', DETECTION='attack_transfer' ) )
+        # CSV_FILE_PATH.append(  extract_information( root='./data', net=['cif100vgg'], dest='./data/attack_transfer', nr=nr, csv_filename='attack_transfer_lid_cif100vgg{}.csv'.format(APP), layers=False, ATTACKS='attacks', DETECTION='attack_transfer' ) )
+        # CSV_FILE_PATH.append(  extract_information( root='./data', net=['imagenet'],  dest='./data/attack_transfer', nr=nr, csv_filename='attack_transfer_lid_imagenet{}.csv'.format(APP), layers=False, ATTACKS='attacks', DETECTION='attack_transfer' ) )
         copy_var(CSV_FILE_PATH, OUT_PATH, nr)
-
-
-
-
 
     # attack_transfer
     # extract_information(root='./data', net=['cif10', 'imagenet32', 'imagenet64', 'imagenet128', 'celebaHQ32', 'celebaHQ64', 'celebaHQ128'], dest='./data/attack_transfer', run_nr=[1], csv_filename='attack_transfer.csv', layers=False, ATTACKS='attacks', DETECTION='attack_transfer')
@@ -493,8 +508,7 @@ if __name__ == "__main__":
     # extract_information( root='./data', net=['cif10vgg' ], dest='./data/attack_transfer', nr=1, csv_filename='attack_transfer_lid_cif10vgg.csv', layers=False, ATTACKS='attacks', DETECTION='attack_transfer' )
     # extract_information( root='./data', net=['cif100vgg'], dest='./data/attack_transfer', nr=1, csv_filename='attack_transfer_lid_cif100vgg.csv', layers=False, ATTACKS='attacks', DETECTION='attack_transfer' )
 
-    # extract_information( root='./data', net=['imagenet'], dest='./data/attack_transfer', nr=1, csv_filename='attack_transfer_lid_imagenet.csv', layers=False, ATTACKS='attacks', DETECTION='attack_transfer' )
-
+    # extract_information( root='./data', net=['imagenet'], dest='./data/attack_transfer', nr=3, csv_filename='attack_transfer_lid_imagenet.csv', layers=False, ATTACKS='attacks', DETECTION='attack_transfer' )
 
 
     # data_transfer

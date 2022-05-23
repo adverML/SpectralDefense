@@ -327,7 +327,7 @@ detectadversarialslayer ()
                                 for lidk in $LID_K; do 
                                     log_msg "Layer Nr. $nr"
                                     if [ "$net" == cif10 ]; then
-                                        python -u detect_adversarials.py --net "$net" --attack "$att" --detector "$det" --wanted_samples "$nrsamples" --clf "$classifier" --k_lid "$lidk" --num_classes 10 --nr "$nr" --run_nr  "$run"  
+                                        python -u detect_adversarials.py --net "$net" --attack "$att" --detector "$det" --wanted_samples "$nrsamples" --clf "$classifier"  --num_classes 10 --nr "$nr" --run_nr  "$run"  --k_lid "$lidk"
                                     fi
 
                                     if [ "$net" == cif10_rb ]; then

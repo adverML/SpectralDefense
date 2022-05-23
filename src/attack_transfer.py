@@ -47,7 +47,7 @@ parser.add_argument("--detector",       default='InputMFS',       help=settings.
 parser.add_argument("--net",            default='cif10',          help=settings.HELP_NET)
 parser.add_argument("--mode",           default='test',           help="Choose test or validation case")
 parser.add_argument("--nr",             default='-1',   type=int, help=settings.HELP_LAYER_NR)
-parser.add_argument("--wanted_samples", default='1500', type=int, help=settings.HELP_WANTED_SAMPLES)
+parser.add_argument("--wanted_samples", default='2000', type=int, help=settings.HELP_WANTED_SAMPLES)
 parser.add_argument("--clf",            default='LR',             help="Logistic Regression (LR) or Random Forest (RF)")
 parser.add_argument("--num_classes",    default='10',   type=int, help=settings.HELP_NUM_CLASSES)
 
@@ -89,15 +89,32 @@ log_header(logger, args, output_path_dir, sys) # './data/extracted_characteristi
 # load characteristics
 logger.log('INFO: Loading characteristics...')
 
+
+
+
 # input data
 extracted_characteristics_path = create_dir_extracted_characteristics(args, root='./data/extracted_characteristics/',  TRANSFER='attack', wait_input=False)
 characteristics_path, characteristics_advs_path = create_save_dir_path(extracted_characteristics_path, args, filename='characteristics' )
 
+
+if args.detector == 'LIDNOISE':
+    # import pdb; pdb.set_trace()
+    characteristics_path      = characteristics_path.replace('/characteristics', '/lid_tmp_k')
+    characteristics_advs_path = characteristics_advs_path.replace('/characteristics_adv', '/lid_tmp_k_adv')
+
 logger.log("characteristics_path:      " + str(characteristics_path) )
 logger.log("characteristics_advs_path: " + str(characteristics_advs_path) )
 
-characteristics =     torch.load(characteristics_path)[:args.wanted_samples]
+
+
+
+characteristics     = torch.load(characteristics_path)[:args.wanted_samples]
 characteristics_adv = torch.load(characteristics_advs_path)[:args.wanted_samples]
+
+if args.detector == 'LIDNOISE':
+    # import pdb; pdb.set_trace()
+    characteristics     = characteristics.reshape(     (characteristics.shape[0], -1) )
+    characteristics_adv = characteristics_adv.reshape( (characteristics_adv.shape[0], -1) )
 
 shape = np.shape(characteristics)
 logger.log("shape: " + str(shape))

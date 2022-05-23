@@ -7,6 +7,8 @@ import os, pdb
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import confusion_matrix
 from sklearn.metrics import roc_auc_score
+from sklearn.metrics import precision_score
+from sklearn.metrics import accuracy_score
 from sklearn.metrics import f1_score
 from sklearn.metrics import roc_curve
 
@@ -49,11 +51,20 @@ def show_results(args, logger, y_actual, y_hat, y_hat_pr):
     TNR = TN / (TN + FP) 
     FNR = FN / (FN + TP)
     
-    ACC = (TP + TN) / (TP + TN + FP + FN)
-    PRECISION = TP / (TP + FP)
+    # ACC = (TP + TN) / (TP + TN + FP + FN)
+    ACC = accuracy_score(y_actual, y_hat)
+    
+    # PRECISION = TP / (TP + FP)
+    # PRECISION = precision_score(y_actual, y_hat, average='weighted', labels=np.unique(y_hat_pr))
+    PRECISION = precision_score(y_actual, y_hat)
+    
+    
+    
     
     # F1 =  2 * (PRECISION*TPR) / (PRECISION+TPR)
     F1 = f1_score(y_actual, y_hat)
+    
+    import pdb; pdb.set_trace()
 
     if args.clf == 'IF': 
         auc = -1
@@ -94,7 +105,7 @@ def show_results(args, logger, y_actual, y_hat, y_hat_pr):
     # print("tpr", tpr)
 
 
-def split_data(args, logger, characteristics, characteristics_adv, noise, test_size=0.2, random_state=42):
+def split_data(args, logger, characteristics, characteristics_adv, noise=False, test_size=0.2, random_state=42):
     
     shape_adv = np.shape(characteristics_adv)[0]
     shape_char = np.shape(characteristics)[0]
@@ -104,8 +115,8 @@ def split_data(args, logger, characteristics, characteristics_adv, noise, test_s
     if not noise:
         adv_X_train_val, adv_X_test, adv_y_train_val, adv_y_actual = train_test_split(characteristics_adv, np.ones(shape_adv),   test_size=test_size, random_state=random_state)
         b_X_train_val, b_X_test, b_y_train_val, b_y_actual         = train_test_split(characteristics,     np.zeros(shape_char), test_size=test_size, random_state=random_state)
-        adv_X_train, adv_X_val, adv_y_train, adv_y_val           = train_test_split(adv_X_train_val,     adv_y_train_val,      test_size=test_size, random_state=random_state)
-        b_X_train, b_X_val, b_y_train, b_y_val                   = train_test_split(b_X_train_val,       b_y_train_val,        test_size=test_size, random_state=random_state)
+        adv_X_train, adv_X_val, adv_y_train, adv_y_val             = train_test_split(adv_X_train_val,     adv_y_train_val,      test_size=test_size, random_state=random_state)
+        b_X_train, b_X_val, b_y_train, b_y_val                     = train_test_split(b_X_train_val,       b_y_train_val,        test_size=test_size, random_state=random_state)
     else:
         adv_X_train_val, adv_X_test, adv_y_train_val, adv_y_actual = train_test_split(characteristics_adv,    np.ones(shape_adv),  test_size=test_size, random_state=random_state)
         b_X_train_val, b_X_test, b_y_train_val, b_y_actual         = train_test_split(characteristics[:shape_adv], np.zeros(shape_adv), test_size=test_size, random_state=random_state)

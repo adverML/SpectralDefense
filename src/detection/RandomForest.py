@@ -23,9 +23,10 @@ def RF(args, logger, X_train, y_train, X_test, y_test):
     # trees = [25, 50, 75, 100, 300, 600]
     # trees = [ 25, 50, 100, 500, 1000, 2000 ]
     # trees = [ 300, 1000, 2000 ]
-    trees = [ 300 ]
-
-
+    # trees = [ 300 ]
+    # trees = [ 100, 300, 500, 800 ]
+    trees = [ 400 ]
+    
 
     clf = RandomForestClassifier(n_estimators=100, n_jobs=-1) 
     save_clf = copy.deepcopy(clf)

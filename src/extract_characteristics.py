@@ -77,6 +77,7 @@ parser.add_argument("--eps",       default='8./255.',    help=settings.HELP_AA_E
 # parser.add_argument("--eps",       default='0.5/255.', help=settings.HELP_AA_EPSILONS)
 
 parser.add_argument("--k_lid",       default='-1',  type=int, help="k for LID")
+parser.add_argument("--k_lid_bs",    default='100',  type=int, help="k for LID")
 
 # Frequency Analysis
 parser.add_argument("--fr", default='8',  type=int, help="InputMFS frequency analysis")
@@ -124,7 +125,7 @@ model = model.eval()
 layer_nr = int(args.nr)
 logger.log("INFO: layer_nr " + str(layer_nr) ) 
 
-if args.detector in ['LayerMFS',  'LayerPFS',  'LID',  'LIDNOISE',  'Mahalanobis']:
+if args.detector in ['LayerMFS',  'LayerPFS',  'LID',  'LIDNOISE', 'LIDLESSLayers', 'LIDLESSLayersFeatures', 'Mahalanobis']:
     get_layer_feature_maps, layers, model, activation = get_whitebox_features(args, logger, model)
 elif args.detector == 'DkNN':
     layers = dfknn_layer(args, model)
@@ -147,12 +148,12 @@ elif args.detector == 'LayerPFS':
     characteristics, characteristics_adv = whitebox_mfs_pfs(args, logger, model, images, images_advs, layers, get_layer_feature_maps, activation, typ='PFS')
 
 ####### LID section
-elif args.detector == 'LID':
+elif args.detector in ['LID', 'LIDLESSLayers']:
     from defenses.Lid import lid
     characteristics, characteristics_adv = lid(args, model, images, images_advs, layers, get_layer_feature_maps, activation)
 
 ####### LIDNOISE 
-elif args.detector == 'LIDNOISE':
+elif args.detector in ['LIDNOISE', 'LIDLESSLayersFeatures']:
 # elif args.detector == 'LID':
     from defenses.Lid import lidnoise
     characteristics,  characteristics_noise, characteristics_adv, lid_tmp_k, lid_tmp_k_noise, lid_tmp_k_adv = lidnoise(args, model, images, images_advs, layers, get_layer_feature_maps, activation)

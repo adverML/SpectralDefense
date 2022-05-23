@@ -9,7 +9,7 @@ DATASETS="imagenet"
 # DATASETS="imagenet_hierarchy"
 # DATASETS="restricted_imagenet"
 
-RUNS="1"
+RUNS="1 2 3"
 # RUNS="1 2 3"
 # RUNS="8"
 # RUNS="7"
@@ -18,8 +18,8 @@ RUNS="1"
 
 # ATTACKS="apgd-dlr+ fab+ square+ apgd-t+ fab-t+"
 # ATTACKS="apgd-ce+"
-# ATTACKS="fgsm bim std pgd df cw"
-ATTACKS="fgsm"
+ATTACKS="fgsm bim std pgd df cw"
+
 # ATTACKS="apgd-ce apgd-t fab-t square"
 
 
@@ -36,8 +36,8 @@ DETECTORS="LIDNOISE"
 # EPSILONS="8./255. 4./255. 2./255. 1./255. 0.5/255."
 EPSILONS="8./255."
 
-CLF="LR RF"
-# CLF="RF"
+# CLF="LR RF"
+CLF="RF"
 # CLF="LR"
 # CLF="IF"
 
@@ -56,11 +56,11 @@ DETECTORSLAYERNR="LayerMFS LayerPFS"
 
 # NRSAMPLES="300 500 1000 1200 1500 2000"
 ALLSAMPLES="3000"
-WANTEDSAMPLES="1500"
+WANTEDSAMPLES="2000"
 WANTEDSAMPLES_TR="18000"
 WANTEDSAMPLES_TE="18000"
 
-NRSAMPLES="1500" # detect
+NRSAMPLES="2000" # detect
 
 #-----------------------------------------------------------------------------------------------------------------------------------
 log_msg "Networks are already trained!"
@@ -176,8 +176,8 @@ detectadversarialslayer ()
 
 # genereratecleandata
 # attacks
-extractcharacteristics
-# detectadversarials
+# extractcharacteristics
+detectadversarials
 
 # extractcharacteristicslayer
 # detectadversarialslayer

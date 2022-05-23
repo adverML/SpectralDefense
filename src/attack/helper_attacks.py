@@ -171,6 +171,7 @@ def create_advs(logger, args, model, output_path_dir, clean_data_path, wanted_sa
         if args.individual:
             adversary.attacks_to_run = [ replacemany(args.attack, ['+', 'l2'], '') ] 
 
+        # import pdb; pdb.set_trace()
         # run attack and save images
         with torch.no_grad():
             # import pdb; pdb.set_trace()
@@ -200,14 +201,23 @@ def create_advs(logger, args, model, output_path_dir, clean_data_path, wanted_sa
                         labels.append(y_test[it].cpu())
                         labels_advs.append(y_adv[it].cpu())  
                         success_counter = success_counter + 1
-                        if (success_counter % 1000) == 0:
-                            get_debug_info( msg="success_counter " + str(success_counter) + " / " + str(wanted_samples) )
                             
                     elif args.fixed_clean_data:
                         images.append( x_test[it].cpu() )     
                         labels.append( y_test[it].cpu() )
-
-
+                    
+                    
+                    elif args.eps == '0':
+                        images.append(x_test[it].cpu())                      
+                        tmp_images_advs.append(img.cpu())
+                        labels.append(y_test[it].cpu())
+                        labels_advs.append(y_adv[it].cpu()) 
+                        success_counter = success_counter + 1
+                        
+                        
+                    if (success_counter % 1000) == 0:
+                        get_debug_info( msg="success_counter " + str(success_counter) + " / " + str(wanted_samples) )
+                        
                 success.append( len(tmp_images_advs) / max_nr )
 
                 images_advs += tmp_images_advs 

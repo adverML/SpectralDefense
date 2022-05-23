@@ -47,15 +47,19 @@ def get_k(args):
     batch_size = 100
     if args.k_lid < 0:
         if args.net == 'mnist' or args.net == 'cif10' or args.net == 'cif10vgg' or args.net == 'imagenet32' or args.net == 'celebaHQ32':
-            k = 10
+            k = 20 # original setup: https://arxiv.org/pdf/1801.02613.pdf
         else: # cif100 cif100vgg imagenet imagenet64
             k = 20
-            batch_size = 64
+            batch_size = 100
             
             if args.net == 'imagenet':
-                batch_size = 32
-    else:
+                k = 30
+                batch_size = 100
+    else: 
         k = args.k_lid
+        
+    if not args.k_lid_bs == 100:
+        batch_size = 100
         
     return k , batch_size
 
@@ -65,7 +69,7 @@ def lid_newest(args, model, images, images_advs, layers, get_layer_feature_maps,
     k, batch_size = get_k(args)
     
     def mle_batch(data, batch, k):
-        data = np.asarray(data, dtype=np.float32)
+        data  = np.asarray(data, dtype=np.float32)
         batch = np.asarray(batch, dtype=np.float32)
         k = min(k, len(data)-1)
         f = lambda v: -k / np.sum(np.log(v/v[-1]))
@@ -73,6 +77,7 @@ def lid_newest(args, model, images, images_advs, layers, get_layer_feature_maps,
      
         a = np.apply_along_axis(np.sort, axis=1, arr=a)[:,1:k+1]
         a = np.apply_along_axis(f, axis=1, arr=a)
+        
         return a
 
     lid_dim = len(layers)
@@ -211,6 +216,9 @@ def lidnoise(args, model, images, images_advs, layers, get_layer_feature_maps, a
         batch = np.asarray(batch, dtype=np.float32)
         k = min(k, len(data)-1)
         
+        # print("k: ", k)
+        # import pdb; pdb.set_trace()
+        
         f  = lambda v: - k / np.sum( np.log(v/v[-1]) )
         f2 = lambda v: - np.log( v / v[-1] )
                 
@@ -287,9 +295,15 @@ def lidnoise(args, model, images, images_advs, layers, get_layer_feature_maps, a
             # tmp_batch_noise, tmp_k_noise  = mle_batch( X_act[i], X_noise_act[i], k=k )
             tmp_batch_adv, tmp_k_adv      = mle_batch( X_act[i], X_adv_act[i]  , k=k )   
             
-            lid_batch_k[:, :, i]       = tmp_k
-            # lid_batch_noise_k[:, :, i] = tmp_k_noise
-            lid_batch_adv_k[:, :, i]   = tmp_k_adv
+            h1, w1    = tmp_k.shape
+            h2, w2, _ = lid_batch_k.shape
+            
+            if h1 == h2 and w1 == w2: 
+                # import pdb; pdb.set_trace()
+                
+                lid_batch_k[:, :, i]       = tmp_k
+                # lid_batch_noise_k[:, :, i] = tmp_k_noise
+                lid_batch_adv_k[:, :, i]   = tmp_k_adv
             
             # lid_batch[:, i]       = tmp_batch
             # lid_batch_noise[:, i] = tmp_batch_noise
@@ -338,6 +352,8 @@ def lidnoise_save(args, model, images, images_advs, layers, get_layer_feature_ma
         data  = np.asarray(data,  dtype=np.float32)
         batch = np.asarray(batch, dtype=np.float32)
         k = min(k, len(data)-1)
+        
+ 
         
         f  = lambda v: - k / np.sum( np.log(v/v[-1]) )
         f2 = lambda v: - np.log( v/ v[-1] )
@@ -407,10 +423,10 @@ def lidnoise_save(args, model, images, images_advs, layers, get_layer_feature_ma
             X_adv_act   = get_layer_feature_maps(batch_adv.cuda(), layers)
         
         for i in range(lid_dim):
-            X_act[i]       = np.asarray( X_act[i].cpu().detach().numpy()      ,dtype=np.float32).reshape((n_feed, -1) )
-            X_noise_act[i] = np.asarray( X_noise_act[i].cpu().detach().numpy(),dtype=np.float32).reshape((n_feed, -1) )
-            X_adv_act[i]   = np.asarray( X_adv_act[i].cpu().detach().numpy()  ,dtype=np.float32).reshape((n_feed, -1) )
-            
+            X_act[i]       = np.asarray( X_act[i].cpu().detach().numpy()      , dtype=np.float32).reshape((n_feed, -1) )
+            X_noise_act[i] = np.asarray( X_noise_act[i].cpu().detach().numpy(), dtype=np.float32).reshape((n_feed, -1) )
+            X_adv_act[i]   = np.asarray( X_adv_act[i].cpu().detach().numpy()  , dtype=np.float32).reshape((n_feed, -1) )
+             
             # Maximum likelihood estimation of local intrinsic dimensionality (LID)
             tmp_batch, tmp_k              = mle_batch( X_act[i], X_act[i]      , k=k )
             tmp_batch_noise, tmp_k_noise  = mle_batch( X_act[i], X_noise_act[i], k=k )
