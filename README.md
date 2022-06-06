@@ -1,4 +1,7 @@
-# Adversrial Machine Learning Benchmarks
+# Spectral Defense
+
+![teaser](one_image_analysis.png)
+
 
 This code belongs to the papers: 
  * `AAAI 22` [Is RobustBench/AutoAttack a suitable Benchmark for Adversarial Robustness?](https://openreview.net/forum?id=aLB3FaqoMBs)
