@@ -225,9 +225,9 @@ def extract_information(settings, root='./data', net=['cif10'], dest='./data/det
                             lr_paths = sort_paths_by_layer( glob.glob( search_path, recursive=True) ) 
                         else:
                             if att in ['std', 'apgd-ce', 'apgd-cel2']:
-                                # search_path = in_dir_detects + architecture + "/**/" + att + "/8_255/**/" + det + "/" + classifier + "/log.txt"
+                                search_path = in_dir_detects + architecture + "/**/" + att + "/8_255/**/" + det + "/" + classifier + "/log.txt"
                                 # search_path = in_dir_detects + architecture + "/**/" + att + "/**/" + det + "/" + classifier + "/log.txt"
-                                search_path = in_dir_detects + architecture + "/**/" + att + "/**/" + det + "/k_*/" + classifier + "/log.txt"
+                                # search_path = in_dir_detects + architecture + "/**/" + att + "/**/" + det + "/k_*/" + classifier + "/log.txt"
                                 
                             else:
                                 search_path = in_dir_detects + architecture + "/**/" + att + "/" + det + "/" + classifier + "/log.txt"

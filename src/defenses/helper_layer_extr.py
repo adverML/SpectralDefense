@@ -57,7 +57,7 @@ def get_whitebox_features(args, logger, model):
     layer_nr = int(args.nr)
     logger.log("INFO: layer_nr " + str(layer_nr) ) 
 
-    if args.net == 'cif10vgg' or args.net == 'cif100vgg':
+    if args.net == 'cif10vgg' or args.net == 'cif10vggnew'  or args.net == 'cif100vgg':
         # indices of activation layers
         # act_layers= [2,5,9,12,16,19,22,26,29,32,36,39,42]
         

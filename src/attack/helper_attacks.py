@@ -90,7 +90,7 @@ def check_args_attack(args, version=True, net_normalization=True, num_classes=Tr
         args = check_net_normalization(args)
     
     if num_classes:
-        if (args.net  in ['cif10', 'cif10vgg', 'cif10rb', 'cif10rn34', 'cif10rn34sota'])  and not args.num_classes == 10:
+        if (args.net  in ['cif10', 'cif10vgg', 'cif10vggnew', 'cif10rb', 'cif10rn34', 'cif10rn34sota'])  and not args.num_classes == 10:
             args.num_classes = 10
         elif (args.net in ['cif100', 'cif100vgg', 'cif100rn34'])  and not args.num_classes == 100:
             args.num_classes = 100
@@ -109,7 +109,7 @@ def check_args_attack(args, version=True, net_normalization=True, num_classes=Tr
             args.num_classes = 4
 
     if img_size:
-        if (args.net in ['cif10' , 'cif10vgg' , 'cif100' , 'cif100vgg' , 'cif10rb' , 'imagenet32' , 'celebaHQ32' , 'cif10rn34sota'])  and not args.img_size == 32:
+        if (args.net in ['cif10' ,  'cif10vgg', 'cif10vggnew', 'cif100' , 'cif100vgg' , 'cif10rb' , 'imagenet32' , 'celebaHQ32' , 'cif10rn34sota'])  and not args.img_size == 32:
             args.img_size = 32
         if (args.net in [ 'imagenet64',  'celebaHQ64'])  and not args.img_size == 64:
             args.img_size =  64
@@ -152,7 +152,7 @@ def create_advs(logger, args, model, output_path_dir, clean_data_path, wanted_sa
         clean_path = 'clean_' + indicator + 'data' 
         
         dataset = torch.load( os.path.join(clean_data_path, clean_path) )#[:args.all_samples]
-        get_debug_info( "actual len/wanted " + str(len(dataset)) + os.sep + str(len(dataset)) )
+        get_debug_info( "actual len/wanted " + str(len(dataset)) + os.sep + str(wanted_samples) )
         data_loader = torch.utils.data.DataLoader(dataset, batch_size=args.batch_size, shuffle=args.shuffle_on)
     else:
         data_loader = load_train_set(args, preprocessing=None, clean_data=False, shuffle=True)

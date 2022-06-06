@@ -133,6 +133,8 @@ def lid_newest(args, model, images, images_advs, layers, get_layer_feature_maps,
 
 def lid(args, model, images, images_advs, layers, get_layer_feature_maps, activation):
 
+    # import pdb; pdb.set_trace()
+    
     act_layers = layers
     k, batch_size = get_k(args)
     
@@ -170,7 +172,7 @@ def lid(args, model, images, images_advs, layers, get_layer_feature_maps, activa
         batch = normalize_images(batch, args)
         batch_adv = normalize_images(batch_adv, args)
 
-        if not args.net == 'cif10vgg' and not args.net == 'cif100vgg':
+        if not args.net == 'cif10vgg' and not args.net == 'cif10vggnew' and not args.net == 'cif100vgg':
             feat_img = model(batch.cuda())
             X_act = get_layer_feature_maps(activation, layers)
 

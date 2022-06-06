@@ -3,19 +3,8 @@
 This code belongs to the papers: 
  * `AAAI 22` [Is RobustBench/AutoAttack a suitable Benchmark for Adversarial Robustness?](https://openreview.net/forum?id=aLB3FaqoMBs)
  * `ICML 21` [Detecting AutoAttack Perturbations in the Frequency Domain](https://openreview.net/forum?id=8uWOTxbwo-Z)
+ * `IJCNN 21` [SpectralDefense: Detecting Adversarial Attacks on CNNs in the Fourier Domain](https://arxiv.org/abs/2103.03000)
 
-
-For this framework, please cite:
-```
-@inproceedings{
-lorenz2022is,
-title={Is AutoAttack/AutoBench a suitable Benchmark for Adversarial Robustness?},
-author={Peter Lorenz and Dominik Strassel and Margret Keuper and Janis Keuper},
-booktitle={The AAAI-22 Workshop on Adversarial Machine Learning and Beyond},
-year={2022},
-url={https://openreview.net/forum?id=aLB3FaqoMBs}
-}
-```
 
 This repository is an expansion of [SpectralAdversarialDefense](https://github.com/paulaharder/SpectralAdversarialDefense), but has some **new features**:
  * Automatic logging.
@@ -45,19 +34,19 @@ This image shows the pipeline from training a model, generating adversarial exam
 * GPUs: A100 (40GB), Titan V (12GB) or GTX 1080 (12GB)
 * CUDA 11.1
 * Python 3.9.5
-* PyTorch 1.9.0
+* PyTorch 1.10.0
 * cuDNN 8.0.5_0
 
 Clone the repository 
 ```sh
-$ git clone --recurse-submodules https://github.com/adverML/SpectralDef_Framework
-$ cd SpectralDef_Framework
+$ git clone --recurse-submodules https://github.com/adverML/SpectralDefense
+$ cd SpectralDefense
 ```
 
 and install the requirements
 ```sh
-$ conda create --name cuda--11-1-1--pytorch--1-9-0 -f requirements.yml
-$ conda activate cuda--11-1-1--pytorch--1-9-0
+$ conda create --name cuda--11-1-1--pytorch--1-10-0 -f requirements.yml
+$ conda activate cuda--11-1-1--pytorch--1-10-0
 ```
 
 There are two possiblities: Either use our data set with existing adversarial examples (not provided yet), in this case follow the instructions under 'Download' or generate the examples by yourself, by going threw 'Data generation'. For both possibilities conclude with 'Build a detector'.

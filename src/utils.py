@@ -38,6 +38,7 @@ from collections import OrderedDict
 
 from models.vgg_cif10 import VGG
 from models.vgg import vgg16_bn
+from models.vgg16new import vgg16
 from models.wideresidual import WideResNet, WideBasic
 from models.wide_resnet import Wide_ResNet
 from models.orig_resnet import wide_resnet50_2
@@ -96,7 +97,7 @@ def get_appendix(num_classes, max_num_classes):
 
 
 def get_num_classes(args):
-    if args.net == 'cif10' or args.net == 'cif10vgg' or args.net == 'cif10rn34' or args.net == 'cif10rn34sota':
+    if args.net == 'cif10' or args.net == 'cif10vgg' or args.net == 'cif10vggnew' or args.net == 'cif10rn34' or args.net == 'cif10rn34sota':
         num_classes = settings.MAX_CLASSES_CIF10
     elif args.net == 'cif100' or args.net == 'cif100vgg'  or args.net == 'cif100rn34':
         num_classes = settings.MAX_CLASSES_CIF100
@@ -725,7 +726,7 @@ def get_normalization(args):
     if args.net == 'mnist':
         mean = [0.1307, 0.1307, 0.1307]
         std  = [0.3081, 0.3081, 0.3081]
-    elif args.net == 'cif10'  or args.net == 'cif10vgg'  or args.net == 'cif10rn34' or args.net == 'cif10rn34sota' or \
+    elif args.net == 'cif10'  or args.net == 'cif10vgg' or args.net == 'cif10vggnew'  or args.net == 'cif10rn34' or args.net == 'cif10rn34sota' or \
         args.net == 'cif10_rb':
         mean = [0.4914, 0.4822, 0.4465] 
         std  = [0.2023, 0.1994, 0.2010]
@@ -817,7 +818,7 @@ def get_model_info(args):
         net = 'rn'
         depth = 34
         widen_factor = 0
-    elif args.net == 'cif10vgg' or args.net == 'cif100vgg':
+    elif args.net == 'cif10vgg' or args.net == 'cif100vgg' or args.net == 'cif10vggnew':
         net = 'vgg'
         depth = 16
         widen_factor = 0
@@ -895,8 +896,26 @@ def load_model(args):
         widen_factor = 0
         model = VGG('VGG16', preprocessing=net_normalization)
         ckpt = torch.load(settings.CIF10VGG_CKPT)
+        
         new_state_dict = create_new_state_dict(ckpt)
         model.load_state_dict(new_state_dict)
+
+
+    elif args.net == 'cif10vggnew':
+        depth = 16
+        widen_factor = 0
+        
+        # model = vgg16(preprocessing=net_normalization)
+        model = VGG('VGG16', preprocessing=net_normalization)
+        # model.features = torch.nn.DataParallel(model.features)
+        model = model.cuda()
+        ckpt = torch.load(settings.CIF10VGG_CKPT_NEW)
+        
+        # new_state_dict = create_new_state_dict(ckpt)
+        # model.load_state_dict(new_state_dict)
+        # import pdb; pdb.set_trace()
+        
+        model.load_state_dict(ckpt['state_dict'])
 
 
     elif args.net == 'cif10rn34sota':
@@ -1085,7 +1104,7 @@ def load_test_set(args, preprocessing=None, num_workers=4, download=True, IS_TRA
         item = datasets.MNIST(root=settings.MNIST_PATH, train=IS_TRAIN, transform=transform, download=download)
         data_loader = torch.utils.data.DataLoader(item, batch_size=args.batch_size, shuffle=shuffle, num_workers=num_workers)
 
-    elif args.net == 'cif10' or args.net == 'cif10_m' or args.net == 'cif10vgg' or args.net == 'cif10rn34' or args.net == 'cif10rn34sota' or args.net == 'cif10_rb':
+    elif args.net == 'cif10' or args.net == 'cif10_m' or args.net == 'cif10vgg' or args.net == 'cif10vggnew' or args.net == 'cif10rn34' or args.net == 'cif10rn34sota' or args.net == 'cif10_rb':
         
         transform_list = [transforms.ToTensor()] + normalization
         transform = transforms.Compose(transform_list)

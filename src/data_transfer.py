@@ -30,6 +30,7 @@ import pdb
 
 from detection.helper_detection import (
     show_results, 
+    show_results_attack_transfer,
     split_data, 
     save_load_clf, 
     compute_time_sample
@@ -101,10 +102,7 @@ if shape[0] < args.wanted_samples:
 #train classifier
 logger.log('Training classifier...')
 
-
 X_train, y_train, X_test, y_test = split_data(args, logger, characteristics, characteristics_adv, noise=False, test_size=0.1, random_state=42)
-
-
 
 #save classifier
 classifier_pth = from_trained_clf + os.sep + str(args.clf) + '.clf'
@@ -114,12 +112,13 @@ classifier_pth = from_trained_clf + os.sep + str(args.clf) + '.clf'
 logger.log("load clf: " + classifier_pth)
 clf = torch.load(classifier_pth)
 
-
 logger.log('Evaluating classifier...')
 y_hat =    clf.predict(X_test)
 y_hat_pr = clf.predict_proba(X_test)[:, 1]
 
 logger.log( "train score: " + str(clf.score(X_train, y_train)) )
 logger.log( "test score:  " + str(clf.score(X_test, y_test))   )
+
+
 
 show_results(args, logger, y_test, y_hat, y_hat_pr)

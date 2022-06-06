@@ -6,35 +6,20 @@ function log_msg {
 
 # DATASETS=(cif10 cif10vgg cif100 cif100vgg imagenet imagenet32 imagenet64 imagenet128 celebaHQ32 celebaHQ64 celebaHQ128)
 # DATASETS="cif10 cif10vgg  cif100 cif100vgg cif10_rb"
-DATASETS="cif10"
+# DATASETS="cif10"
 # DATASETS="cif100vgg"
-# DATASETS="cif10rn34 cif100rn34"
-# DATASETS="cif10rn34sota"
-# DATASETS="cif10_rb"
-# DATASETS="cif10 cif10vgg cif10_rb cif10rn34 cif100 cif100vgg cif100rn34"
 
-# DATASETS="cif10_rb"
-# DATASETS="cif10vgg"
+DATASETS="cif10vgg"
 
 # DATASETS="imagenet64 celebaHQ64 imagenet128 celebaHQ128"
 RUNS="8"
 
-# ATTACKS="df"
 # ATTACKS="l2pgd linfdf"
 # ATTACKS="linfdf l2pgd"
 # ATTACKS="linfdf"
 
-# ATTACKS="gauss fgsm bim pgd std df cw"
-ATTACKS="fgsm"
+ATTACKS="fgsm bim pgd std df cw"
 
-# ATTACKS="fgsm bim pgd cw"
-# ATTACKS="aa+"
-
-# ATTACKS="gauss df cw"
-# ATTACKS="fgsm"
-# ATTACKS="pgd cw"
-
-# ATTACKS="apgd-ce"
 
 # DETECTORS="InputMFS"
 # DETECTORS="InputMFS LayerMFS"
@@ -49,14 +34,14 @@ ATTACKS="fgsm"
 # DETECTORS="HPF"
 # DETECTORS="LID LIDNOISE"
 
-DETECTORS="LayerPFS"
+DETECTORS="LayerMFS"
 
 # DETECTORS="DkNN"
 # EPSILONS="8./255. 4./255. 2./255. 1./255. 0.5/255."
 EPSILONS="8./255."
 
 # CLF="LR"
-CLF="RF"
+CLF="LR RF"
 # CLF="SVC"
 # CLF="cuSVC"
 
@@ -69,21 +54,18 @@ IMAGENET32CLASSES="25 50 100 250 1000"
 WANTEDSAMPLES="2000"
 ALLSAMPLES="2500"
 # NRSAMPLES="2000" # detect
-NRSAMPLES="1500" # detect
+NRSAMPLES="2000" # detect
 
-DATASETSLAYERNR="cif10"
+DATASETSLAYERNR="cif10vgg"
 # ATTACKSLAYERNR="gauss fgsm bim pgd std df cw"
-ATTACKSLAYERNR="fgsm"
-
-# ATTACKSLAYERNR="cw"
-
+ATTACKSLAYERNR="std"
 
 # LAYERNR="0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24"
-# LAYERNR="0 1 2 3 4 5 6 7 8 9 10 11 12"
-LAYERNR="10"
+LAYERNR="0 1 2 3 4 5 6 7 8 9 10 11 12"
+# LAYERNR="10"
 
 # DETECTORSLAYERNR="LayerMFS LayerPFS"
-DETECTORSLAYERNR="LayerPFS"
+DETECTORSLAYERNR="LayerMFS"
 
 PCA_FEATURES="0"
 
@@ -351,6 +333,7 @@ detectadversarialslayer ()
 # attacks
 # extractcharacteristics
 # detectadversarials
+
 
 extractcharacteristicslayer
 detectadversarialslayer

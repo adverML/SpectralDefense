@@ -25,7 +25,7 @@ def RF(args, logger, X_train, y_train, X_test, y_test):
     # trees = [ 300, 1000, 2000 ]
     # trees = [ 300 ]
     # trees = [ 100, 300, 500, 800 ]
-    trees = [ 400 ]
+    trees = [ 300 ]
     
 
     clf = RandomForestClassifier(n_estimators=100, n_jobs=-1) 

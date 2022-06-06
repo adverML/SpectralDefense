@@ -17,8 +17,9 @@ DATASETS="cif10"
 # DATASETS="cif10vgg"
 
 # DATASETS="imagenet64 celebaHQ64 imagenet128 celebaHQ128"
-# RUNS="1 2 3"
-RUNS="30 31 32"
+RUNS="1"
+
+# RUNS="30 31 32"
 
 
 # ATTACKS="fgsm bim pgd std df cw"
@@ -27,9 +28,9 @@ RUNS="30 31 32"
 # ATTACKS="linfdf"
 
 # ATTACKS="gauss bim std df"
-# ATTACKS="fgsm"
-
 ATTACKS="fgsm bim pgd std df cw"
+
+# ATTACKS="fgsm bim pgd std df cw"
 
 # ATTACKS="apgd-ce apgd-t fab-t square"
 # ATTACKS="aa+"
@@ -39,13 +40,14 @@ ATTACKS="fgsm bim pgd std df cw"
 # DETECTORS="InputPFS LayerPFS"
 
 # DETECTORS="LID Mahalanobis"
-# DETECTORS="InputMFS LayerMFS LID Mahalanobis"
+DETECTORS="InputMFS LayerMFS"
+
 # DETECTORS="LayerMFS"
 # DETECTORS="InputMFS LayerMFS"
 # DETECTORS="Mahalanobis"
 # DETECTORS="HPF"
 # DETECTORS="LIDNOISE"
-DETECTORS="LID"
+# DETECTORS="LID"
 
 # DETECTORS="InputPFS LayerPFS"
 
@@ -53,13 +55,13 @@ DETECTORS="LID"
 # EPSILONS="8./255. 4./255. 2./255. 1./255. 0.5/255."
 EPSILONS="8./255."
 
-# CLF="RF"
+CLF="RF"
 # CLF="LR"
 # CLF="SVC"
 # CLF="cuSVC"
 # CLF="IF"
 
-CLF="LR RF"
+# CLF="LR RF"
 
 IMAGENET32CLASSES="25 50 100 250 1000"
 # NRSAMPLES="300 500 1000 1200 1500 2000" # only at detectadversarialslayer
@@ -338,9 +340,9 @@ detectadversarialslayer ()
 }
 
 # printn
-genereratecleandata
-attacks
-extractcharacteristics
+# genereratecleandata
+# attacks
+# extractcharacteristics
 detectadversarials
 
 # extractcharacteristicslayer

@@ -3,9 +3,10 @@
 CLF="RF"
 
 RUNS="1 2 3"
+# RUNS="1"
 
 for run in $RUNS; do
-
+#     ## Random Forest
     python attack_transfer.py --attack fgsm --attack_eval bim --detector LID --clf "$CLF"   --run_nr  "$run"
     python attack_transfer.py --attack fgsm --attack_eval pgd --detector LID --clf "$CLF"   --run_nr  "$run"
     python attack_transfer.py --attack fgsm --attack_eval std --detector LID --clf "$CLF"   --run_nr  "$run"
@@ -21,11 +22,11 @@ for run in $RUNS; do
     python attack_transfer.py --attack pgd  --attack_eval std  --detector LID --clf "$CLF"  --run_nr  "$run" 
     python attack_transfer.py --attack pgd  --attack_eval df   --detector LID --clf "$CLF"  --run_nr  "$run" 
     python attack_transfer.py --attack pgd  --attack_eval cw   --detector LID --clf "$CLF"  --run_nr  "$run" 
-    python attack_transfer.py --attack std  --attack_eval fgsm  --detector LID --clf "$CLF" --run_nr  "$run"  
-    python attack_transfer.py --attack std  --attack_eval bim  --detector LID  --clf "$CLF" --run_nr  "$run"  
-    python attack_transfer.py --attack std  --attack_eval pgd  --detector LID  --clf "$CLF" --run_nr  "$run"  
-    python attack_transfer.py --attack std  --attack_eval df  --detector LID   --clf "$CLF" --run_nr  "$run"  
-    python attack_transfer.py --attack std  --attack_eval cw  --detector LID   --clf "$CLF" --run_nr  "$run"  
+    python attack_transfer.py --attack std    --attack_eval fgsm  --detector LID  --clf "$CLF" --run_nr  "$run"  
+    python attack_transfer.py --attack std    --attack_eval bim   --detector LID  --clf "$CLF" --run_nr  "$run"  
+    python attack_transfer.py --attack std    --attack_eval pgd   --detector LID  --clf "$CLF" --run_nr  "$run"  
+    python attack_transfer.py --attack std    --attack_eval df    --detector LID  --clf "$CLF" --run_nr  "$run"  
+    python attack_transfer.py --attack std    --attack_eval cw    --detector LID  --clf "$CLF" --run_nr  "$run"  
     python attack_transfer.py --attack df   --attack_eval fgsm  --detector LID --clf "$CLF" --run_nr  "$run"  
     python attack_transfer.py --attack df   --attack_eval bim  --detector LID  --clf "$CLF" --run_nr  "$run"  
     python attack_transfer.py --attack df   --attack_eval pgd  --detector LID  --clf "$CLF" --run_nr  "$run"  
@@ -36,8 +37,6 @@ for run in $RUNS; do
     python attack_transfer.py --attack cw   --attack_eval pgd  --detector LID --clf "$CLF"  --run_nr  "$run"  
     python attack_transfer.py --attack cw   --attack_eval std  --detector LID --clf "$CLF"  --run_nr  "$run"  
     python attack_transfer.py --attack cw   --attack_eval df  --detector LID --clf "$CLF"   --run_nr  "$run"  
-
-
 
     python attack_transfer.py --attack fgsm --net cif10vgg --attack_eval bim --detector LID --clf "$CLF"   --run_nr  "$run" 
     python attack_transfer.py --attack fgsm --net cif10vgg --attack_eval pgd --detector LID --clf "$CLF"   --run_nr  "$run" 
@@ -110,32 +109,34 @@ for run in $RUNS; do
     python attack_transfer.py --attack fgsm --net cif100vgg --num_classes 100 --attack_eval cw  --detector LID --clf "$CLF"   --run_nr  "$run"
     python attack_transfer.py --attack bim  --net cif100vgg --num_classes 100 --attack_eval fgsm --detector LID --clf "$CLF"  --run_nr  "$run" 
     python attack_transfer.py --attack bim  --net cif100vgg --num_classes 100 --attack_eval pgd  --detector LID --clf "$CLF"  --run_nr  "$run" 
-#     python attack_transfer.py --attack bim  --net cif100vgg --num_classes 100 --attack_eval std  --detector LID --clf "$CLF"  --run_nr  "$run" 
-#     python attack_transfer.py --attack bim  --net cif100vgg --num_classes 100 --attack_eval df   --detector LID --clf "$CLF"  --run_nr  "$run" 
-#     python attack_transfer.py --attack bim  --net cif100vgg --num_classes 100 --attack_eval cw   --detector LID --clf "$CLF"  --run_nr  "$run" 
-#     python attack_transfer.py --attack pgd  --net cif100vgg --num_classes 100 --attack_eval fgsm --detector LID --clf "$CLF"  --run_nr  "$run" 
-#     python attack_transfer.py --attack pgd  --net cif100vgg --num_classes 100 --attack_eval bim  --detector LID --clf "$CLF"  --run_nr  "$run" 
-#     python attack_transfer.py --attack pgd  --net cif100vgg --num_classes 100 --attack_eval std  --detector LID --clf "$CLF"  --run_nr  "$run" 
-#     python attack_transfer.py --attack pgd  --net cif100vgg --num_classes 100 --attack_eval df   --detector LID --clf "$CLF"  --run_nr  "$run" 
-#     python attack_transfer.py --attack pgd  --net cif100vgg --num_classes 100 --attack_eval cw   --detector LID --clf "$CLF"  --run_nr  "$run" 
-#     python attack_transfer.py --attack std  --net cif100vgg --num_classes 100 --attack_eval fgsm  --detector LID --clf "$CLF" --run_nr  "$run" 
-#     python attack_transfer.py --attack std  --net cif100vgg --num_classes 100 --attack_eval bim  --detector LID  --clf "$CLF" --run_nr  "$run" 
-#     python attack_transfer.py --attack std  --net cif100vgg --num_classes 100 --attack_eval pgd  --detector LID  --clf "$CLF" --run_nr  "$run" 
-#     python attack_transfer.py --attack std  --net cif100vgg --num_classes 100 --attack_eval df  --detector LID   --clf "$CLF" --run_nr  "$run" 
-#     python attack_transfer.py --attack std  --net cif100vgg --num_classes 100 --attack_eval cw  --detector LID   --clf "$CLF" --run_nr  "$run" 
-#     python attack_transfer.py --attack df   --net cif100vgg --num_classes 100 --attack_eval fgsm  --detector LID --clf "$CLF" --run_nr  "$run" 
-#     python attack_transfer.py --attack df   --net cif100vgg --num_classes 100 --attack_eval bim  --detector LID  --clf "$CLF" --run_nr  "$run" 
-#     python attack_transfer.py --attack df   --net cif100vgg --num_classes 100 --attack_eval pgd  --detector LID  --clf "$CLF" --run_nr  "$run" 
-#     python attack_transfer.py --attack df   --net cif100vgg --num_classes 100 --attack_eval std  --detector LID  --clf "$CLF" --run_nr  "$run" 
-#     python attack_transfer.py --attack df   --net cif100vgg --num_classes 100 --attack_eval cw  --detector LID   --clf "$CLF" --run_nr  "$run" 
-#     python attack_transfer.py --attack cw   --net cif100vgg --num_classes 100 --attack_eval fgsm  --detector LID --clf "$CLF" --run_nr  "$run" 
-#     python attack_transfer.py --attack cw   --net cif100vgg --num_classes 100 --attack_eval bim  --detector LID --clf "$CLF"  --run_nr  "$run" 
-#     python attack_transfer.py --attack cw   --net cif100vgg --num_classes 100 --attack_eval pgd  --detector LID --clf "$CLF"  --run_nr  "$run" 
-#     python attack_transfer.py --attack cw   --net cif100vgg --num_classes 100 --attack_eval std  --detector LID --clf "$CLF"  --run_nr  "$run" 
-#     python attack_transfer.py --attack cw   --net cif100vgg --num_classes 100 --attack_eval df  --detector LID --clf "$CLF"   --run_nr  "$run"
+    python attack_transfer.py --attack bim  --net cif100vgg --num_classes 100 --attack_eval std  --detector LID --clf "$CLF"  --run_nr  "$run" 
+    python attack_transfer.py --attack bim  --net cif100vgg --num_classes 100 --attack_eval df   --detector LID --clf "$CLF"  --run_nr  "$run" 
+    python attack_transfer.py --attack bim  --net cif100vgg --num_classes 100 --attack_eval cw   --detector LID --clf "$CLF"  --run_nr  "$run" 
+    python attack_transfer.py --attack pgd  --net cif100vgg --num_classes 100 --attack_eval fgsm --detector LID --clf "$CLF"  --run_nr  "$run" 
+    python attack_transfer.py --attack pgd  --net cif100vgg --num_classes 100 --attack_eval bim  --detector LID --clf "$CLF"  --run_nr  "$run" 
+    python attack_transfer.py --attack pgd  --net cif100vgg --num_classes 100 --attack_eval std  --detector LID --clf "$CLF"  --run_nr  "$run" 
+    python attack_transfer.py --attack pgd  --net cif100vgg --num_classes 100 --attack_eval df   --detector LID --clf "$CLF"  --run_nr  "$run" 
+    python attack_transfer.py --attack pgd  --net cif100vgg --num_classes 100 --attack_eval cw   --detector LID --clf "$CLF"  --run_nr  "$run" 
+    python attack_transfer.py --attack std  --net cif100vgg --num_classes 100 --attack_eval fgsm  --detector LID --clf "$CLF" --run_nr  "$run" 
+    python attack_transfer.py --attack std  --net cif100vgg --num_classes 100 --attack_eval bim  --detector LID  --clf "$CLF" --run_nr  "$run" 
+    python attack_transfer.py --attack std  --net cif100vgg --num_classes 100 --attack_eval pgd  --detector LID  --clf "$CLF" --run_nr  "$run" 
+    python attack_transfer.py --attack std  --net cif100vgg --num_classes 100 --attack_eval df  --detector LID   --clf "$CLF" --run_nr  "$run" 
+    python attack_transfer.py --attack std  --net cif100vgg --num_classes 100 --attack_eval cw  --detector LID   --clf "$CLF" --run_nr  "$run" 
+    python attack_transfer.py --attack df   --net cif100vgg --num_classes 100 --attack_eval fgsm  --detector LID --clf "$CLF" --run_nr  "$run" 
+    python attack_transfer.py --attack df   --net cif100vgg --num_classes 100 --attack_eval bim  --detector LID  --clf "$CLF" --run_nr  "$run" 
+    python attack_transfer.py --attack df   --net cif100vgg --num_classes 100 --attack_eval pgd  --detector LID  --clf "$CLF" --run_nr  "$run" 
+    python attack_transfer.py --attack df   --net cif100vgg --num_classes 100 --attack_eval std  --detector LID  --clf "$CLF" --run_nr  "$run" 
+    python attack_transfer.py --attack df   --net cif100vgg --num_classes 100 --attack_eval cw  --detector LID   --clf "$CLF" --run_nr  "$run" 
+    python attack_transfer.py --attack cw   --net cif100vgg --num_classes 100 --attack_eval fgsm  --detector LID --clf "$CLF" --run_nr  "$run" 
+    python attack_transfer.py --attack cw   --net cif100vgg --num_classes 100 --attack_eval bim  --detector LID --clf "$CLF"  --run_nr  "$run" 
+    python attack_transfer.py --attack cw   --net cif100vgg --num_classes 100 --attack_eval pgd  --detector LID --clf "$CLF"  --run_nr  "$run" 
+    python attack_transfer.py --attack cw   --net cif100vgg --num_classes 100 --attack_eval std  --detector LID --clf "$CLF"  --run_nr  "$run" 
+    python attack_transfer.py --attack cw   --net cif100vgg --num_classes 100 --attack_eval df  --detector LID --clf "$CLF"   --run_nr  "$run"
+done
 
-# done
+# python attack_transfer.py --attack cw   --net cif100vgg --num_classes 100 --attack_eval bim  --detector LID --clf LR   --run_nr  3
+# python attack_transfer.py --attack cw   --net cif100vgg --num_classes 100 --attack_eval pgd  --detector LID --clf LR   --run_nr  3
+# python attack_transfer.py --attack cw   --net cif100vgg --num_classes 100 --attack_eval df  --detector LID --clf LR   --run_nr  3
 
+# python attack_transfer.py --attack fgsm   --net cif10 --num_classes 10 --attack_eval bim  --detector LID --clf LR   --run_nr  1
 
-
-    python attack_transfer.py --attack std  --attack_eval cw  --detector LID   --clf RF --run_nr  1

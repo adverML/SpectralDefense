@@ -122,7 +122,7 @@ def calc_features(args, logger, model, images,  layers, get_layer_feature_maps, 
         image = normalize_images(image, args)
         
         inputimage = []
-        if not args.net == 'cif10vgg' and not args.net == 'cif100vgg':
+        if not args.net == 'cif10vgg' and not args.net == 'cif10vggnew' and not args.net == 'cif100vgg':
             if args.take_inputimage_off:
                 inputimage = [image]
             
