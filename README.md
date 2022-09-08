@@ -1,6 +1,6 @@
 # Spectral Defense
 
-![teaser](one_image_analysis.png)
+# ![teaser](one_image_analysis.png)
 
 
 This code belongs to the papers: 
