@@ -85,7 +85,6 @@ save_args_to_file(args, output_path_dir)
 logger = Logger(output_path_dir + os.sep + 'log.txt')
 log_header(logger, args, output_path_dir, sys) # './data/extracted_characteristics/imagenet32/wrn_28_10/std/8_255/LayerMFS'
 
-# import pdb; pdb.set_trace()
 
 # load characteristics
 logger.log('INFO: Loading characteristics...')
@@ -105,7 +104,6 @@ characteristics     = torch.load(characteristics_path)[:args.wanted_samples]
 characteristics_adv = torch.load(characteristics_advs_path)[:args.wanted_samples]
 
 if args.detector == 'LIDNOISE':
-    # import pdb; pdb.set_trace()
     characteristics     = characteristics.reshape(     (characteristics.shape[0], -1) )
     characteristics_adv = characteristics_adv.reshape( (characteristics_adv.shape[0], -1) )
 
@@ -133,8 +131,7 @@ clf = torch.load(classifier_pth)
 logger.log( "train score: " + str( clf.score(X_train, y_train) ) )
 logger.log( "test score:  " + str( clf.score(X_test, y_test) )   )
 
-# X_test = np.concatenate((X_train, X_test))
-# y_test = np.concatenate((y_train, y_test))
+
 
 logger.log('Evaluating classifier...')
 y_hat =    clf.predict(X_test)
@@ -143,5 +140,3 @@ y_hat_pr = clf.predict_proba(X_test)[:, 1]
 y_train_pr = clf.predict_proba(X_train)[:, 1]
 
 show_results_attack_transfer(args, logger, y_test, y_hat, y_hat_pr, X_train, y_train, y_train_pr)
-
-# show_results(args, logger, y_test, y_hat, y_hat_pr)

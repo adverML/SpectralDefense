@@ -30,7 +30,6 @@ def generate_data_labels(logger, args, model, loader, wanted_samples, output_pat
             total += labels.size(0)
 
             correct += (predicted == labels).sum().item()
-            # import pdb; pdb.set_trace()
             
             if (predicted == labels):
                 clean_dataset.append([images.cpu(), labels.cpu()])

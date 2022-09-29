@@ -1,7 +1,5 @@
 #!/usr/bin/env python3
 
-# cif10 4 titan because of extract char --> 4x45GB RAM
-
 print('Load modules...')
 import numpy as np
 import pdb
@@ -45,8 +43,6 @@ from attack.helper_attacks import check_args_attack
 
 from defenses.helper_layer_extr import get_whitebox_features, test_activation, dfknn_layer
 from defenses.Spectral import blackbox_mfs_analysis, blackbox_mfs_pfs, whitebox_mfs_pfs
-# from nnif import get_knn_layers, calc_all_ranks_and_dists, append_suffix
-# NORMALIZED = settings.NORMALIZED
 
 #processing the arguments
 parser = argparse.ArgumentParser()
@@ -76,25 +72,19 @@ parser.add_argument("--eps",       default='8./255.',    help=settings.HELP_AA_E
 # parser.add_argument("--eps",       default='1./255.',  help=settings.HELP_AA_EPSILONS)
 # parser.add_argument("--eps",       default='0.5/255.', help=settings.HELP_AA_EPSILONS)
 
-parser.add_argument("--k_lid",       default='-1',  type=int, help="k for LID")
-parser.add_argument("--k_lid_bs",    default='100',  type=int, help="k for LID")
-
 # Frequency Analysis
 parser.add_argument("--fr", default='8',  type=int, help="InputMFS frequency analysis")
 parser.add_argument("--to", default='24', type=int, help="InputMFS frequency analysis")
 
 args = parser.parse_args()
 args = check_args_attack(args, version=True)
-# max frequency
-# if args.max_freq_on or ((args.net == 'cif100' or args.net == 'cif100vgg' or args.net == 'cif100rn34') and (args.attack=='cw' or args.attack=='df')):
-#     args.max_freq_on = True
 
 # output path dir
 output_path_dir = create_dir_extracted_characteristics(args, root='./data/extracted_characteristics/', wait_input=False)
 
 save_args_to_file(args, output_path_dir)
 logger = Logger(output_path_dir + os.sep + 'log.txt')
-log_header(logger, args, output_path_dir, sys) # './data/extracted_characteristics/imagenet32/wrn_28_10/std/8_255/LayerMFS'
+log_header(logger, args, output_path_dir, sys) 
 
 # input data
 input_path_dir = create_dir_attacks(args, root='./data/attacks/')
@@ -125,7 +115,7 @@ model = model.eval()
 layer_nr = int(args.nr)
 logger.log("INFO: layer_nr " + str(layer_nr) ) 
 
-if args.detector in ['LayerMFS',  'LayerPFS',  'LID',  'LIDNOISE', 'LIDLESSLayers', 'LIDLESSLayersFeatures', 'Mahalanobis']:
+if args.detector in ['LayerMFS',  'LayerPFS',  'LID', 'Mahalanobis']:
     get_layer_feature_maps, layers, model, activation = get_whitebox_features(args, logger, model)
 elif args.detector == 'DkNN':
     layers = dfknn_layer(args, model)
@@ -148,61 +138,16 @@ elif args.detector == 'LayerPFS':
     characteristics, characteristics_adv = whitebox_mfs_pfs(args, logger, model, images, images_advs, layers, get_layer_feature_maps, activation, typ='PFS')
 
 ####### LID section
-elif args.detector in ['LID', 'LIDLESSLayers']:
+elif args.detector in ['LID']:
     from defenses.Lid import lid
     characteristics, characteristics_adv = lid(args, model, images, images_advs, layers, get_layer_feature_maps, activation)
-
-####### LIDNOISE 
-elif args.detector in ['LIDNOISE', 'LIDLESSLayersFeatures']:
-# elif args.detector == 'LID':
-    from defenses.Lid import lidnoise
-    characteristics,  characteristics_noise, characteristics_adv, lid_tmp_k, lid_tmp_k_noise, lid_tmp_k_adv = lidnoise(args, model, images, images_advs, layers, get_layer_feature_maps, activation)
-    
-    lid_tmp_k_path, lid_tmp_k_advs_path = create_save_dir_path(output_path_dir, args, filename='lid_tmp_k' )
-    noise_path, _                       = create_save_dir_path(output_path_dir, args, filename='lid_tmp_k_noise' )
-    characteristics_noise_path, _       = create_save_dir_path(output_path_dir, args, filename='characteristics_noise' )
-    
-    torch.save(lid_tmp_k,        lid_tmp_k_path,       pickle_protocol=4)
-    torch.save(lid_tmp_k_noise,  noise_path,           pickle_protocol=4)
-    torch.save(lid_tmp_k_adv,    lid_tmp_k_advs_path,  pickle_protocol=4)
-    
-    torch.save(characteristics_noise, characteristics_noise_path, pickle_protocol=4)
-    # characteristics      = np.concatenate((characteristics, characteristics_noise), axis=0)
-    
 
 ####### Mahalanobis section
 elif args.detector == 'Mahalanobis':
     
-    if args.net == 'imagenet':
-        pass
-        # model = torch.nn.DataParallel(model, device_ids=[0, 1, 2, 4])
-    
     from defenses.DeepMahalanobis import deep_mahalanobis
     characteristics, characteristics_adv = deep_mahalanobis(args, logger, model, images, images_advs, layers, get_layer_feature_maps, activation, output_path_dir)
 
-####### Dknn section
-elif args.detector == 'DkNN':
-    import defenses.DeepkNN as DkNN
-    characteristics, characteristics_adv = DkNN.calculate(args, model, images, images_advs, layers, 0, 0)
-    # DkNN.calculate_test(args, model, images, images_advs, layers, 0, 0)
-
-####### CDVAE
-elif args.detector == 'CDVAE':
-    pass
-
-
-####### HP Filter
-elif args.detector == 'HPF':
-    import defenses.HPF as HPF
-    characteristics, characteristics_adv = HPF.high_pass_filter(args, images, images_advs)
-
-####### Trust section
-elif args.detector == 'Trust':
-    pass
-
-####### ODD section https://github.com/jayaram-r/adversarial-detection
-elif args.detector == 'ODD':
-    pass
 
 else:
     logger.log('ERR: unknown detector')

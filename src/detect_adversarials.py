@@ -70,7 +70,7 @@ args = check_args_attack(args, version=True, net_normalization=False, img_size=F
 output_path_dir = create_dir_detection(args, root='./data/detection/')
 save_args_to_file(args, output_path_dir)
 logger = Logger(output_path_dir + os.sep + 'log.txt')
-log_header(logger, args, output_path_dir, sys) # './data/extracted_characteristics/imagenet32/wrn_28_10/std/8_255/LayerMFS'
+log_header(logger, args, output_path_dir, sys)
 
 # load characteristics
 logger.log('INFO: Loading characteristics...')
@@ -85,41 +85,9 @@ if args.lid_k_log:
 characteristics_path, characteristics_advs_path = create_save_dir_path(extracted_characteristics_path, args, filename=filename)
 
 
-if  args.detector in  ['VAEInputPFS', 'VAEInputMFS']:
-    pfs = ''
-    if args.detector == 'VAEInputPFS':
-        pfs = '_PFS'
-
-    if args.attack == 'fgsm':
-        characteristics_path      = '/home/lorenzp/adversialml/src/submodules/CD-VAE/detection/data/cd-vae-1/resnet_cifar10/fft_clean_data_resnet_cifar10_FGSM{}.pth'.format(pfs)
-        characteristics_advs_path = '/home/lorenzp/adversialml/src/submodules/CD-VAE/detection/data/cd-vae-1/resnet_cifar10/fft_adv_data_resnet_cifar10_FGSM{}.pth'.format(pfs)
-    elif args.attack == 'cw':
-        characteristics_path      = '/home/lorenzp/adversialml/src/submodules/CD-VAE/detection/data/cd-vae-1/resnet_cifar10/fft_clean_data_resnet_cifar10_CW{}.pth'.format(pfs)
-        characteristics_advs_path = '/home/lorenzp/adversialml/src/submodules/CD-VAE/detection/data/cd-vae-1/resnet_cifar10/fft_adv_data_resnet_cifar10_CW{}.pth'.format(pfs)
-    elif args.attack == 'bim':
-        characteristics_path      = '/home/lorenzp/adversialml/src/submodules/CD-VAE/detection/data/cd-vae-1/resnet_cifar10/fft_clean_data_resnet_cifar10_BIM{}.pth'.format(pfs)
-        characteristics_advs_path = '/home/lorenzp/adversialml/src/submodules/CD-VAE/detection/data/cd-vae-1/resnet_cifar10/fft_adv_data_resnet_cifar10_BIM{}.pth'.format(pfs)
-    elif args.attack == 'pgd':
-        characteristics_path      = '/home/lorenzp/adversialml/src/submodules/CD-VAE/detection/data/cd-vae-1/resnet_cifar10/fft_clean_data_resnet_cifar10_PGD{}.pth'.format(pfs)
-        characteristics_advs_path = '/home/lorenzp/adversialml/src/submodules/CD-VAE/detection/data/cd-vae-1/resnet_cifar10/fft_adv_data_resnet_cifar10_PGD{}.pth'.format(pfs)
-        print("characteristics_path: ", len(characteristics_path))
-
 logger.log("characteristics_path:      " + str(characteristics_path) )
-# logger.log("characteristics_advs_path: " + str(characteristics_path) )
-
-# import pdb; pdb.set_trace()
-
-s = 1
-if args.detector in ['LIDNOISE', 'LIDLESSLayersFeatures'] and not args.fixed_clean_data:
-    s = 2
-    characteristics     = torch.load(characteristics_path)[:args.wanted_samples * s]
-    characteristics_adv = torch.load(characteristics_advs_path)[:args.wanted_samples]
-    
-    if args.lid_k_log:
-        characteristics     = characteristics.reshape((characteristics.shape[0], -1))
-        characteristics_adv = characteristics_adv.reshape((characteristics_adv.shape[0], -1))
         
-elif args.fixed_clean_data: 
+if args.fixed_clean_data: 
     characteristics     = torch.load(characteristics_path)
     index = np.random.choice(characteristics.shape[0], args.wanted_samples, replace=False)  
     characteristics = characteristics[index]
@@ -131,7 +99,6 @@ else:
 characteristics     = np.asarray(characteristics)
 characteristics_adv = np.asarray(characteristics_adv)
     
-# import pdb; pdb.set_trace()
     
 shape = np.shape(characteristics)
 logger.log("shape: " + str(shape))
@@ -143,26 +110,17 @@ if args.detector in ['LIDNOISE', 'LIDLESSLayersFeatures'] and not args.lid_k_log
     X_train, y_train, X_test, y_test = split_data(args, logger, characteristics, characteristics_adv, noise=True, test_size=0.1, random_state=42)
 else:
     X_train, y_train, X_test, y_test = split_data(args, logger, characteristics, characteristics_adv, noise=False, test_size=0.1, random_state=42)
-    
-# X_train, y_train, X_test, y_test = split_data(args, logger, characteristics, characteristics_adv[:2000], k=shape[0], test_size=0.2, random_state=42)
-# scaler  = MinMaxScaler().fit(X_train)
-# X_train = scaler.transform(X_train)
-# X_test  = scaler.transform(X_test)
+
 
 if args.pca_features > 0:
     logger.log('Apply PCA decomposition. Reducing number of features from {} to {}'.format(X_train.shape[1], args.pca_features))
     from sklearn.decomposition import PCA # https://scikit-learn.org/stable/modules/generated/sklearn.decomposition.PCA.html?highlight=pca#sklearn.decomposition.PCA
     pca = PCA(n_components=args.pca_features, svd_solver='auto', random_state=32)
-    # pca = PCA(n_components='mle', svd_solver='auto', random_state=32)
 
     pca.fit(X_train)
     X_train = pca.transform(X_train)
     X_test  = pca.transform(X_test)
-    # import pdb; pdb.set_trace()
-    # # X_train = torch.from_numpy(X_train)
-    # from submodules.PyTorch.TorchPCA import PCA
-    # y = PCA.Decomposition(X_train.cuda(), k=1)
-    # import pdb; pdb.set_trace()
+
 
 #train classifier
 logger.log('Training classifier...')
@@ -186,8 +144,6 @@ if settings.SAVE_CLASSIFIER:
     
     clf = save_load_clf(args, clf,   output_path_dir=output_path_dir)
 else: # load clf
-    # import pdb; pdb.set_trace()
     clf = save_load_clf(args, clf=0, output_path_dir=output_path_dir)
-    # compute_time_sample(args, clf, X_train, y_train, X_test, y_test)
 
 show_results(args, logger, y_test, y_hat, y_hat_pr)

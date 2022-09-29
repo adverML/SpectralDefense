@@ -87,14 +87,14 @@ if __name__ == '__main__':
         clean_data   = generate_data_labels(logger, args, model, test_loader, args.wanted_samples_te, output_path_dir, option=2)
 
         torch.save(clean_data,   output_path_dir + os.sep + 'clean_data',   pickle_protocol=4)
-        # torch.save(clean_te_labels, output_path_dir + os.sep + 'clean_labels', pickle_protocol=4)
+
 
     if args.wanted_samples_tr > 0:
         train_loader   = load_train_set(args, shuffle=args.shuffle_off, clean_data=True, preprocessing=None)
         clean_tr_data  = generate_data_labels(logger, args, model, train_loader, args.wanted_samples_tr, output_path_dir, option=0)
 
         torch.save(clean_tr_data,   output_path_dir + os.sep + 'clean_tr_data',   pickle_protocol=4)
-        # torch.save(clean_tr_labels, output_path_dir + os.sep + 'clean_tr_labels', pickle_protocol=4)
+
 
         clean_tr_data = []; #clean_tr_labels = []
 
@@ -103,6 +103,6 @@ if __name__ == '__main__':
         clean_te_data = generate_data_labels(logger, args, model, test_loader, args.wanted_samples_te, output_path_dir, option=1)
 
         torch.save(clean_te_data,   output_path_dir + os.sep + 'clean_te_data',   pickle_protocol=4)
-        # torch.save(clean_te_labels, output_path_dir + os.sep + 'clean_te_labels', pickle_protocol=4)
+
 
         clean_te_data = []; #clean_te_labels = []

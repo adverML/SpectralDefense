@@ -8,11 +8,8 @@ import pdb
 
 import pandas as pd 
 from PIL import Image
-# import pickle
 
-# from skimage import io
 import matplotlib.pyplot as plt
-# import numpy
 import torch
 from torch.utils.data import Dataset
 
