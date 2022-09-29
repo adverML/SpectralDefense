@@ -287,8 +287,6 @@ def create_advs(logger, args, model, output_path_dir, clean_data_path, wanted_sa
             _, predicted = torch.max(outputs.data, 1)
             predicted_adv = predicted.flatten()
 
-            # import pdb; pdb.set_trace()
-
             for idx, suc in enumerate(success):
                 counter = counter + 1
                 if suc:

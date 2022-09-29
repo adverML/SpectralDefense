@@ -22,11 +22,7 @@ def calculate_fourier_spectrum(im, typ='MFS'):
     if typ == 'MFS':
         fourier_spectrum = np.abs(fft)
     elif typ == 'PFS':
-        fourier_spectrum = np.abs(np.angle(fft))
-
-    # import pdb; pdb.set_trace()
-    # fourier_spectrum = np.max(fourier_spectrum, axis=1)
-    # fourier_spectrum = np.mean(fourier_spectrum, axis=1)        
+        fourier_spectrum = np.abs(np.angle(fft))   
     
     return fourier_spectrum
 
@@ -37,14 +33,11 @@ def calculate_fourier_spectrum_analysis(im, fr, to, typ='MFS'):
     im = im.data.numpy() #[3, 32, 32]
 
     fft = np.fft.fft2(im)
-    # fft = np.max( fft, axis=0 )
-    # fft = np.mean( fft, axis=0 )
     if typ == 'MFS':
         fourier_spectrum = np.abs(fft)
     elif typ == 'PFS':
         fourier_spectrum = np.abs(np.angle(fft))
-
-    # fourier_spectrum =  np.fft.fftshift(fourier_spectrum)       
+   
     return fourier_spectrum[:, fr:to, fr:to]
 
 

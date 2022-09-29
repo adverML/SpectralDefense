@@ -1,14 +1,17 @@
 #!/bin/bash
 
+# SD_blackbox = InputMFS
+# SD_whitebox = LayerMFS
+
 function log_msg {
   echo  "`date` $@"
 }
-
 
 DATASETS="cif10"
 RUNS="1"
 ATTACKS="fgsm bim pgd std df cw"
 DETECTORS="InputMFS LayerMFS"
+# DETECTORS="LID Mahalanobis"
 EPSILONS="8./255."
 
 CLF="RF"
@@ -21,7 +24,6 @@ WANTEDSAMPLES="2000"
 ALLSAMPLES="5000"
 # NRSAMPLES="1500" # detect
 NRSAMPLES="2000" # detect
-
 
 DATASETSLAYERNR="cif100 cif10vgg cif100vgg"
 ATTACKSLAYERNR="df"
@@ -291,9 +293,9 @@ detectadversarialslayer ()
 }
 
 # printn
-# genereratecleandata
-# attacks
-# extractcharacteristics
+genereratecleandata
+attacks
+extractcharacteristics
 detectadversarials
 
 # extractcharacteristicslayer
