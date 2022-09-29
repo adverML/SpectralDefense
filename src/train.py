@@ -241,15 +241,6 @@ if __name__ == '__main__':
         elif settings.IMAGE_SIZE == '512x512': 
             recent_folder = '512x512_4_0.001_Smiling_Friday_14_May_2021_21h_51m_59s'
 
-    #     # recent_folder = most_recent_folder(os.path.join(settings.CHECKPOINT_PATH, args.net), fmt=settings.DATE_FORMAT)
-
-    #     pdb.set_trace()
-    #     recent_folder = most_recent_folder( settings.CHECKPOINT_PATH, fmt=settings.DATE_FORMAT)
-
-    #     if not recent_folder:
-    #         raise Exception('no recent folder were found')
-    #     # checkpoint_path = os.path.join(settings.CHECKPOINT_PATH)
-    #     checkpoint_path = os.path.join(settings.CHECKPOINT_PATH, args.net, recent_folder)
     else:
         # import pdb; pdb.set_trace()
         checkpoint_path = os.path.join(settings.CHECKPOINT_PATH, args.net, settings.IMAGE_SIZE + '_' + str(args.b) + '_' + \

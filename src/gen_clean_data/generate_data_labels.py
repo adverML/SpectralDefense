@@ -34,8 +34,6 @@ def generate_data_labels(logger, args, model, loader, wanted_samples, output_pat
             
             if (predicted == labels):
                 clean_dataset.append([images.cpu(), labels.cpu()])
-                # clean_dataset.append(images.cpu().numpy())
-                # clean_labels.append(labels.cpu().numpy())
 
             i = i + 1
             if i % 500 == 0:

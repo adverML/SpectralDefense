@@ -4,67 +4,18 @@ function log_msg {
   echo  "`date` $@"
 }
 
-# DATASETS=(cif10 cif10vgg cif100 cif100vgg imagenet imagenet32 imagenet64 imagenet128 celebaHQ32 celebaHQ64 celebaHQ128)
-# DATASETS="cif10 cif10vgg  cif100 cif100vgg cif10_rb"
+
 DATASETS="cif10"
-# DATASETS="cif100vgg"
-# DATASETS="cif10rn34 cif100rn34"
-# DATASETS="cif10"
-# DATASETS="cif10_rb"
-# DATASETS="cif10 cif10vgg cif10_rb cif10rn34 cif100 cif100vgg cif100rn34"
-
-# DATASETS="cif10_rb"
-# DATASETS="cif10vgg"
-
-# DATASETS="imagenet64 celebaHQ64 imagenet128 celebaHQ128"
 RUNS="1"
-
-# RUNS="30 31 32"
-
-
-# ATTACKS="fgsm bim pgd std df cw"
-# ATTACKS="l2pgd linfdf"
-# ATTACKS="linfdf l2pgd"
-# ATTACKS="linfdf"
-
-# ATTACKS="gauss bim std df"
 ATTACKS="fgsm bim pgd std df cw"
-
-# ATTACKS="fgsm bim pgd std df cw"
-
-# ATTACKS="apgd-ce apgd-t fab-t square"
-# ATTACKS="aa+"
-
-# DETECTORS="InputMFS LayerMFS"
-# DETECTORS="InputMFS LayerMFS"
-# DETECTORS="InputPFS LayerPFS"
-
-# DETECTORS="LID Mahalanobis"
 DETECTORS="InputMFS LayerMFS"
-
-# DETECTORS="LayerMFS"
-# DETECTORS="InputMFS LayerMFS"
-# DETECTORS="Mahalanobis"
-# DETECTORS="HPF"
-# DETECTORS="LIDNOISE"
-# DETECTORS="LID"
-
-# DETECTORS="InputPFS LayerPFS"
-
-# DETECTORS="DkNN"
-# EPSILONS="8./255. 4./255. 2./255. 1./255. 0.5/255."
 EPSILONS="8./255."
 
 CLF="RF"
 # CLF="LR"
-# CLF="SVC"
-# CLF="cuSVC"
-# CLF="IF"
-
 # CLF="LR RF"
 
 IMAGENET32CLASSES="25 50 100 250 1000"
-# NRSAMPLES="300 500 1000 1200 1500 2000" # only at detectadversarialslayer
 
 WANTEDSAMPLES="2000"
 ALLSAMPLES="5000"

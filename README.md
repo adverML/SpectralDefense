@@ -104,6 +104,19 @@ To get the weights for all networks for CIFAR-10 and CIFAR-100, ImageNet and Cel
 
 In case of troubles, adapt the paths in `conf/global_settings.py`. You are welcome to create an issue on Github.
 
+
+
+
+#### Pipeline
+
+Automatic execution scripts are stored in path `src/scripts/`. As an example on CIFAR10: `src/scripts/cif/cif.sh`. In the following sub-chapters, we explain the following steps:
+
+ - Clean data generation (`generate_clean_data.py`)
+ - Attack clean data (`attack.py`)
+ - Extract characteristics (`extract_characteristics.py`)
+ - Detection (`detect_adversarials.py`)
+
+
 ### Data generation
 
 Train the VGG16 on CIFAR-10:
@@ -119,7 +132,9 @@ $ python train_cif100.py
 <!-- Copy the pth-files from the checkpoint directory to /models/vgg_cif10.pth or /models/vgg_cif100.pth. In detail: For cif10 go to the folder ./checkpoints; copy the file ckpt.pth to the folder ./models and rename it vgg_cif10.pth. For cif100: Go to the folder ./checkpoints/vgg16; select a folder; copy a file *.pth to the folder ./models and rename it vgg_cif100.pth. -->
 
 
-The following skript will download the CIFAR-10/100 dataset and extract the CIFAR10/100 (imagenet32, imagenet64, imagenet128, celebAHQ32, ...) images, which are correctly classified by the network by running. Use --net cif10 for CIFAR-10 and --net cif100 for CIFAR-100
+
+
+The following skript will download the CIFAR-10/100 dataset and extract the CIFAR10/100 (imagenet32, imagenet64, imagenet128, celebAHQ32, ...) images, which are correctly classified by the network by running. Use --net cif10 for CIFAR10 and --net cif100 for CIFAR100
 ```sh
 $ # python generate_clean_data.py -h  // for help
 $ python generate_clean_data.py --net cif10

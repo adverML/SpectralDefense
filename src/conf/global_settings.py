@@ -7,7 +7,6 @@ extended by Peter Lorenz
 import os
 from datetime import datetime
 
-
 SHOW_DEBUG = True
 
 #tensorboard log dir
@@ -46,20 +45,12 @@ CELEBA_CSV_PATH = 'submodules/pytorch_ipynb/cnn/celeba-' # test_
 # Weight Paths
 MNIST_CKPT = '/home/lorenzp/adversialml/src/pytorch-classification/checkpoint/model_best.pth.tar'
 
-# CIF10_CKPT  = '/home/lorenzp/adversialml/src/pytorch-CelebAHQ/checkpoint/wideresnet_2810_per_percentage/wide_resnet_ckpt_     50.48.pth'
-# CIF10_CKPT  = '/home/lorenzp/adversialml/src/pytorch-CelebAHQ/checkpoint/wideresnet_2810_per_percentage/wide_resnet_ckpt_     59.77.pth'
-# CIF10_CKPT  = '/home/lorenzp/adversialml/src/pytorch-CelebAHQ/checkpoint/wideresnet_2810_per_percentage/wide_resnet_ckpt_     70.13.pth'
-# CIF10_CKPT  = '/home/lorenzp/adversialml/src/pytorch-CelebAHQ/checkpoint/wideresnet_2810_per_percentage/wide_resnet_ckpt_     80.76.pth'
-
 CIF10_CKPT      = '/home/lorenzp/wide-resnet.pytorch/checkpoint_wrn/cifar10/wide-resnet-28x10_2022-04-17_14:12:50.pt' 
-#CIF10_CKPT      =  './submodules/pytorch-CelebAHQ/checkpoint/wideresnet_2810/wide_resnet_ckpt.pth'
-# CIF10_M_CKPT    = '/home/lorenzp/adversialml/src/src/submodules/CD-VAE/pretrained/wide_resnet.pth'
 CIF10_M_CKPT    =  './submodules/CD-VAE/pretrained/cd-vae-1.pth'
 
 CIF100_CKPT     = '/home/lorenzp/wide-resnet.pytorch/checkpoint_wrn/cifar100/wide-resnet-28x10_2022-04-17_14:13:21.pt'
-# CIF100_CKPT     = './submodules/pytorch-classification/checkpoints/cifar100/wideresnet2810/model_best.pth.tar'
+
 CIF10VGG_CKPT   = './checkpoint/vgg16/vgg_cif10.pth'
-# CIF10VGG_CKPT_NEW   = '/home/scratch/adversarialml/pytorch-vgg-cifar10/save_vgg16/checkpoint_299-save.tar'
 CIF10VGG_CKPT_NEW   = '/home/scratch/adversarialml/pytorch-vgg-cifar10/save_vgg16/checkpoint_299.tar'
 CIF100VGG_CKPT  = './checkpoint/vgg16/vgg_cif100.pth'
 CIF10RN34_CKPT  = './submodules/pytorch-CelebAHQ/checkpoint/resnet_34/resnet_34_ckpt_test.pth'
@@ -78,15 +69,9 @@ IMAGENET32_CKPT_10     = './submodules/pytorch-classification/checkpoints/imagen
 IMAGENET64_CKPT_1000   = './submodules/pytorch-classification/checkpoints/imagenet64/wideresent2810/model_best.pth.tar'
 IMAGENET128_CKPT_1000  = './submodules/pytorch-classification/checkpoints/imagenet128/wideresent2810/model_best.pth.tar'
 
-# CELEBAHQ32_CKPT_2   =  './checkpoint/wrn2810/32x32_64_0.1_Smiling_a100_Wednesday_18_August_2021_16h_02m_16s/wrn2810-175-best.pth' # '/home/lorenzp/adversialml/src/src/checkpoint/wrn2810/32x32_64_0.1_Smiling_a100_Wednesday_18_August_2021_16h_02m_16s/wrn2810-175-best.pth'
 CELEBAHQ32_CKPT_2   = './submodules/pytorch-CelebAHQ/checkpoint/wrn2810/32x32_128_0.1_Smiling_Thursday_30_September_2021_11h_01m_19s/wrn2810-161-best.pth'
 CELEBAHQ64_CKPT_2   = './submodules/pytorch-CelebAHQ/checkpoint/wrn2810/64x64_128_0.1_Smiling_Thursday_30_September_2021_15h_35m_05s/wrn2810-141-best.pth'
-CELEBAHQ128_CKPT_2  = './submodules/pytorch-CelebAHQ/checkpoint/wrn2810/128x128_64_0.1_Smiling_Thursday_30_September_2021_15h_37m_55s/wrn2810-140-best.pth' # '/home/lorenzp/adversialml/src/src/checkpoint/wrn2810/128x128_64_0.1_Smiling_a100_Sunday_22_August_2021_13h_01m_15s/wrn2810-80-regular.pth'
-
-# CELEBAHQ32_CKPT_4   = './submodules/pytorch-CelebAHQ/checkpoint/wrn2810/32x32_128_0.1_Hair_Color_Saturday_05_February_2022_22h_47m_31s/wrn2810-9-0.512_perecent.pth'
-# CELEBAHQ32_CKPT_4   = './submodules/pytorch-CelebAHQ/checkpoint/wrn2810/32x32_128_0.1_Hair_Color_Saturday_05_February_2022_22h_47m_31s/wrn2810-25-     0.590_perecent.pth'
-# CELEBAHQ32_CKPT_4   = './submodules/pytorch-CelebAHQ/checkpoint/wrn2810/32x32_128_0.1_Hair_Color_Saturday_05_February_2022_22h_47m_31s/wrn2810-7-     0.705_perecent.pth'
-# CELEBAHQ32_CKPT_4   = './submodules/pytorch-CelebAHQ/checkpoint/wrn2810/32x32_128_0.1_Hair_Color_Saturday_05_February_2022_22h_47m_31s/wrn2810-41-     0.802_perecent.pth'
+CELEBAHQ128_CKPT_2  = './submodules/pytorch-CelebAHQ/checkpoint/wrn2810/128x128_64_0.1_Smiling_Thursday_30_September_2021_15h_37m_55s/wrn2810-140-best.pth'
 
 CELEBAHQ32_CKPT_4   = './submodules/pytorch-CelebAHQ/checkpoint/wrn2810/32x32_64_0.1_Hair_Color_Thursday_04_November_2021_14h_35m_14s/wrn2810-200-best.pth'
 CELEBAHQ64_CKPT_4   = './submodules/pytorch-CelebAHQ/checkpoint/wrn2810/64x64_64_0.1_Hair_Color_Thursday_04_November_2021_17h_25m_16s/wrn2810-171-best.pth'
@@ -124,43 +109,32 @@ TRAINERR = False
 SELECTED_COL = ['asr', 'auc',  'f1',  'acc', 'pre', 'tpr', 'tnr', 'fnr', 'asrd']
 
 # ATTACKS_LIST = ['gauss', 'fgsm', 'bim', 'pgd', 'std', 'df',  'cw']
-
 # ATTACKS_LIST = ['fgsm', 'bim', 'pgd', 'cw', ] 
 # ATTACKS_LIST = ['std', 'df'] 
 # ATTACKS_LIST = ['cw'] 
 # ATTACKS_LIST = ['fgsm'] 
-
-# ATTACKS_LIST = ['fgsm', 'bim', 'std', 'pgd', 'df', 'cw'] 
+ATTACKS_LIST = ['fgsm', 'bim', 'std', 'pgd', 'df', 'cw'] 
 
 # ATTACKS_LIST = ['apgd-ce', 'apgd-t', 'fab-t', 'square']
-ATTACKS_LIST = [ 'apgd-ce' ]
-# ATTACKS_LIST = [ 'apgd-cel2' ]
+# ATTACKS_LIST = ['apgd-ce']
+# ATTACKS_LIST = ['apgd-cel2']
 
 # DETECTOR_LIST_LAYERS = ['InputMFS', 'LayerMFS', 'LID', 'Mahalanobis']
 # DETECTOR_LIST_LAYERS = ['InputPFS', 'LayerPFS']
-# DETECTOR_LIST_LAYERS = ['LayerMFS', 'LayerPFS']
+DETECTOR_LIST_LAYERS = ['LayerMFS', 'LayerPFS']
 # DETECTOR_LIST_LAYERS = ['LayerMFS', 'LayerPFS']
 
 
 # DETECTOR_LIST = [ 'LID', 'Mahalanobis' ]
-# DETECTOR_LIST = [ 'InputMFS', 'LayerMFS' ]
+DETECTOR_LIST = [ 'InputMFS', 'LayerMFS' ]
 # DETECTOR_LIST = ['InputPFS', 'InputMFS', 'LayerPFS', 'LayerMFS', 'LID', 'Mahalanobis']
-# DETECTOR_LIST = ['InputMFS', 'LayerMFS', 'LID', 'Mahalanobis']
-# DETECTOR_LIST = ['LayerMFS', 'LayerPFS']
-# DETECTOR_LIST = ['InputMFS', 'LayerMFS']
-# DETECTOR_LIST = ['DkNN']
-# DETECTOR_LIST = [ 'InputMFS' ]
-DETECTOR_LIST = ['LIDNOISE']
 # DETECTOR_LIST = ['LID']
-
 
 # DETECTOR_LIST = ['HPF']
 # DETECTOR_LIST = ['LayerMFS']
-
-# DETECTOR_LIST = ['LID', 'LIDNOISE']
 # DETECTOR_LIST = ['LID', 'Mahalanobis']
 
 CLF = ['LR', 'RF']
-# CLF = ['LR', 'RF']
+
 
 SAVE_CLASSIFIER = True

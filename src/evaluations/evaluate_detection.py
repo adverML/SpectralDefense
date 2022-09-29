@@ -19,10 +19,6 @@ sys.path.append('./')
 
 # import datetime
 from conf import settings
-# import csv
-# import argparse
-
-
 
 def check_eps(str_val):
     if '8./255.' in str_val:
