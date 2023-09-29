@@ -91,9 +91,9 @@ def lid_newest(args, model, images, images_advs, layers, get_layer_feature_maps,
         lid_batch_adv   = np.zeros(shape=(n_feed, lid_dim))
         batch= torch.Tensor(n_feed, shape[0], shape[1], shape[2])
         batch_adv= torch.Tensor(n_feed, shape[0], shape[1], shape[2])
-        for j in range(n_feed):
-            batch[j,:,:,:] = images[j]
-            batch_adv[j,:,:,:] = images_advs[j]
+        
+        batch     = torch.stack(images[start:end])
+        batch_adv = torch.stack(images_advs[start:end])
 
         batch = normalize_images(batch, args)
         batch_adv = normalize_images(batch_adv, args)
