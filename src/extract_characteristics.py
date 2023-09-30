@@ -49,11 +49,13 @@ from defenses.Spectral import blackbox_mfs_analysis, blackbox_mfs_pfs, whitebox_
 
 #processing the arguments
 parser = argparse.ArgumentParser()
-parser.add_argument("--run_nr",          default=1,              type=int, help="Which run should be taken?")
+parser.add_argument("--run_nr",          default=1,               type=int, help="Which run should be taken?")
 
 parser.add_argument("--attack"  ,        default='fgsm',          help=settings.HELP_ATTACK)
 parser.add_argument("--detector",        default='LayerMFS',      help=settings.HELP_DETECTOR)
-parser.add_argument('--take_inputimage_off', action='store_false', help='Input Images for feature extraction. Default = True')
+#parser.add_argument('--take_inputimage_off', action='store_false', help='Input Images for feature extraction. Default = True')
+parser.add_argument("--take_inputimage_off", default=False, type=lambda x: x == 'True', help="Input Images for feature extraction. Default = True")
+
 parser.add_argument("--max_freq_on",     action='store_true',     help="Switch max frequency normalization on")
 
 parser.add_argument("--net",            default='cif10',          help=settings.HELP_NET)
@@ -64,8 +66,8 @@ parser.add_argument("--num_classes",    default='10',   type=int, help=settings.
 
 #parser.add_argument("--shuffle_on",        action='store_true', help="Switch shuffle data on")
 parser.add_argument("--shuffle_on", default=False, type=lambda x: x == 'True', help="Switch shuffle data on")
-parser.add_argument('--net_normalization', action='store_true', help=settings.HELP_NET_NORMALIZATION)
-parser.add_argument("--fixed_clean_data",  action='store_true', help="Fixed Clean Data")
+parser.add_argument("--net_normalization", default=False, type=lambda x: x == 'True', help=settings.HELP_NET_NORMALIZATION)
+parser.add_argument("--fixed_clean_data", default=False, type=lambda x: x == 'True', help="Fixed Clean Data")
 
 parser.add_argument('--version',    type=str, default='standard')
 # parser.add_argument("--eps",       default='-1',       help=settings.HELP_AA_EPSILONS) # to activate the best layers
@@ -127,7 +129,7 @@ model = model.eval()
 layer_nr = int(args.nr)
 logger.log("INFO: layer_nr " + str(layer_nr) ) 
 
-if args.detector in ['LayerMFS',  'LayerPFS',  'LID',  'LIDNOISE', 'LIDLESSLayers', 'LIDLESSLayersFeatures', 'FFTmultiLIDMFS', 'FFTmultiLIDPFS', 'Mahalanobis']:
+if args.detector in ['LayerMFS',  'LayerPFS',  'LID',  'LIDNOISE', 'FFTmultiLIDMFS', 'FFTmultiLIDPFS', 'LIDLESSLayers', 'LIDLESSLayersFeatures', 'Mahalanobis']:
     get_layer_feature_maps, layers, model, activation = get_whitebox_features(args, logger, model)
 elif args.detector == 'DkNN':
     layers = dfknn_layer(args, model)
@@ -154,9 +156,13 @@ elif args.detector in ['LID']:
     from defenses.Lid import lid
     characteristics, characteristics_adv = lid(args, model, images, images_advs, layers, get_layer_feature_maps, activation)
 
+####### multiLID section
+elif args.detector in ['multiLID', 'FFTmultiLIDMFS', 'FFTmultiLIDPFS']:
+    from defenses.Lid import multilid
+    characteristics, characteristics_adv = multilid(args, model, images, images_advs, layers, get_layer_feature_maps, activation)
 
 ####### LIDNOISE 
-elif args.detector in ['LIDNOISE', 'LIDLESSLayersFeatures', 'FFTmultiLIDMFS', 'FFTmultiLIDPFS']:
+elif args.detector in ['LIDNOISE', 'LIDLESSLayersFeatures']:
     from defenses.Lid import lidnoise
     # characteristics,  characteristics_noise, characteristics_adv, lid_tmp_k, lid_tmp_k_noise, lid_tmp_k_adv = lidnoise(args, model, images, images_advs, layers, get_layer_feature_maps, activation)
     lid_tmp_k,  lid_tmp_k_adv, lid_tmp_k_adv, characteristics, lid_tmp_k_noise, characteristics_adv = lidnoise(args, model, images, images_advs, layers, get_layer_feature_maps, activation)
@@ -168,6 +174,7 @@ elif args.detector in ['LIDNOISE', 'LIDLESSLayersFeatures', 'FFTmultiLIDMFS', 'F
     torch.save(lid_tmp_k,        lid_tmp_k_path,       pickle_protocol=4)
     torch.save(lid_tmp_k_noise,  noise_path,           pickle_protocol=4)
     torch.save(lid_tmp_k_adv,    lid_tmp_k_advs_path,  pickle_protocol=4)
+
 
 
 ####### Mahalanobis section

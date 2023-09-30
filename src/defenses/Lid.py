@@ -227,6 +227,108 @@ def calcFFTmultiLID(args, features):
 
     return fft_features
 
+
+
+def multiLID(args, model, images, images_advs, layers, get_layer_feature_maps, activation):
+    
+    act_layers = layers
+    k, batch_size = get_k(args)
+
+    def mle_batch(data, batch, k):
+        
+        data  = np.asarray(data,  dtype=np.float32)
+        batch = np.asarray(batch, dtype=np.float32)
+        k = min(k, len(data)-1)
+        
+        f  = lambda v: - k / np.sum( np.log(v/v[-1]) )
+        f2 = lambda v: - np.log( v / v[-1] )
+                
+        dist = cdist(batch, data)
+        dist = np.apply_along_axis(np.sort, axis=1, arr=dist)[:,1:k+1]
+        sol = np.apply_along_axis(f, axis=1, arr=dist)
+        
+        a2 = np.apply_along_axis(f2, axis=1, arr=dist)
+        
+        return sol, a2
+
+
+    lid_dim = len(act_layers)
+    shape = np.shape(images[0])
+    
+    def estimate(i_batch):
+        start = i_batch * batch_size
+        end = np.minimum(len(images), (i_batch + 1) * batch_size)
+        n_feed = end - start
+        
+        lid_batch       = np.zeros(shape=(1))
+        lid_batch_noise = np.zeros(shape=(1))
+        lid_batch_adv   = np.zeros(shape=(1))
+        
+        lid_batch_k       = np.zeros(shape=(n_feed, k, lid_dim))
+        lid_batch_noise_k = np.zeros(shape=(1))
+        lid_batch_adv_k   = np.zeros(shape=(n_feed, k, lid_dim))
+        
+        batch       = torch.Tensor(n_feed, shape[0], shape[1], shape[2])
+        batch_noise = torch.Tensor(1)
+        batch_adv   = torch.Tensor(n_feed, shape[0], shape[1], shape[2])
+        
+        print(n_feed, start, end)
+        batch     = torch.stack(images[start:end])
+        batch_adv = torch.stack(images_advs[start:end])
+
+        batch       = normalize_images(batch, args)
+        batch_adv   = normalize_images(batch_adv, args)
+
+        if not args.net == 'cif10vgg' and not args.net == 'cif100vgg':
+            feat_img = model(batch.to(args.device))
+            X_act = get_layer_feature_maps(activation, layers)
+            if args.detector in ["FFTmultiLIDMFS", "FFTmultiLIDPFS"]:
+                X_act = calcFFTmultiLID(args, X_act)
+
+            feat_adv = model(batch_adv.to(args.device))
+            X_adv_act = get_layer_feature_maps(activation, layers)
+            if args.detector in ["FFTmultiLIDMFS", "FFTmultiLIDPFS"]:
+                X_adv_act = calcFFTmultiLID(args, X_adv_act)
+        else:
+            X_act       = get_layer_feature_maps(batch.to(args.device), layers)
+            X_adv_act   = get_layer_feature_maps(batch_adv.to(args.device), layers)
+        
+        for i in range(lid_dim):
+            X_act[i]       = np.asarray(X_act[i].cpu().detach().numpy()    , dtype=np.float32).reshape((n_feed, -1) )
+            X_adv_act[i]   = np.asarray(X_adv_act[i].cpu().detach().numpy(), dtype=np.float32).reshape((n_feed, -1) )
+            
+            tmp_batch, tmp_k              = mle_batch( X_act[i], X_act[i]      , k=k )
+            tmp_batch_adv, tmp_k_adv      = mle_batch( X_act[i], X_adv_act[i]  , k=k )   
+            
+            h1, w1    = tmp_k.shape
+            h2, w2, _ = lid_batch_k.shape
+            
+            if h1 == h2 and w1 == w2: 
+                lid_batch_k[:, :, i]       = tmp_k
+                lid_batch_adv_k[:, :, i]   = tmp_k_adv
+            
+        return lid_batch_k, lid_batch_adv_k
+
+    lids = []
+    lid_noise = []
+    lids_adv = []
+    lid_tmp_k = []
+    lid_tmp_k_noise = [] 
+    lid_tmp_k_adv = []
+    
+    n_batches = int(np.ceil(len(images) / float(batch_size)))
+    
+    for i_batch in tqdm(range(n_batches)):
+        lid_batch, lid_batch_adv = estimate(i_batch)
+        lids.extend(lid_batch)
+        lids_adv.extend(lid_batch_adv)
+    
+    characteristics     = np.asarray(lids, dtype=np.float32)
+    characteristics_adv = np.asarray(lids_adv, dtype=np.float32)
+    
+    return characteristics, characteristics_adv
+
+
 def lidnoise(args, model, images, images_advs, layers, get_layer_feature_maps, activation):
     
     act_layers = layers

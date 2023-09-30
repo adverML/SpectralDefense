@@ -62,7 +62,7 @@ def extract_features(logger, args, model, input_path_dir, output_path_dir, wante
     number_images = len(images)
     logger.log("INFO: eps " + str(args.eps) + " INFO: nr_img " + str(number_images) + " INFO: Wanted Samples: " + str(wanted_samples) )
 
-    if args.detector == 'LayerMFS' or args.detector == 'LayerPFS' or args.detector == 'LID' or args.detector == 'LIDNOISE' or args.detector == 'Mahalanobis':
+    if args.detector in ['LayerMFS', 'LayerPFS', 'LID', 'LIDNOISE', 'multiLID', 'FFTmultiLIDMFS', 'FFTmultiLIDPFS', 'Mahalanobis']:
         get_layer_feature_maps, layers, model, activation = get_whitebox_features(args, logger, model)
     elif args.detector == 'DkNN':
         layers = dfknn_layer(args, model)
@@ -94,6 +94,12 @@ def extract_features(logger, args, model, input_path_dir, output_path_dir, wante
         from defenses.Lid import lidnoise
         characteristics, characteristics_adv = lidnoise(args, model, images, images_advs, layers, get_layer_feature_maps, activation)
 
+    ####### multiLID 
+    elif args.detector in ['multiLID', 'FFTmultiLIDMFS', 'FFTmultiLIDPFS']:
+        from defenses.Lid import multiLID
+        characteristics, characteristics_adv = multiLID(args, model, images, images_advs, layers, get_layer_feature_maps, activation)
+
+
     ####### Mahalanobis section
     elif args.detector == 'Mahalanobis':
         from defenses.DeepMahalanobis import deep_mahalanobis
@@ -124,7 +130,7 @@ if __name__ == '__main__':
 
     parser.add_argument("--attack"  ,        default='fgsm',          help=settings.HELP_ATTACK)
     parser.add_argument("--detector",        default='LayerMFS',      help=settings.HELP_DETECTOR)
-    parser.add_argument('--take_inputimage_off', action='store_false',    help='Input Images for feature extraction. Default = True')
+    parser.add_argument("--take_inputimage_off", default=False, type=lambda x: x == 'True', help="Input Images for feature extraction. Default = True")
     parser.add_argument("--max_freq_on",     action='store_true',      help="Switch max frequency normalization on")
 
     parser.add_argument("--net",            default='cif10',          help=settings.HELP_NET)

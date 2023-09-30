@@ -1,8 +1,8 @@
 {
     "net": "cif10",
-    "run": 1,
-    "att": "pgd",
-    "detector": "LIDNOISE",
+    "run_nr": 1,
+    "attack": "pgd",
+    "detector": "multiLID",
     "eps": "8./255.",
     "clf": "LR",
     "wanted_samples": 2000

@@ -1,11 +1,11 @@
 {
     "net": "cif10",
-    "run": 50,
-    "att": "pgd",
+    "run_nr": 50,
+    "attack": "pgd",
     "detector": "FFTmultiLIDMFS",
     "eps": "8./255.",
     "clf": "RF",
-    "NRWANTEDSAMPLES": 0,
-    "WANTEDSAMPLES_TR": 44000,
-    "WANTEDSAMPLES_TE": 8600
+    "wanted_samples": 0,
+    "wanted_samples_tr": 44000,
+    "wanted_samples_te": 8600
 }

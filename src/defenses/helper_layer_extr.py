@@ -79,7 +79,7 @@ def get_whitebox_features(args, logger, model):
         if args.net == 'cif100vgg' and (args.attack == 'cw' or args.attack == 'df'):
             layers = [42]
             
-        if args.detector in ['LID', 'LIDNOISE',  'FFTmultiLIDMFS', 'FFTmultiLIDPFS', 'Mahalanobis']:
+        if args.detector in ['LID', 'LIDNOISE', 'multiLID', 'FFTmultiLIDMFS', 'FFTmultiLIDPFS', 'Mahalanobis']:
             layers = [2,5,9,12,16,19,22,26,29,32,36,39,42]
 
         if layer_nr == 0:
@@ -317,7 +317,7 @@ def get_whitebox_features(args, logger, model):
             model.conv4.register_forward_hook( get_activation('seq_conv4') )
             model.relu.register_forward_hook(get_activation('relu'))
         
-        if not args.nr == -1 or args.detector in ['LID', 'LIDNOISE',  'FFTmultiLIDMFS', 'FFTmultiLIDPFS', 'Mahalanobis']:
+        if not args.nr == -1 or args.detector in ['LID', 'LIDNOISE', 'multiLID', 'FFTmultiLIDMFS', 'FFTmultiLIDPFS', 'Mahalanobis']:
             model.conv2[0].residual[1].register_forward_hook( get_activation('conv2_0_relu_1') )
             model.conv2[0].residual[4].register_forward_hook( get_activation('conv2_0_relu_4') )
 
@@ -427,7 +427,7 @@ def get_whitebox_features(args, logger, model):
             ]
         
 
-        if args.detector in ['LID', 'LIDNOISE', 'FFTmultiLIDMFS', 'FFTmultiLIDPFS']:
+        if args.detector in ['LID', 'LIDNOISE', 'multiLID', 'FFTmultiLIDMFS', 'FFTmultiLIDPFS']:
             
             layers = [
                 'conv2_0_relu_4',  'conv2_1_relu_4',  'conv2_2_relu_4', 'conv2_3_relu_4', 'conv3_0_relu_4', 'conv3_1_relu_4', 
@@ -480,7 +480,7 @@ def get_whitebox_features(args, logger, model):
                 act_val_list.append(act_val)
             return act_val_list
 
-        if not args.nr == -1 or args.detector in ['LID', 'LIDNOISE',  'FFTmultiLIDMFS', 'FFTmultiLIDPFS', 'Mahalanobis']:
+        if not args.nr == -1 or args.detector in ['LID', 'LIDNOISE', 'multiLID',  'FFTmultiLIDMFS', 'FFTmultiLIDPFS', 'Mahalanobis']:
             model.relu.register_forward_hook( get_activation('0_relu') )
 
             model.layer1[0].relu.register_forward_hook( get_activation('layer_1_0_relu') )
@@ -529,7 +529,7 @@ def get_whitebox_features(args, logger, model):
                 'layer_3_0_relu', 'layer_3_1_relu',  'layer_3_2_relu',  'layer_3_3_relu', 'layer_3_4_relu',  'layer_3_5_relu',  'layer_4_0_relu',  'layer_4_1_relu',   'layer_4_2_relu'
             ]
         
-        if args.detector in ['LIDNOISE', 'FFTmultiLIDMFS', 'FFTmultiLIDPFS']:
+        if args.detector in ['LIDNOISE', 'multiLID', 'FFTmultiLIDMFS', 'FFTmultiLIDPFS']:
             layers = [
              '0_relu', 'layer_1_0_relu', 'layer_1_1_relu', 'layer_1_2_relu', 'layer_2_0_relu', 'layer_2_1_relu', 'layer_2_2_relu',  'layer_2_3_relu', 
                 'layer_3_0_relu', 'layer_3_1_relu',  'layer_3_2_relu',  'layer_3_3_relu', 'layer_3_4_relu',  'layer_3_5_relu',  'layer_4_0_relu',  'layer_4_1_relu',   'layer_4_2_relu'

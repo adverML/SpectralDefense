@@ -60,8 +60,9 @@ if __name__ == '__main__':
     #parser.add_argument("--shuffle_off",    action='store_false',   help="Switch shuffle data off")        # shuffle is switched on by default
     parser.add_argument("--shuffle",        default=True,  type=lambda x: x == 'True', help="Switch shuffle data off")
 
-    parser.add_argument('--net_normalization', action='store_false', help=settings.HELP_NET_NORMALIZATION) # net normalization is switched on by default
-    
+    #parser.add_argument('--net_normalization', action='store_false', help=settings.HELP_NET_NORMALIZATION) 
+    parser.add_argument("--net_normalization", default=True, type=lambda x: x == 'True', help="net normalization is switched on by default")
+
     parser.add_argument("--load_json", default="", help="Load settings from file in json format. Command line options override values in file.")
     parser.add_argument("--save_json", default="", help="Save settings to file in json format. Ignored in json file")
 

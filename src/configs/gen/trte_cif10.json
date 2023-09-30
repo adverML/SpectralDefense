@@ -2,7 +2,6 @@
     "net": "cif10",
     "run_nr": 50,
     "attack": "pgd",
-    "detector": "LIDNOISE",
     "eps": "8./255.",
     "wanted_samples": 0,
     "wanted_samples_tr": 50000,

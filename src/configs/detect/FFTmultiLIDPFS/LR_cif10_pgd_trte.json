@@ -1,7 +1,7 @@
 {
     "net": "cif10",
-    "run": 50,
-    "att": "pgd",
+    "run_nr": 50,
+    "attack": "pgd",
     "detector": "FFTmultiLIDPFS",
     "eps": "8./255.",
     "clf": "LR",
