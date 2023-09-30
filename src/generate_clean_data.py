@@ -69,7 +69,6 @@ if __name__ == '__main__':
     args = parser.parse_args()
     args = args_handling(args, parser, cfg_gen_path)
     print_args(args)
-    args = check_args_attack(args, version=True)
     
     output_path_dir = create_dir_clean_data(args, root='./data/clean_data/')
 
