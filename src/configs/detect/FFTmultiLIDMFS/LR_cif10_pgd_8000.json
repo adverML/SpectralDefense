@@ -1,0 +1,9 @@
+{
+    "net": "cif10",
+    "run": 15,
+    "att": "pgd",
+    "detector": "FFTmultiLIDMFS",
+    "eps": "8./255.",
+    "clf": "LR",
+    "NRWANTEDSAMPLES": 8000
+}

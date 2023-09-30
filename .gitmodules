@@ -1,0 +1,31 @@
+[submodule "src/src/submodules/autoattack"]
+	path = src/submodules/autoattack
+	url = git@github.com:adverML/auto-attack.git
+	branch = forspectraldefense
+[submodule "src/src/submodules/pytorch-classification"]
+	path = src/submodules/pytorch-classification
+	url = https://github.com/bearpaw/pytorch-classification
+[submodule "src/src/submodules/adversarial-detection"]
+	path = src/submodules/adversarial-detection
+	url = git@github.com:adverML/adversarial-detection.git
+[submodule "src/src/submodules/knn-defense"]
+	path = src/submodules/knn-defense
+	url = https://github.com/chawins/knn-defense.git
+[submodule "src/src/submodules/Imagenet32_Scripts"]
+	path = src/submodules/Imagenet32_Scripts
+	url = git@github.com:computeVision/Imagenet32_Scripts.git
+[submodule "src/src/submodules/ImageNet128_Scripts"]
+	path = src/submodules/ImageNet128_Scripts
+	url = git@github.com:adverML/ImageNet128_Scripts.git
+[submodule "src/src/submodules/ImageNet-Downsampled"]
+	path = src/submodules/ImageNet-Downsampled
+	url = git@github.com:computeVision/ImageNet-Downsampled.git
+[submodule "src/src/submodules/CD-VAE"]
+	path = src/submodules/CD-VAE
+	url = git@github.com:adverML/CD-VAE.git
+[submodule "src/submodules/adaptive-auto-attack"]
+	path = src/submodules/adaptive-auto-attack
+	url = git@github.com:adverML/adaptive-auto-attack.git
+[submodule "src/submodules/PyTorch"]
+	path = src/submodules/PyTorch
+	url = git@github.com:adverML/PyTorch.git
