@@ -7,16 +7,17 @@ from sklearn.preprocessing import MinMaxScaler, StandardScaler
 
 
 def LR(args, logger, X_train, y_train, X_test, y_test):
-    
-    # penalty {‘l1", ‘l2", ‘elasticnet", ‘none"}, default="l2"
-    # dual bool, default=False --> primal
-    # tolf loat, default=1e-4
-    # C float, default=1.0
-    # intercept_scaling float, default=1
-    # class_weightdict or ‘balanced", default=None
-    # random_stateint, RandomState instance, default=None
-    # max_iter int, default=100
-    # multi_class{‘auto", ‘ovr", ‘multinomial"}, default="auto"
+    """
+    penalty {‘l1", ‘l2", ‘elasticnet", ‘none"}, default="l2"
+    dual bool, default=False --> primal
+    tolf loat, default=1e-4
+    C float, default=1.0
+    intercept_scaling float, default=1
+    class_weightdict or ‘balanced", default=None
+    random_stateint, RandomState instance, default=None
+    max_iter int, default=100
+    multi_class{‘auto", ‘ovr", ‘multinomial"}, default="auto"
+    """
     
     # scaler  = MinMaxScaler().fit(X_train)
     scaler  = StandardScaler().fit(X_train)

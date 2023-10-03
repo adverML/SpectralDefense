@@ -4,7 +4,7 @@
     "attack": "pgd",
     "detector": "multiLID",
     "eps": "8./255.",
-    "clf": "LR",
+    "clf": "RF",
     "wanted_samples": 0,
     "wanted_samples_tr": 44000,
     "wanted_samples_te": 8600

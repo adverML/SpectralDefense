@@ -77,9 +77,6 @@ def show_results(args, logger, y_actual, y_hat, y_hat_pr):
     TNR = TN / (TN + FP) 
     FNR = FN / (FN + TP)
     
-    # ACC = (TP + TN) / (TP + TN + FP + FN)
-    # PRECISION = TP / (TP + FP)
-    # F1 =  2 * (PRECISION*TPR) / (PRECISION+TPR)
     ACC = accuracy_score(y_actual, y_hat)
     PRECISION = precision_score(y_actual, y_hat)
     F1 = f1_score(y_actual, y_hat)
@@ -103,24 +100,17 @@ def show_results(args, logger, y_actual, y_hat, y_hat_pr):
     logger.log('TPR:  ' +  str(tpr) ) # True positive rate/adversarial detetcion rate/recall/sensitivity is 
     logger.log('TNR:  ' +  str(tnr) ) # True negative rate/normal detetcion rate/selectivity is 
     logger.log('FNR:  ' +  str(fnr) )
-    
-    # logger.log('RES:, AUC, ACC, PRE, TPR, F1, FNR' )
-    # logger.log('RES:,' + str(auc) + ',' + str(acc) + ',' + str(pre) + ',' + str(tpr) + ',' + str(f1) + ',' + str(fnr) )
 
     logger.log('RES:, AUC, ACC, PRE, TPR, F1, TNR, FNR' )
     logger.log('RES:,' + str(auc) + ',' + str(acc) + ',' + str(pre) + ',' + str(tpr) + ',' + str(f1) + ',' + str(tnr) + ',' + str(fnr) )
-    # logger.log('RES:, AUC, ACC, PRE, TPR, F1, FNR' )
-    # logger.log('RES:,' + str(auc) + ',' + str(acc) + ',' + str(pre) + ',' + str(tpr) + ',' + str(f1) + ',' + str(fnr) )
     logger.log('<==========================================================================')
 
 
 def show_results_attack_transfer(args, logger, y_actual, y_hat, y_hat_pr, X_train, y_train, y_train_pr):
     
-    print("len(y_actual)",   len(y_actual) )
+    print("len(y_actual)", len(y_actual) )
     print("len(y_hat)",    len(y_hat) )
     print("len(y_hat_pr)", len(y_hat_pr) )
-    
-    # other(y_hat, y_hat_pr, y_actual)
     
     fpr, tpr, thresholds = roc_curve(y_train, y_train_pr)
     optimal_idx = np.argmax(tpr - fpr)
@@ -128,28 +118,17 @@ def show_results_attack_transfer(args, logger, y_actual, y_hat, y_hat_pr, X_trai
     optimal_threshold = thresholds[optimal_idx]
     y_hat = np.ones_like(y_hat)
     y_hat[np.where( y_hat_pr[y_hat_pr <= optimal_threshold] )]  = 0
-    # y_hat[np.where(y_hat_pr[y_hat_pr < optimal_threshold] )] = 0
-    
-    # import pdb; pdb.set_trace()
     
     TP, FP, TN, FN = perf_measure(y_actual, y_hat)
     TPR = TP / (TP + FN)
     TNR = TN / (TN + FP) 
     FNR = FN / (FN + TP)
     
-    # ACC = (TP + TN) / (TP + TN + FP + FN)
-    ACC = accuracy_score(y_actual, y_hat)    
-    # PRECISION = TP / (TP + FP)
-    # PRECISION = precision_score(y_actual, y_hat, average='weighted', labels=np.unique(y_hat_pr))
+    ACC = accuracy_score(y_actual, y_hat)
 
     PRECISION = precision_score(y_actual, y_hat)
     RECALL    = recall_score(y_actual, y_hat)
-    
-    # F1 =  2 * (PRECISION*TPR) / (PRECISION+TPR)
     F1 = f1_score(y_actual, y_hat)
-    
-    # import pdb; pdb.set_trace()
-    # PRECISION = 0.1
 
     if args.clf == 'IF': 
         auc = -1
@@ -172,33 +151,55 @@ def show_results_attack_transfer(args, logger, y_actual, y_hat, y_hat_pr, X_trai
     logger.log('TPR:  ' +  str(tpr) ) # True positive rate/adversarial detetcion rate/recall/sensitivity is 
     logger.log('TNR:  ' +  str(tnr) ) # True negative rate/normal detetcion rate/selectivity is 
     logger.log('FNR:  ' +  str(fnr) )
-    
-    # logger.log('RES:, AUC, ACC, PRE, TPR, F1, FNR' )
-    # logger.log('RES:,' + str(auc) + ',' + str(acc) + ',' + str(pre) + ',' + str(tpr) + ',' + str(f1) + ',' + str(fnr) )
 
     logger.log('RES:, AUC, ACC, PRE, TPR, F1, TNR, FNR' )
     logger.log('RES:,' + str(auc) + ',' + str(acc) + ',' + str(pre) + ',' + str(tpr) + ',' + str(f1) + ',' + str(tnr) + ',' + str(fnr) )
-    # logger.log('RES:, AUC, ACC, PRE, TPR, F1, FNR' )
-    # logger.log('RES:,' + str(auc) + ',' + str(acc) + ',' + str(pre) + ',' + str(tpr) + ',' + str(f1) + ',' + str(fnr) )
     logger.log('<==========================================================================')
     
 
 
 def split_data(args, logger, characteristics, characteristics_adv, noise=False, test_size=0.2, random_state=42):
     
-    shape_adv = np.shape(characteristics_adv)[0]
     shape_char = np.shape(characteristics)[0]
+    shape_adv = np.shape(characteristics_adv)[0]
     
-    # import pdb; pdb.set_trace()
     # adv_X_train_val, adv_X_test, adv_y_train_val, adv_y_actual = train_test_split(characteristics_adv, np.ones(shape_adv),   test_size=test_size, random_state=random_state)
     # b_X_train_val, b_X_test, b_y_train_val, b_y_actual         = train_test_split(characteristics,     np.zeros(shape_char), test_size=test_size, random_state=random_state)
     # adv_X_train, adv_X_val, adv_y_train, adv_y_val             = train_test_split(adv_X_train_val,     adv_y_train_val,      test_size=test_size, random_state=random_state)
     # b_X_train, b_X_val, b_y_train, b_y_val                     = train_test_split(b_X_train_val,       b_y_train_val,        test_size=test_size, random_state=random_state)
+   
+    if args.split_mode == "block":
 
-    adv_X_train_val, adv_X_test, adv_y_train_val, adv_y_test = train_test_split(characteristics_adv, np.ones(shape_adv), test_size=0.2, random_state=42)
-    b_X_train_val, b_X_test, b_y_train_val, b_y_test = train_test_split(characteristics, np.zeros(shape_char), test_size=0.2, random_state=42)
-    adv_X_train, adv_X_val, adv_y_train, adv_y_val = train_test_split(adv_X_train_val, adv_y_train_val, test_size=0.2, random_state=42)
-    b_X_train, b_X_val, b_y_train, b_y_val = train_test_split(b_X_train_val, b_y_train_val, test_size=0.2, random_state=42)
+        y_nor = np.zeros_like(shape_char)
+        y_adv = np.ones_like(shape_adv)
+
+        train_size = 1 - test_size
+        assert(train_size > 0)
+
+        X_train = np.concatenate((characteristics_nor[:train_size], characteristics_adv[:train_size]))
+        y_train = np.concatenate((y_nor[:train_size], y_adv[:train_size]))
+
+        X_test = np.concatenate((characteristics_nor[train_size:], characteristics_adv[train_size:]))
+        y_actual = np.concatenate((y_nor[train_size:], y_nor[train_size:]))
+
+    elif args.split_mode == "random": 
+        adv_X_train_val, adv_X_test, adv_y_train_val, adv_y_test = train_test_split(characteristics_adv, np.ones(shape_adv), test_size=test_size, random_state=random_state)
+        b_X_train_val, b_X_test, b_y_train_val, b_y_test = train_test_split(characteristics, np.zeros(shape_char), test_size=test_size, random_state=random_state)
+        adv_X_train, adv_X_val, adv_y_train, adv_y_val = train_test_split(adv_X_train_val, adv_y_train_val, test_size=test_size, random_state=random_state)
+        b_X_train, b_X_val, b_y_train, b_y_val = train_test_split(b_X_train_val, b_y_train_val, test_size=test_size, random_state=random_state)
+
+        X_train = np.concatenate(( b_X_train,adv_X_train))
+        y_train = np.concatenate(( b_y_train,adv_y_train))
+
+        X_test = np.concatenate(( b_X_test, adv_X_test))
+        y_actual = np.concatenate(( b_y_test,adv_y_test))
+
+        logger.log("b_X_train" + str(b_X_train.shape) )
+        logger.log("adv_X_train" + str(adv_X_train.shape) )
+
+        logger.log("b_X_test" + str(b_X_test.shape) )
+        logger.log("adv_X_test" + str(adv_X_test.shape) )
+
 
     # if not noise:
     #     adv_X_train_val, adv_X_test, adv_y_train_val, adv_y_actual = train_test_split(characteristics_adv, np.ones(shape_adv),   test_size=test_size, random_state=random_state)
@@ -219,19 +220,12 @@ def split_data(args, logger, characteristics, characteristics_adv, noise=False, 
     #     adv_X_train, adv_X_val, adv_y_train, adv_y_val           = train_test_split(adv_X_train_val,     adv_y_train_val,      test_size=test_size, random_state=random_state)
     #     b_X_train, b_X_val, b_y_train, b_y_val                   = train_test_split(b_X_train_val,       b_y_train_val,        test_size=test_size, random_state=random_state)
 
-
     # X_train = np.concatenate(( b_X_train, adv_X_train) )
     # y_train = np.concatenate(( b_y_train, adv_y_train) )
 
     # X_test = np.concatenate( (b_X_test, adv_X_test, b_X_val, adv_X_val) )
     # y_actual = np.concatenate( (b_y_actual, adv_y_actual, b_y_val, adv_y_val) )
     
-    X_train = np.concatenate(( b_X_train,adv_X_train))
-    y_train = np.concatenate(( b_y_train,adv_y_train))
-
-    X_test = np.concatenate(( b_X_test, adv_X_test))
-    y_actual = np.concatenate(( b_y_test,adv_y_test))
-
     # if args.mode == 'test':
     #     X_test = np.concatenate( (b_X_test, adv_X_test) )
     #     y_actual = np.concatenate( (b_y_actual, adv_y_actual) )
@@ -240,12 +234,6 @@ def split_data(args, logger, characteristics, characteristics_adv, noise=False, 
     #     y_actual = np.concatenate( (b_y_val, adv_y_val) )
     # else:
     #     logger.log('Not a valid mode')
-
-    logger.log("b_X_train" + str(b_X_train.shape) )
-    logger.log("adv_X_train" + str(adv_X_train.shape) )
-
-    logger.log("b_X_test" + str(b_X_test.shape) )
-    logger.log("adv_X_test" + str(adv_X_test.shape) )
 
     return X_train, y_train, X_test, y_actual
 
@@ -273,7 +261,6 @@ def compute_time_sample(args, clf, X_train, y_train, X_test, y_actual):
     
     for loop in range(NR_LOOPS + WARM_UP):
         tstart = time.time() * 1000.0
-        # import pdb; pdb.set_trace()
         y_hat = clf.predict(X_test[:nr_samples])
         tend = time.time() * 1000.0
         difference = tend - tstart

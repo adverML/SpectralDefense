@@ -59,7 +59,7 @@ def check_net_normalization(args):
         if not args.attack in (AA_std + AA_plus):
             get_debug_info("Warning: Net normalization must be switched off!  Net normalization is switched off now!")
             args.net_normalization = False
-            
+           
     return args
 
 
@@ -234,7 +234,7 @@ def create_advs(logger, args, model, output_path_dir, clean_data_path, wanted_sa
 
         #setup depending on attack
         if args.attack == 'fgsm':
-            attack = fa.FGSM() #linfs
+            attack = fa.FGSM() # linfs
             epsilons = [epsilon_to_float(args.eps)]
             if args.net == 'mnist':
                 epsilons = [0.3] 

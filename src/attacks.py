@@ -70,7 +70,7 @@ if __name__ == '__main__':
 
     save_args_to_file(args, output_path_dir)
     logger = Logger(output_path_dir + os.sep + 'log.txt')
-    log_header(logger, args, output_path_dir, sys) # './data/attacks/imagenet32/wrn_28_10/fgsm'
+    log_header(logger, args, output_path_dir, sys)
 
     device_name = getdevicename()
 

@@ -53,6 +53,10 @@ parser.add_argument("--pca_features",      default='0',    type=int, help="Numbe
 parser.add_argument("--fixed_clean_data",  action='store_true',      help="Fixed Clean Data")
 parser.add_argument("--lid_k_log",         action='store_true',      help="LID expanded")
 parser.add_argument("--tuning", default=None,  help="randomsearch, gridsearch")
+parser.add_argument("--random_state", default=21,  help="random_state")
+parser.add_argument("--test_size", default=0.3,  help="random_state")
+
+parser.add_argument("--split_mode", default='block', choices=["block", "random"], help="")
 
 parser.add_argument('--version',    type=str, default='standard')
 # parser.add_argument("--eps",   default='-1',     help="epsilon: 4/255, 3/255, 2/255, 1/255, 0.5/255")
@@ -137,7 +141,7 @@ if shape[0] < args.wanted_samples:
 #    X_train, y_train, X_test, y_test = split_data(args, logger, characteristics, characteristics_adv, noise=True, test_size=0.1, random_state=42)
 #else:
 #    X_train, y_train, X_test, y_test = split_data(args, logger, characteristics, characteristics_adv, noise=False, test_size=0.1, random_state=42)
-X_train, y_train, X_test, y_test = split_data(args, logger, characteristics, characteristics_adv, noise=False, test_size=0.2, random_state=42)  
+X_train, y_train, X_test, y_test = split_data(args, logger, characteristics, characteristics_adv, noise=False, test_size=args.test_size, random_state=args.random_state)  
 # X_train, y_train, X_test, y_test = split_data(args, logger, characteristics, characteristics_adv[:2000], k=shape[0], test_size=0.2, random_state=42)
 # scaler  = MinMaxScaler().fit(X_train)
 # X_train = scaler.transform(X_train)

@@ -47,6 +47,7 @@ parser.add_argument("--num_classes",    default='10',   type=int, help=settings.
 parser.add_argument("--clf",            default='LR',             help="Logistic Regression (LR) or Random Forest (RF) or Isolation Forest (IF)")
 parser.add_argument("--trees",          default='300',  type=int, help=settings.HELP_NUM_CLASSES)
 parser.add_argument("--num_iter",       default='100',  type=int, help="LR: Number iteration")
+parser.add_argument("--tuning",         default=None,   help="Tune LR RF parameters")
 
 parser.add_argument('--version',    type=str, default='standard')
 # parser.add_argument("--eps",       default='-1',       help="epsilon: 4/255, 3/255, 2/255, 1/255, 0.5/255")
@@ -127,6 +128,10 @@ if  args.wanted_samples_tr > 0 and args.wanted_samples_te > 0:
     perm_indices_j = np.random.permutation(2*j)
     X_test = np.concatenate( (characteristics_te, characteristics_te_adv) )[perm_indices_j]
     y_test = np.concatenate( ( np.zeros(j), np.ones(j)) )[perm_indices_j]
+
+    if len(X_train.shape) > 2:
+        X_train = X_train.reshape(X_train.shape[0], -1)
+        X_test = X_test.reshape(X_test.shape[0], -1)
 
 #train classifier
 logger.log('Training classifier...')
