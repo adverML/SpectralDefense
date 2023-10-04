@@ -1,5 +1,4 @@
-
-######### LID 
+######### LID
 python  extract_characteristics.py --load_json LID/CIFAR10/wrn2810_fgsm_2000.json
 python  extract_characteristics.py --load_json LID/CIFAR10/wrn2810_bim_2000.json
 python  extract_characteristics.py --load_json LID/CIFAR10/wrn2810_pgd_2000.json
@@ -36,9 +35,7 @@ python  extract_characteristics.py --load_json LID/IMAGENET/wrn502_df_2000.json
 python  extract_characteristics.py --load_json LID/IMAGENET/wrn502_cw_2000.json
 
 
-
 ######### multiLID 
-
 python  extract_characteristics.py --load_json multiLID/CIfAR10/wrn2810_fgsm_2000.json
 python  extract_characteristics.py --load_json multiLID/CIfAR10/wrn2810_bim_2000.json
 python  extract_characteristics.py --load_json multiLID/CIfAR10/wrn2810_pgd_2000.json

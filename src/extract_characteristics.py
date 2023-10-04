@@ -88,7 +88,7 @@ parser.add_argument("--to", default='24', type=int, help="InputMFS frequency ana
 parser.add_argument("--device", default='cpu', help="cpu vs. cuda")
 
 parser.add_argument("--load_json", default="", help="Load settings from file in json format. Command line options override values in file.")
-parser.add_argument("--save_json", default="", help="Save settings to file in json format. Ignored in json file")
+parser.add_argument("--save_json", default="", help="Save settings to file in json format. Ignored in json file.")
 
 args = parser.parse_args()
 args = args_handling(args, parser, cfg_extract_path)
@@ -153,13 +153,13 @@ elif args.detector == 'LayerPFS':
 
 ####### LID section
 elif args.detector in ['LID', 'LIDLessFeatures']:
-    from defenses.Lid import lid
-    characteristics, characteristics_adv = lid(args, model, images, images_advs, layers, get_layer_feature_maps, activation)
+    from defenses.Lid import LID
+    characteristics, characteristics_adv = LID(args, model, images, images_advs, layers, get_layer_feature_maps, activation)
 
 ####### multiLID section
 elif args.detector in ['multiLID', 'multiLIDLessFeatures', 'FFTmultiLIDMFS', 'FFTmultiLIDPFS']:
     from defenses.Lid import multiLID
-    characteristics, characteristics_adv = multilid(args, model, images, images_advs, layers, get_layer_feature_maps, activation)
+    characteristics, characteristics_adv = multiLID(args, model, images, images_advs, layers, get_layer_feature_maps, activation)
 
 ####### LIDNOISE 
 elif args.detector in ['LIDNOISE']:

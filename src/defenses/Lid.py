@@ -132,7 +132,7 @@ def lid_newest(args, model, images, images_advs, layers, get_layer_feature_maps,
     return characteristics, characteristics_adv
 
 
-def lid(args, model, images, images_advs, layers, get_layer_feature_maps, activation):
+def LID(args, model, images, images_advs, layers, get_layer_feature_maps, activation):
     
     act_layers = layers
     k, batch_size = get_k(args)
@@ -160,18 +160,8 @@ def lid(args, model, images, images_advs, layers, get_layer_feature_maps, activa
         batch= torch.Tensor(n_feed, shape[0], shape[1], shape[2])
         batch_adv= torch.Tensor(n_feed, shape[0], shape[1], shape[2])
 
-        print(n_feed, start, end)
         batch     = torch.stack(images[start:end])
         batch_adv = torch.stack(images_advs[start:end])
-
-        #for j in range(n_feed):
-        #    batch[j,:,:,:] = images[j]
-        #    batch_adv[j,:,:,:] = images_advs[j]
-
-        # batch = cifar_normalize(batch)
-        # batch_adv = cifar_normalize(batch_adv)
-        # X_act       = get_layer_feature_maps(batch.to(device), act_layers)
-        # X_adv_act   = get_layer_feature_maps(batch_adv.to(device), act_layers)
 
         batch     = normalize_images(batch, args)
         batch_adv = normalize_images(batch_adv, args)
@@ -372,10 +362,6 @@ def lidnoise(args, model, images, images_advs, layers, get_layer_feature_maps, a
         batch_noise = torch.Tensor(1)
         batch_adv   = torch.Tensor(n_feed, shape[0], shape[1], shape[2])
         
-        #for j in range(n_feed):
-            #batch[j,:,:,:]       = images[j]
-            ## batch_noise[j,:,:,:] = images[j]
-            #batch_adv[j,:,:,:]   = images_advs[j]
 
         print(n_feed, start, end)
         batch     = torch.stack(images[start:end])
