@@ -1,0 +1,9 @@
+{
+    "net": "cif10vgg",
+    "run_nr": 1,
+    "attack": "bim",
+    "detector": "LID",
+    "eps": "8./255.",
+    "wanted_samples": 2000,
+    "shuffle_on": "False"
+}

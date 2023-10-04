@@ -1,0 +1,9 @@
+{
+    "net": "imagenet",
+    "run_nr": 1,
+    "attack": "pgd",
+    "detector": "multiLID",
+    "eps": "8./255.",
+    "wanted_samples": 2000,
+    "shuffle_on": "False"
+}

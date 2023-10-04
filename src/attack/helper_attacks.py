@@ -28,7 +28,7 @@ from utils import (
     load_train_set
 )
 
-AA_std  = ['std', 'apgd-ce',   'apgd-cel2', 'apgd-t', 'fab-t' ,  'square']
+AA_std  = [ 'aa', 'std', 'apgd-ce',   'apgd-cel2', 'apgd-t', 'fab-t' ,  'square']
 AA_plus = ['aa+', 'apgd-ce+',  'apgd-dlr+', 'fab+',   'square+', 'apgd-t+', 'fab-t+']
 
 def adapt_batchsize(args, device_name):
@@ -334,9 +334,10 @@ def create_advs(logger, args, model, output_path_dir, clean_data_path, wanted_sa
     logger.log("INFO: images {}".format(len(images)))
     logger.log("INFO: images_advs {}".format(len(images_advs)))
 
-    if args.attack in ['aa+', 'std']  or args.individual:
+    if args.attack in ['aa+', 'aa', 'std']  or args.individual:
         logger.log('INFO: {} attack success rate: {}'.format(indicator[:2], success_rate) )
     else:
         logger.log('INFO: {} attack success rate: {}'.format(indicator[:2], success_counter / counter ) )
 
     return images, labels, images_advs, labels_advs
+

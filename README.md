@@ -172,6 +172,18 @@ $ python evaluation_detection.py
 Note that: `layers=False` for evaluating the detectors after the the right layers are selected. 
 
 
+### Examples
+
+```
+cd src
+```
+
+
+```
+bash configs/scripts/table1.sh 
+```
+
+
 ## Other repositories used
 * For training the VGG-16 on CIFAR-10 we used:
 https://github.com/kuangliu/pytorch-cifar.

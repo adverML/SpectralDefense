@@ -4,8 +4,6 @@
     "attack": "pgd",
     "detector": "multiLID",
     "eps": "8./255.",
-    "split_mode": "block",
-    "clf": "LR",
-    "test_size": 0.3,
-    "wanted_samples": 2000
+    "wanted_samples": 2000,
+    "shuffle_on": "False"
 }

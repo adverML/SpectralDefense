@@ -169,18 +169,20 @@ def split_data(args, logger, characteristics, characteristics_adv, noise=False, 
     # b_X_train, b_X_val, b_y_train, b_y_val                     = train_test_split(b_X_train_val,       b_y_train_val,        test_size=test_size, random_state=random_state)
    
     if args.split_mode == "block":
-
-        y_nor = np.zeros_like(shape_char)
-        y_adv = np.ones_like(shape_adv)
+        
+        y_nor = np.zeros(shape_char).astype(int)
+        y_adv = np.ones(shape_adv).astype(int)
 
         train_size = 1 - test_size
         assert(train_size > 0)
 
-        X_train = np.concatenate((characteristics_nor[:train_size], characteristics_adv[:train_size]))
+        train_size = int(shape_char*0.8)
+
+        X_train = np.concatenate((characteristics[:train_size], characteristics_adv[:train_size]))
         y_train = np.concatenate((y_nor[:train_size], y_adv[:train_size]))
 
-        X_test = np.concatenate((characteristics_nor[train_size:], characteristics_adv[train_size:]))
-        y_actual = np.concatenate((y_nor[train_size:], y_nor[train_size:]))
+        X_test = np.concatenate((characteristics[train_size:], characteristics_adv[train_size:]))
+        y_actual = np.concatenate((y_nor[train_size:], y_adv[train_size:]))
 
     elif args.split_mode == "random": 
         adv_X_train_val, adv_X_test, adv_y_train_val, adv_y_test = train_test_split(characteristics_adv, np.ones(shape_adv), test_size=test_size, random_state=random_state)

@@ -12,8 +12,17 @@
             "console": "integratedTerminal",
             "justMyCode": true,
             "args": [
-                 "--net", "cif10", "--attack", "pgd", "--detector", "FFTmultiLIDMFS",  "--eps", "8./255.", "--run_nr", "1",  "--wanted_samples", "200", "--take_inputimage_off"
+                "--load_json", "LID/CIFAR10/wrn2810_fgsm_2000.json"
             ]
+            // "name": "Python: python -u extract_characteristics.py",
+            // "type": "python",
+            // "request": "launch",
+            // "program": "extract_characteristics.py",
+            // "console": "integratedTerminal",
+            // "justMyCode": true,
+            // "args": [
+            //      "--net", "cif10", "--attack", "pgd", "--detector", "FFTmultiLIDMFS",  "--eps", "8./255.", "--run_nr", "1",  "--wanted_samples", "200", "--take_inputimage_off"
+            // ]
             // "name": "Python: python -u attacks_trte.py",
             // "type": "python",
             // "request": "launch",
@@ -43,6 +52,5 @@
             // ]
         }
 
-        
     ]
 }

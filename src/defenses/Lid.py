@@ -100,14 +100,14 @@ def lid_newest(args, model, images, images_advs, layers, get_layer_feature_maps,
         batch_adv = normalize_images(batch_adv, args)
 
         if not args.net == 'cif10vgg' and not args.net == 'cif100vgg':
-            feat_img = model(batch.cuda())
+            feat_img = model(batch.to(args.device))
             X_act = get_layer_feature_maps(activation, layers)
 
-            feat_adv = model(batch_adv.cuda())
+            feat_adv = model(batch_adv.to(args.device))
             X_adv_act = get_layer_feature_maps(activation, layers)
         else:
-            X_act = get_layer_feature_maps(batch.cuda(), layers)
-            X_adv_act = get_layer_feature_maps(batch_adv.cuda(), layers)
+            X_act = get_layer_feature_maps(batch.to(args.device), layers)
+            X_adv_act = get_layer_feature_maps(batch_adv.to(args.device), layers)
 
         for i in range(lid_dim):
             X_act[i]       = np.asarray(X_act[i].cpu().detach().numpy()    , dtype=np.float32).reshape((n_feed, -1))
@@ -177,14 +177,14 @@ def lid(args, model, images, images_advs, layers, get_layer_feature_maps, activa
         batch_adv = normalize_images(batch_adv, args)
 
         if not args.net == 'cif10vgg' and not args.net == 'cif10vggnew' and not args.net == 'cif100vgg':
-            feat_img = model(batch.cuda())
+            feat_img = model(batch.to(args.device))
             X_act = get_layer_feature_maps(activation, layers)
 
-            feat_adv = model(batch_adv.cuda())
+            feat_adv = model(batch_adv.to(args.device))
             X_adv_act = get_layer_feature_maps(activation, layers)
         else:
-            X_act     = get_layer_feature_maps(batch.cuda(), layers)
-            X_adv_act = get_layer_feature_maps(batch_adv.cuda(), layers)
+            X_act     = get_layer_feature_maps(batch.to(args.device), layers)
+            X_adv_act = get_layer_feature_maps(batch_adv.to(args.device), layers)
         
         for i in range(lid_dim):
             X_act[i]       = np.asarray(X_act[i].cpu().detach().numpy()    , dtype=np.float32).reshape((n_feed, -1))
@@ -395,7 +395,7 @@ def lidnoise(args, model, images, images_advs, layers, get_layer_feature_maps, a
         if not args.net == 'cif10vgg' and not args.net == 'cif100vgg':
             feat_img = model(batch.to(args.device))
             X_act = get_layer_feature_maps(activation, layers)
-            # feat_noise  = model(batch_noise.cuda())
+            # feat_noise  = model(batch_noise.to(args.device))
             # X_noise_act = get_layer_feature_maps(activation, layers)
             if args.detector in ["FFTmultiLIDMFS", "FFTmultiLIDPFS"]:
                 X_act = calcFFTmultiLID(args, X_act)
@@ -406,7 +406,7 @@ def lidnoise(args, model, images, images_advs, layers, get_layer_feature_maps, a
                 X_adv_act = calcFFTmultiLID(args, X_adv_act)
         else:
             X_act       = get_layer_feature_maps(batch.to(args.device), layers)
-            # X_noise_act = get_layer_feature_maps(batch_noise.cuda(), layers)
+            # X_noise_act = get_layer_feature_maps(batch_noise.to(args.device), layers)
             X_adv_act   = get_layer_feature_maps(batch_adv.to(args.device), layers)
         
         for i in range(lid_dim):
@@ -529,18 +529,18 @@ def lidnoise_save(args, model, images, images_advs, layers, get_layer_feature_ma
         batch_adv   = normalize_images(batch_adv, args)
 
         if not args.net == 'cif10vgg' and not args.net == 'cif100vgg':
-            feat_img = model(batch.cuda())
+            feat_img = model(batch.to(args.device))
             X_act = get_layer_feature_maps(activation, layers)
 
-            feat_noise  = model(batch_noise.cuda())
+            feat_noise  = model(batch_noise.to(args.device))
             X_noise_act = get_layer_feature_maps(activation, layers)
 
-            feat_adv = model(batch_adv.cuda())
+            feat_adv = model(batch_adv.to(args.device))
             X_adv_act = get_layer_feature_maps(activation, layers)
         else:
-            X_act       = get_layer_feature_maps(batch.cuda(), layers)
-            X_noise_act = get_layer_feature_maps(batch_noise.cuda(), layers)
-            X_adv_act   = get_layer_feature_maps(batch_adv.cuda(), layers)
+            X_act       = get_layer_feature_maps(batch.to(args.device), layers)
+            X_noise_act = get_layer_feature_maps(batch_noise.to(args.device), layers)
+            X_adv_act   = get_layer_feature_maps(batch_adv.to(args.device), layers)
         
         for i in range(lid_dim):
             X_act[i]       = np.asarray( X_act[i].cpu().detach().numpy()      , dtype=np.float32).reshape((n_feed, -1) )

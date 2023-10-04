@@ -12,10 +12,6 @@ def plot_model(args, model):
     with torch.no_grad():
         print("")
         
-        
-    
-    
-    
     return characteristics, characteristics_adv
 
 # with torch.no_grad():

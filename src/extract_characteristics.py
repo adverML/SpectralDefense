@@ -54,7 +54,7 @@ parser.add_argument("--run_nr",          default=1,               type=int, help
 parser.add_argument("--attack"  ,        default='fgsm',          help=settings.HELP_ATTACK)
 parser.add_argument("--detector",        default='LayerMFS',      help=settings.HELP_DETECTOR)
 #parser.add_argument('--take_inputimage_off', action='store_false', help='Input Images for feature extraction. Default = True')
-parser.add_argument("--take_inputimage_off", default=False, type=lambda x: x == 'True', help="Input Images for feature extraction. Default = True")
+parser.add_argument("--take_inputimage_off", default=True, type=lambda x: x == 'True', help="Input Images for feature extraction. Default = True")
 
 parser.add_argument("--max_freq_on",     action='store_true',     help="Switch max frequency normalization on")
 
@@ -65,7 +65,7 @@ parser.add_argument('--img_size',       default='32',   type=int, help=settings.
 parser.add_argument("--num_classes",    default='10',   type=int, help=settings.HELP_NUM_CLASSES)
 
 #parser.add_argument("--shuffle_on",        action='store_true', help="Switch shuffle data on")
-parser.add_argument("--shuffle_on", default=False, type=lambda x: x == 'True', help="Switch shuffle data on")
+parser.add_argument("--shuffle_on", default='False', type=lambda x: x == 'True', help="Switch shuffle data on")
 parser.add_argument("--net_normalization", default=False, type=lambda x: x == 'True', help=settings.HELP_NET_NORMALIZATION)
 parser.add_argument("--fixed_clean_data", default=False, type=lambda x: x == 'True', help="Fixed Clean Data")
 
@@ -129,7 +129,7 @@ model = model.eval()
 layer_nr = int(args.nr)
 logger.log("INFO: layer_nr " + str(layer_nr) ) 
 
-if args.detector in ['LayerMFS',  'LayerPFS',  'LID',  'LIDNOISE', 'FFTmultiLIDMFS', 'FFTmultiLIDPFS', 'LIDLESSLayers', 'LIDLESSLayersFeatures', 'Mahalanobis']:
+if args.detector in ['LayerMFS',  'LayerPFS',  'LID',  'LIDNOISE', 'FFTmultiLIDMFS', 'FFTmultiLIDPFS', 'LIDLessFeatures',  'multiLIDLessFeatures', 'Mahalanobis']:
     get_layer_feature_maps, layers, model, activation = get_whitebox_features(args, logger, model)
 elif args.detector == 'DkNN':
     layers = dfknn_layer(args, model)
@@ -152,17 +152,17 @@ elif args.detector == 'LayerPFS':
     characteristics, characteristics_adv = whitebox_mfs_pfs(args, logger, model, images, images_advs, layers, get_layer_feature_maps, activation, typ='PFS')
 
 ####### LID section
-elif args.detector in ['LID']:
+elif args.detector in ['LID', 'LIDLessFeatures']:
     from defenses.Lid import lid
     characteristics, characteristics_adv = lid(args, model, images, images_advs, layers, get_layer_feature_maps, activation)
 
 ####### multiLID section
-elif args.detector in ['multiLID', 'FFTmultiLIDMFS', 'FFTmultiLIDPFS']:
-    from defenses.Lid import multilid
+elif args.detector in ['multiLID', 'multiLIDLessFeatures', 'FFTmultiLIDMFS', 'FFTmultiLIDPFS']:
+    from defenses.Lid import multiLID
     characteristics, characteristics_adv = multilid(args, model, images, images_advs, layers, get_layer_feature_maps, activation)
 
 ####### LIDNOISE 
-elif args.detector in ['LIDNOISE', 'LIDLESSLayersFeatures']:
+elif args.detector in ['LIDNOISE']:
     from defenses.Lid import lidnoise
     # characteristics,  characteristics_noise, characteristics_adv, lid_tmp_k, lid_tmp_k_noise, lid_tmp_k_adv = lidnoise(args, model, images, images_advs, layers, get_layer_feature_maps, activation)
     lid_tmp_k,  lid_tmp_k_adv, lid_tmp_k_adv, characteristics, lid_tmp_k_noise, characteristics_adv = lidnoise(args, model, images, images_advs, layers, get_layer_feature_maps, activation)
@@ -175,18 +175,14 @@ elif args.detector in ['LIDNOISE', 'LIDLESSLayersFeatures']:
     torch.save(lid_tmp_k_noise,  noise_path,           pickle_protocol=4)
     torch.save(lid_tmp_k_adv,    lid_tmp_k_advs_path,  pickle_protocol=4)
 
-
-
 ####### Mahalanobis section
 elif args.detector == 'Mahalanobis':
     
     from defenses.DeepMahalanobis import deep_mahalanobis
     characteristics, characteristics_adv = deep_mahalanobis(args, logger, model, images, images_advs, layers, get_layer_feature_maps, activation, output_path_dir)
 
-
 else:
     logger.log('ERR: unknown detector')
-    
 
 # Save
 logger.log("INFO: Save extracted characteristics ...")

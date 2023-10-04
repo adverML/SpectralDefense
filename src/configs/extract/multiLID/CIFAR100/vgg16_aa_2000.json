@@ -1,0 +1,9 @@
+{
+    "net": "cif100vgg",
+    "run_nr": 1,
+    "attack": "aa",
+    "detector": "multiLID",
+    "eps": "8./255.",
+    "wanted_samples": 2000,
+    "shuffle_on": "False"
+}

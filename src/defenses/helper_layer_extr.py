@@ -310,7 +310,7 @@ def get_whitebox_features(args, logger, model):
         # fourier_act_layers = [ 'conv2_0_relu_1', 'conv2_0_relu_4', 'conv2_1_relu_1', 'conv2_1_relu_4', 'conv2_2_relu_1', 'conv2_2_relu_4', 'conv2_3_relu_1', 'conv2_3_relu_4']
         # import pdb; pdb.set_trace()
 
-        if not args.nr == -1 or args.detector in ['LIDLESSLayers', 'LIDLESSLayersFeatures']:
+        if not args.nr == -1 or args.detector in ['LIDLessFeatures', 'multiLIDLessFeatures']:
             model.init_conv.register_forward_hook( get_activation('init_conv') )
             model.conv2.register_forward_hook( get_activation('seq_conv2') )
             model.conv3.register_forward_hook( get_activation('seq_conv3') )
@@ -417,7 +417,7 @@ def get_whitebox_features(args, logger, model):
                             'relu'
                         ]
 
-        if args.detector in ['LIDLESSLayers', 'LIDLESSLayersFeatures']:
+        if args.detector in ['LIDLessFeatures', 'multiLIDLessFeatures']:
             layers = [
                 'init_conv',
                 'seq_conv2',
