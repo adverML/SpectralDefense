@@ -1,0 +1,11 @@
+{
+    "net": "cif10",
+    "run_nr": 1,
+    "attack": "fgsm",
+    "detector": "LIDLessFeatures",
+    "eps": "8./255.",
+    "split_mode": "random",
+    "clf": "LR",
+    "test_size": 0.2,
+    "wanted_samples": 2000
+}

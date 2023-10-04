@@ -15,23 +15,8 @@ def RF(args, logger, X_train, y_train, X_test, y_test):
 
     if args.tuning == None:
     
-        # trees = [ 300 ]
-
-        # max_depths = np.linspace(1, 32, 32, endpoint=True)
-        # max_depths = [5, 10, 100, 500, 800, 1000]
-        # max_depths = [5, 10, 100, 500, 800]
-        # max_leaf_nodes = [5, 10, 50, 100, 500, 800, 1000]
         max_depths     = [None]
         max_leaf_nodes = [None]
-
-        # trees = [100, 200, 300, 400, 500]
-        # trees = [600, 700, 800, 900]
-        # trees = [ 200, 300, 400, 500, 600, 800, 900, 1200 ]
-        # trees = [25, 50, 75, 100, 300, 600]
-        # trees = [ 25, 50, 100, 500, 1000, 2000 ]
-        # trees = [ 300, 1000, 2000 ]
-        # trees = [ 300 ]
-        # trees = [ 100, 300, 500, 800 ]
         trees = [ 300 ]
 
         clf = RandomForestClassifier(n_estimators=100, n_jobs=-1) 

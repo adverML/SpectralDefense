@@ -129,7 +129,7 @@ model = model.eval()
 layer_nr = int(args.nr)
 logger.log("INFO: layer_nr " + str(layer_nr) ) 
 
-if args.detector in ['LayerMFS',  'LayerPFS',  'LID',  'LIDNOISE', 'FFTmultiLIDMFS', 'FFTmultiLIDPFS', 'LIDLessFeatures',  'multiLIDLessFeatures', 'Mahalanobis']:
+if args.detector in ['LayerMFS',  'LayerPFS',  'LID',  "multiLID", 'LIDNOISE', 'FFTmultiLIDMFS', 'FFTmultiLIDPFS', 'LIDLessFeatures',  'multiLIDLessFeatures', 'Mahalanobis']:
     get_layer_feature_maps, layers, model, activation = get_whitebox_features(args, logger, model)
 elif args.detector == 'DkNN':
     layers = dfknn_layer(args, model)
