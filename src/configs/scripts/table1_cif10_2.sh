@@ -17,7 +17,7 @@ python  extract_characteristics.py --load_json LID/CIFAR10/vgg16_cw_2000.json   
 
 
 ######### multiLID 
-python  extract_characteristics.py --load_json multiLID/CIFAR10/wrn2810_fgsm_2000.json --run_nr $run_nr #todo again
+python  extract_characteristics.py --load_json multiLID/CIFAR10/wrn2810_fgsm_2000.json --run_nr $run_nr
 python  extract_characteristics.py --load_json multiLID/CIFAR10/wrn2810_bim_2000.json --run_nr $run_nr 
 python  extract_characteristics.py --load_json multiLID/CIFAR10/wrn2810_pgd_2000.json --run_nr $run_nr   
 python  extract_characteristics.py --load_json multiLID/CIFAR10/wrn2810_aa_2000.json  --run_nr $run_nr
