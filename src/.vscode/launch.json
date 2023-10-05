@@ -5,15 +5,25 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "Python: python -u extract_characteristics.py",
+            "name": "Python: python -u attacks.py",
             "type": "python",
             "request": "launch",
-            "program": "extract_characteristics.py",
+            "program": "attacks.py",
             "console": "integratedTerminal",
             "justMyCode": true,
             "args": [
-                "--load_json", "LID/CIFAR10/wrn2810_fgsm_2000.json"
+                "--load_json", "tmp.json"
             ]
+            // {
+            //     "name": "Python: python -u extract_characteristics.py",
+            //     "type": "python",
+            //     "request": "launch",
+            //     "program": "extract_characteristics.py",
+            //     "console": "integratedTerminal",
+            //     "justMyCode": true,
+            //     "args": [
+            //         "--load_json", "LID/CIFAR10/wrn2810_fgsm_2000.json"
+            //     ]
             // "name": "Python: python -u extract_characteristics.py",
             // "type": "python",
             // "request": "launch",

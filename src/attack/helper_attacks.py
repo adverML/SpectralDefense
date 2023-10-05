@@ -35,20 +35,17 @@ def adapt_batchsize(args, device_name):
     get_debug_info(msg="device_name: " + device_name)
     batch_size = 128 
     
-    if device_name == 'nvidia titan v' and (args.net in ['imagenet128',  'celebaHQ128']):
+    if device_name in ['nvidia titan v', 'nvidia geforce gtx 1080 ti'] and (args.net in ['imagenet128',  'celebaHQ128']):
         batch_size = 24
-        
     if device_name == 'nvidia a100' and (args.net in ['imagenet', 'imagenet_hierarchy', 'restricted_imagenet', 'imagenet128', 'celebaHQ128']):
         batch_size = 48
-
-    if device_name == 'nvidia titan v' and (args.attack in (AA_std + AA_plus) ):
+    if device_name in ['nvidia titan v', 'nvidia geforce gtx 1080 ti'] and (args.attack in (AA_std + AA_plus) ):
         batch_size = 256
-
-    if device_name == 'nvidia titan v' and (( args.attack in ["cw" , "df"] ) and (args.net in ['imagenet64', 'celebaHQ64'])):
+    if device_name in ['nvidia titan v', 'nvidia geforce gtx 1080 ti'] and (( args.attack in ["cw" , "df"] ) and (args.net in ['imagenet64', 'celebaHQ64'])):
         batch_size = 48
     elif args.net == 'celebaHQ256':
         batch_size = 24
-    elif device_name == 'nvidia titan v' and args.net == 'imagenet':
+    elif device_name in ['nvidia titan v', 'nvidia geforce gtx 1080 ti'] and args.net == 'imagenet':
         batch_size = 32
     
     return batch_size
@@ -119,7 +116,6 @@ def check_args_attack(args, version=True, net_normalization=True, num_classes=Tr
     return args
 
 
-
 def replacemany(our_str, to_be_replaced:tuple, replace_with:str):
     for nextchar in to_be_replaced:
         our_str = our_str.replace(nextchar, replace_with)
@@ -151,7 +147,7 @@ def create_advs(logger, args, model, output_path_dir, clean_data_path, wanted_sa
     if use_clean_test_data:
         clean_path = 'clean_' + indicator + 'data' 
         
-        dataset = torch.load( os.path.join(clean_data_path, clean_path) )#[:args.all_samples]
+        dataset = torch.load( os.path.join(clean_data_path, clean_path) )
         get_debug_info( "actual len/wanted " + str(len(dataset)) + os.sep + str(wanted_samples) )
         data_loader = torch.utils.data.DataLoader(dataset, batch_size=args.batch_size, shuffle=args.shuffle_on)
     else:
@@ -162,21 +158,17 @@ def create_advs(logger, args, model, output_path_dir, clean_data_path, wanted_sa
     
     if args.attack  in (AA_std + AA_plus):
         logger.log('INFO: Load data...')
-        # dataset = load_test_set(args,  shuffle=args.shuffle_on)
 
         sys.path.append("./submodules/autoattack")
         from submodules.autoattack.autoattack import AutoAttack as AutoAttack_mod
         
         adversary = AutoAttack_mod(model, norm=args.norm, eps=epsilon_to_float(args.eps), log_path=output_path_dir + os.sep + 'log.txt', version=args.version)
         if args.individual:
-            adversary.attacks_to_run = [ replacemany(args.attack, ['+', 'l2'], '') ] 
+            adversary.attacks_to_run = [ replacemany(args.attack, ['+', 'l2'], '') ]
 
-        # import pdb; pdb.set_trace()
         # run attack and save images
         with torch.no_grad():
-            # import pdb; pdb.set_trace()
             for it, (x_test, y_test) in enumerate(tqdm(data_loader, total=tqdm_total)):
-                # for x_test, x_test in data_loader:
                 x_test = torch.squeeze(x_test).cpu()
                 y_test = torch.squeeze(y_test).cpu()
 
@@ -184,12 +176,12 @@ def create_advs(logger, args, model, output_path_dir, clean_data_path, wanted_sa
                     x_test = torch.unsqueeze(x_test, 0)
                     y_test = torch.unsqueeze(y_test, 0)
 
+
                 if not args.individual:
                     logger.log("INFO: mode: std; not individual")
                     x_adv, y_adv, max_nr = adversary.run_standard_evaluation(x_test, y_test, bs=args.batch_size, return_labels=True)
                 else: 
                     logger.log("INFO: mode: individual; not std")
-                    # import pdb; pdb.set_trace()
                     adv_complete = adversary.run_standard_evaluation_individual(x_test, y_test, bs=args.batch_size, return_labels=True)
                     x_adv, y_adv, max_nr = adv_complete[ replacemany(args.attack, ['+', 'l2'], '') ]
 

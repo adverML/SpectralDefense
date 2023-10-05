@@ -13,16 +13,19 @@ celeba256_path = os.path.join (dataset_path, "CelebAHQ/Img/hq/data256x256")
 
 cfg_path = "configs"
 gen      = "gen"
+attack      = "attack"
 extract  = "extract"
 detect   = "detect"
 
 # config
 cfg_gen_path = os.path.join(cfg_path, gen)
+cfg_attack_path = os.path.join(cfg_path, attack)
 cfg_extract_path = os.path.join(cfg_path, extract)
 cfg_detect_path  = os.path.join(cfg_path, detect)
 
 # workspace
 ws_gen_path = os.path.join(results_path, gen)
+ws_attack_path = os.path.join(results_path, attack)
 ws_extract_path = os.path.join(results_path, extract)
 ws_detect_path  = os.path.join(results_path, detect)
 

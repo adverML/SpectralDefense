@@ -130,7 +130,7 @@ if __name__ == '__main__':
 
     parser.add_argument("--attack"  ,        default='fgsm',          help=settings.HELP_ATTACK)
     parser.add_argument("--detector",        default='LayerMFS',      help=settings.HELP_DETECTOR)
-    parser.add_argument("--take_inputimage_off", default=False, type=lambda x: x == 'True', help="Input Images for feature extraction. Default = True")
+    parser.add_argument("--take_inputimage_off", default=False, type=lambda x: str(x).lower() == 'true', help="Input Images for feature extraction. Default = True")
     parser.add_argument("--max_freq_on",     action='store_true',      help="Switch max frequency normalization on")
 
     parser.add_argument("--net",            default='cif10',          help=settings.HELP_NET)
@@ -143,7 +143,7 @@ if __name__ == '__main__':
     parser.add_argument("--num_classes", default='10', type=int, help=settings.HELP_NUM_CLASSES)
 
     #parser.add_argument("--shuffle_on", action='store_true',      help="Switch shuffle data on")
-    parser.add_argument("--shuffle_on", default=False,  type=lambda x: x == 'True', help="Switch shuffle data on")
+    parser.add_argument("--shuffle_on", default=False,  type=lambda x: str(x).lower() == 'true', help="Switch shuffle data on")
 
     parser.add_argument('--net_normalization', action='store_true',   help=settings.HELP_NET_NORMALIZATION)
 

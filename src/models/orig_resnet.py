@@ -163,8 +163,6 @@ class ResNet(nn.Module):
         if norm_layer is None:
             norm_layer = nn.BatchNorm2d
 
-        # import pdb; pdb.set_trace()
-
         self.preprocessing = preprocessing
         if not len(preprocessing) == 0:
             self.mu =    torch.tensor(preprocessing['mean']).float().view(3, 1, 1).cuda()
@@ -246,10 +244,7 @@ class ResNet(nn.Module):
         return nn.Sequential(*layers)
 
     def _forward_impl(self, x: Tensor) -> Tensor:
-        # See note [TorchScript super()]
-        # print(" x shape ", x.shape)
         if not len(self.preprocessing) == 0:
-            # import pdb; pdb.set_trace()
             x = (x - self.mu) / self.sigma
 
         x = self.conv1(x)
