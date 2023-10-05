@@ -38,15 +38,15 @@ def adapt_batchsize(args, device_name):
     if device_name in ['nvidia titan v', 'nvidia geforce gtx 1080 ti'] and (args.net in ['imagenet128',  'celebaHQ128']):
         batch_size = 24
     if device_name == 'nvidia a100' and (args.net in ['imagenet', 'imagenet_hierarchy', 'restricted_imagenet', 'imagenet128', 'celebaHQ128']):
-        batch_size = 48
+        batch_size = 64
     if device_name in ['nvidia titan v', 'nvidia geforce gtx 1080 ti'] and (args.attack in (AA_std + AA_plus) ):
         batch_size = 256
     if device_name in ['nvidia titan v', 'nvidia geforce gtx 1080 ti'] and (( args.attack in ["cw" , "df"] ) and (args.net in ['imagenet64', 'celebaHQ64'])):
-        batch_size = 48
+        batch_size = 32
     elif args.net == 'celebaHQ256':
         batch_size = 24
     elif device_name in ['nvidia titan v', 'nvidia geforce gtx 1080 ti'] and args.net == 'imagenet':
-        batch_size = 32
+        batch_size = 18
     
     return batch_size
 
@@ -176,7 +176,6 @@ def create_advs(logger, args, model, output_path_dir, clean_data_path, wanted_sa
                     x_test = torch.unsqueeze(x_test, 0)
                     y_test = torch.unsqueeze(y_test, 0)
 
-
                 if not args.individual:
                     logger.log("INFO: mode: std; not individual")
                     x_adv, y_adv, max_nr = adversary.run_standard_evaluation(x_test, y_test, bs=args.batch_size, return_labels=True)
@@ -191,11 +190,11 @@ def create_advs(logger, args, model, output_path_dir, clean_data_path, wanted_sa
                         images.append(x_test[it].cpu())                      
                         tmp_images_advs.append(img.cpu())
                         labels.append(y_test[it].cpu())
-                        labels_advs.append(y_adv[it].cpu())  
+                        labels_advs.append(y_adv[it].cpu()) 
                         success_counter = success_counter + 1
                             
                     elif args.fixed_clean_data:
-                        images.append( x_test[it].cpu() )     
+                        images.append( x_test[it].cpu() )   
                         labels.append( y_test[it].cpu() )
                     
                     
