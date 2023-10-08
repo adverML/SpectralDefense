@@ -1351,7 +1351,7 @@ def check_layer_nr(args):
 def check_k(args):
     k_lid = ''
     
-    if args.detector in ['LID', 'LIDNOISE']:
+    if args.detector in ['LID', 'LIDNOISE', 'multiLID']:
         if args.k_lid > 0:
             k_lid = 'k_' + str(args.k_lid)
         

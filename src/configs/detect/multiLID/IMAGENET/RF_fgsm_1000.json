@@ -1,0 +1,9 @@
+{
+    "net": "imagenet",
+    "run_nr": 1,
+    "attack": "fgsm",
+    "detector": "multiLID",
+    "eps": "4./255.",
+    "clf": "RF",
+    "wanted_samples": 1000
+}

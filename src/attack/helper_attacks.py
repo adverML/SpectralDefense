@@ -251,6 +251,7 @@ def create_advs(logger, args, model, output_path_dir, clean_data_path, wanted_sa
             logger.log('Err: unknown attack')
             raise NotImplementedError('Err: unknown attack')
 
+
         fmodel = PyTorchModel(model, bounds=(0, 1), preprocessing=preprocessing)
         logger.log('eps: {}'.format(epsilons))
 

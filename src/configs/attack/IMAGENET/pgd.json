@@ -1,8 +1,8 @@
 {
     "run_nr": 1,
-    "attack": "aa",
+    "attack": "pgd",
     "net": "imagenet",
-    "img_size": 256,
+    "img_size": 224,
     "num_classes": 1000,
     "wanted_samples": 2000,
     "all_samples": 4000,
@@ -15,6 +15,6 @@
     "batch_size": 1500,
     "log_path": "log.txt",
     "version": "standard",
-    "net_normalization": true,
+    "net_normalization": false,
     "load_json": "configs/attack/"
 }

@@ -1,0 +1,20 @@
+{
+    "run_nr": 1,
+    "attack": "aa",
+    "net": "cif10",
+    "img_size": 32,
+    "num_classes": 10,
+    "wanted_samples": 2000,
+    "all_samples": 4000,
+    "shuffle_on": false,
+    "fixed_clean_data": false,
+    "use_clean_train_data": true,
+    "norm": "Linf",
+    "eps": "8./255.",
+    "individual": false,
+    "batch_size": 1500,
+    "log_path": "log.txt",
+    "version": "standard",
+    "net_normalization": true,
+    "load_json": "configs/attack/"
+}

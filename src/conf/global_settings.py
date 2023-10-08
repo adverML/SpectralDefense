@@ -110,5 +110,4 @@ DETECTOR_LIST_LAYERS = ['LayerMFS', 'LayerPFS']
 DETECTOR_LIST = [ 'InputMFS', 'LayerMFS' ]
 CLF = ['LR', 'RF']
 
-
 SAVE_CLASSIFIER = True

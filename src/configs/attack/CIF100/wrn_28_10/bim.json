@@ -1,9 +1,9 @@
 {
     "run_nr": 1,
-    "attack": "cw",
-    "net": "imagenet",
-    "img_size": 256,
-    "num_classes": 1000,
+    "attack": "bim",
+    "net": "cif100",
+    "img_size": 32,
+    "num_classes": 100,
     "wanted_samples": 2000,
     "all_samples": 4000,
     "shuffle_on": false,

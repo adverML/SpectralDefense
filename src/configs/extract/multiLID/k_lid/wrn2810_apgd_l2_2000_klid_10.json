@@ -1,0 +1,10 @@
+{
+    "net": "cif10",
+    "run_nr": 20,
+    "attack": "apgd-cel2",
+    "detector": "multiLID",
+    "eps": "0.1",
+    "wanted_samples": 2000,
+    "shuffle_on": false,
+    "k_lid": 10
+}

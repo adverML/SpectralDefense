@@ -1,0 +1,20 @@
+{
+    "run_nr": 1,
+    "attack": "fgsm",
+    "net": "imagenet",
+    "img_size": 224,
+    "num_classes": 1000,
+    "wanted_samples": 1000,
+    "all_samples": 4000,
+    "shuffle_on": false,
+    "fixed_clean_data": false,
+    "use_clean_train_data": true,
+    "norm": "Linf",
+    "eps": "4./255.",
+    "individual": false,
+    "batch_size": 1500,
+    "log_path": "log.txt",
+    "version": "standard",
+    "net_normalization": false,
+    "load_json": "configs/attack/"
+}

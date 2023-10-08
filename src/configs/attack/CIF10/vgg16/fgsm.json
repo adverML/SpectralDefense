@@ -1,9 +1,9 @@
 {
     "run_nr": 1,
     "attack": "fgsm",
-    "net": "imagenet",
-    "img_size": 256,
-    "num_classes": 1000,
+    "net": "cif10vgg",
+    "img_size": 32,
+    "num_classes": 10,
     "wanted_samples": 2000,
     "all_samples": 4000,
     "shuffle_on": false,

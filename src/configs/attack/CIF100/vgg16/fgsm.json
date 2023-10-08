@@ -1,0 +1,20 @@
+{
+    "run_nr": 1,
+    "attack": "fgsm",
+    "net": "cif100vgg",
+    "img_size": 32,
+    "num_classes": 100,
+    "wanted_samples": 2000,
+    "all_samples": 4000,
+    "shuffle_on": false,
+    "fixed_clean_data": false,
+    "use_clean_train_data": true,
+    "norm": "Linf",
+    "eps": "8./255.",
+    "individual": false,
+    "batch_size": 1500,
+    "log_path": "log.txt",
+    "version": "standard",
+    "net_normalization": false,
+    "load_json": "configs/attack/"
+}

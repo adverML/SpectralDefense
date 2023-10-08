@@ -1,8 +1,8 @@
 {
     "run_nr": 1,
-    "attack": "pgd",
+    "attack": "fgsm",
     "net": "imagenet",
-    "img_size": 256,
+    "img_size": 224,
     "num_classes": 1000,
     "wanted_samples": 2000,
     "all_samples": 4000,

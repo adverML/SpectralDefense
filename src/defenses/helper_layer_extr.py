@@ -58,7 +58,7 @@ def get_whitebox_features(args, logger, model):
     layer_nr = int(args.nr)
     logger.log("INFO: layer_nr " + str(layer_nr) ) 
 
-    if args.net == 'cif10vgg' or args.net == 'cif10vggnew'  or args.net == 'cif100vgg':
+    if args.net in ['cif10vgg', 'cif10vggnew' , 'cif100vgg']:
         # indices of activation layers
         # act_layers= [2,5,9,12,16,19,22,26,29,32,36,39,42]
         
@@ -201,7 +201,7 @@ def get_whitebox_features(args, logger, model):
             assert True
 
 
-    elif args.net == 'cif10rn34' or args.net == 'cif100rn34':
+    elif args.net in ['cif10rn34', 'cif100rn34']:
 
         def get_layer_feature_maps(activation_dict, act_layer_list):
             act_val_list = []
@@ -295,9 +295,9 @@ def get_whitebox_features(args, logger, model):
             assert True
 
 
-    elif (args.net == 'mnist' or args.net == 'cif10' or args.net == 'cif100' or args.net == 'celebaHQ32' or args.net == 'imagenet32' 
-        or args.net == 'celebaHQ64' or args.net == 'celebaHQ128' or args.net == 'celebaHQ256'
-        or args.net == 'imagenet64' or args.net == 'imagenet128'):
+    elif (args.net in [ 'mnist', 'cif10', 'cif100', 'celebaHQ32', 'imagenet32' 
+       , 'celebaHQ64', 'celebaHQ128', 'celebaHQ256'
+       , 'imagenet64', 'imagenet128']):
 
         def get_layer_feature_maps(activation_dict, act_layer_list):
             act_val_list = []
@@ -407,7 +407,7 @@ def get_whitebox_features(args, logger, model):
                     model.conv4[3].residual[4].register_forward_hook(get_activation('conv4_3_relu_4'))
                     model.relu.register_forward_hook(get_activation('relu'))
 
-                    if args.net == 'celebaHQ32' or args.net == 'celebaHQ64' or args.net == 'celebaHQ128' or args.net == 'celebaHQ256':
+                    if args.net in ['celebaHQ32', 'celebaHQ64', 'celebaHQ128', 'celebaHQ256']:
                         layers = [
                             'relu'
                         ]
@@ -471,7 +471,7 @@ def get_whitebox_features(args, logger, model):
             assert True
 
 
-    elif args.net == 'imagenet' or args.net == 'imagenet_hierarchy':
+    elif args.net in ['imagenet', 'imagenet_hierarchy']:
 
         def get_layer_feature_maps(activation_dict, act_layer_list):
             act_val_list = []
@@ -535,7 +535,6 @@ def get_whitebox_features(args, logger, model):
                 'layer_3_0_relu', 'layer_3_1_relu',  'layer_3_2_relu',  'layer_3_3_relu', 'layer_3_4_relu',  'layer_3_5_relu',  'layer_4_0_relu',  'layer_4_1_relu',   'layer_4_2_relu'
             ]
         
-        
         if args.detector in ['Mahalanobis']:
             layers = [
                 'layer_3_0_relu', 'layer_3_1_relu',  'layer_3_2_relu', 'layer_3_3_relu', 'layer_3_4_relu',  'layer_3_5_relu',  'layer_4_0_relu',  'layer_4_1_relu',   'layer_4_2_relu'
@@ -590,8 +589,6 @@ def get_whitebox_features(args, logger, model):
                 act_val_list.append(act_val)
             return act_val_list
         
-        
-
         if not args.nr == -1:
             model.relu.register_forward_hook( get_activation('0_relu') )
 

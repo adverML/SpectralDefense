@@ -5,5 +5,6 @@
     "detector": "multiLID",
     "eps": "8./255.",
     "wanted_samples": 2000,
-    "shuffle_on": "False"
+    "shuffle_on": false,
+    "num_classes": 10
 }
