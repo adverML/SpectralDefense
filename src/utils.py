@@ -1436,3 +1436,18 @@ def log_header(logger, args, output_path_dir, sys):
     logger.log('ARGS: ' + str(args.__dict__))
     logger.log('OUTPUT_PATH_DIR: ' + output_path_dir)
 
+
+def str2bool(v):
+    """
+    Converts string to bool type; enables command line 
+    arguments in the format of '--arg1 true --arg2 false'
+    https://github.com/facebookresearch/ConvNeXt/blob/main/main.py
+    """
+    if isinstance(v, bool):
+        return v
+    if v.lower() in ('yes', 'true', 't', 'y', '1'):
+        return True
+    elif v.lower() in ('no', 'false', 'f', 'n', '0'):
+        return False
+    else:
+        raise argparse.ArgumentTypeError('Boolean value expected.')

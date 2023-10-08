@@ -39,7 +39,8 @@ from utils import (
     get_num_classes,
     load_model,
     print_args,
-    args_handling
+    args_handling,
+    str2bool
 )
 
 from attack.helper_attacks import check_args_attack
@@ -54,9 +55,9 @@ parser.add_argument("--run_nr",          default=1,               type=int, help
 parser.add_argument("--attack"  ,        default='fgsm',          help=settings.HELP_ATTACK)
 parser.add_argument("--detector",        default='LayerMFS',      help=settings.HELP_DETECTOR)
 #parser.add_argument('--take_inputimage_off', action='store_false', help='Input Images for feature extraction. Default = True')
-parser.add_argument("--take_inputimage_off", default=True, type=lambda x: str(x).lower() == 'true', help="Input Images for feature extraction. Default = True")
+parser.add_argument("--take_inputimage_off", default=True, type=str2bool, help="Input Images for feature extraction. Default = True")
 
-parser.add_argument("--max_freq_on",     action='store_true',     help="Switch max frequency normalization on")
+parser.add_argument("--max_freq_on",    default=False, type=str2bool,   help="Switch max frequency normalization on")
 
 parser.add_argument("--net",            default='cif10',          help=settings.HELP_NET)
 parser.add_argument("--nr",             default='-1',   type=int, help=settings.HELP_LAYER_NR)
@@ -65,9 +66,9 @@ parser.add_argument('--img_size',       default='32',   type=int, help=settings.
 parser.add_argument("--num_classes",    default='10',   type=int, help=settings.HELP_NUM_CLASSES)
 
 #parser.add_argument("--shuffle_on",        action='store_true', help="Switch shuffle data on")
-parser.add_argument("--shuffle_on", default=False, type=lambda x: str(x).lower() == 'true', help="Switch shuffle data on")
-parser.add_argument("--net_normalization", default=False, type=lambda x: str(x).lower() == 'true', help=settings.HELP_NET_NORMALIZATION)
-parser.add_argument("--fixed_clean_data", default=False, type=lambda x: str(x).lower() == 'true', help="Fixed Clean Data")
+parser.add_argument("--shuffle_on", default=False, type=str2bool, help="Switch shuffle data on")
+parser.add_argument("--net_normalization", default=False, type=str2bool, help=settings.HELP_NET_NORMALIZATION)
+parser.add_argument("--fixed_clean_data", default=False, type=str2bool, help="Fixed Clean Data")
 
 parser.add_argument('--version',    type=str, default='standard')
 # parser.add_argument("--eps",       default='-1',       help=settings.HELP_AA_EPSILONS) # to activate the best layers

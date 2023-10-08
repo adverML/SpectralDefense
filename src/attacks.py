@@ -30,7 +30,8 @@ from utils import (
     load_model,
     get_debug_info,
     print_args,
-    args_handling
+    args_handling,
+    str2bool,
 )
 
 from attack.helper_attacks import (
@@ -51,20 +52,20 @@ if __name__ == '__main__':
     parser.add_argument("--num_classes",           default='10',    type=int,  help=settings.HELP_NUM_CLASSES)
     parser.add_argument("--wanted_samples",        default='2000',  type=int,  help=settings.HELP_WANTED_SAMPLES)
     parser.add_argument("--all_samples",           default='4000',  type=int,  help="Samples from generate Clean data") # https://gist.github.com/mengyuest/53d5db940037e95cbb791efdb9f910d9
-    parser.add_argument("--shuffle_on", default=False, type=lambda x: str(x).lower() == 'true', help="Switch shuffle data on")
-    parser.add_argument("--fixed_clean_data", default=False, type=lambda x: str(x).lower() == 'true', help="Fixed Clean Data")
-    parser.add_argument("--use_clean_train_data", default=True, type=lambda x: str(x).lower() == 'true', help="use_clean_test_data")
+    parser.add_argument("--shuffle_on", default=False, type=str2bool, help="Switch shuffle data on")
+    parser.add_argument("--fixed_clean_data", default=False, type=str2bool, help="Fixed Clean Data")
+    parser.add_argument("--use_clean_train_data", default=True, type=str2bool, help="use_clean_test_data")
     
     # Only for Autoatack
     parser.add_argument('--norm',       type=str, default='Linf')
     parser.add_argument('--eps',        type=str, default='8./255.')
-    parser.add_argument("--individual", default=False, type=lambda x: str(x).lower() == 'true', help="custom autoattack")
+    parser.add_argument("--individual", default=False, type=str2bool, help="custom autoattack")
     parser.add_argument('--batch_size', type=int, default=1500)
     parser.add_argument('--log_path',   type=str, default='log.txt')
     parser.add_argument('--version',    type=str, default='standard')
 
 
-    parser.add_argument("--net_normalization", default=True, type=lambda x: str(x).lower() == 'true', help=settings.HELP_NET_NORMALIZATION)
+    parser.add_argument("--net_normalization", default=True, type=str2bool, help=settings.HELP_NET_NORMALIZATION)
 
     parser.add_argument("--load_json", default="", help="Load settings from file in json format. Command line options override values in file.")
     parser.add_argument("--save_json", default="", help="Save settings to file in json format. Ignored in json file.")
